@@ -40,15 +40,15 @@ impl FragmentList {
     }
 }
 
-fn parse_into_groups(contents: &str) -> Vec<Box<FragmentList>> {
+fn parse_into_groups(contents: &str) -> Vec<FragmentList> {
 
-    let mut groups: Vec<Box<FragmentList>> = Vec::new();
+    let mut groups: Vec<FragmentList> = Vec::new();
     let mut curr = 0;
     for line in contents.lines() {
         if line != "" {
             let name = get_header(line);
             if name != "" {
-                groups.push(Box::new(FragmentList::new(name)));
+                groups.push(FragmentList::new(name));
                 curr += 1;
             } else if groups.len() > 0 {
                 groups[curr - 1].fragments.push(line.to_string());
