@@ -1,0 +1,11 @@
+[package]
+name = "rust-randomline"
+version = "0.1.0"
+authors = ["Galen Palmer <palmergs@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+rand = "*"
+clap = "*"
+lazy_static = "*"
+regex = "*"
