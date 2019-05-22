@@ -4,7 +4,8 @@ extern crate clap;
 use std::fs;
 use std::error::Error;
 use clap::{App, Arg};
-//use rand::prelude::*;
+use rand::prelude::*;
+use rand::seq::SliceRandom;
 use regex::Regex;
 use std::borrow::Borrow;
 
@@ -78,6 +79,18 @@ fn read_file_into_list(path: &str) -> Vec<&FragmentList> {
     Vec::new()
 }
 
+fn name(groups: &Vec<FragmentList>) -> String {
+    if groups.len() > 1 {
+        let group0 = &groups[0].fragments;
+        let group1 = &groups[1].fragments;
+        format!("{}{}", 
+            group0.choose(&mut rand::thread_rng()).unwrap(), 
+            group1.choose(&mut rand::thread_rng()).unwrap())
+    } else {
+        "".to_string()
+    }
+}
+
 fn main() {
     let matches = App::new("randomlines")
        .version("1.0")
@@ -95,8 +108,12 @@ fn main() {
         .unwrap_or("names.txt");
     let contents = fs::read_to_string(file_name).expect("unable to read name file");
     let groups = parse_into_groups(&contents);
-    for wrapper in groups {
+    for wrapper in &groups {
         println!("What is in the box? {:?}", wrapper);
+    }
+
+    for n in 0..100 {
+        println!("{}. = {}", n, name(&groups));
     }
 
     let n32 = rand::random::<i32>();
