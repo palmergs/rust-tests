@@ -1,9 +1,21 @@
 [dfirst]
-dwa
 tho
-ba
-da
 tha
+ba
+bo
+bu
+da
+dwa
+du
+ta
+to
+tu
+ge
+phe
+fa
+glo
+gla
+glu
 
 [dlast]
 lin
