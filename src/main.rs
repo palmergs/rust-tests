@@ -42,7 +42,6 @@ impl FragmentList {
 }
 
 fn parse_into_groups(contents: &str) -> Vec<FragmentList> {
-
     let mut groups: Vec<FragmentList> = Vec::new();
     let mut curr = 0;
     for line in contents.lines() {
@@ -59,33 +58,14 @@ fn parse_into_groups(contents: &str) -> Vec<FragmentList> {
     groups
 }
 
-fn read_file_into_list(path: &str) -> Vec<&FragmentList> {
-
-    //let contents = fs::read_to_string(file_name)
-    //    .expect("unable to read file");
-    //let lines: Vec<&str> = contents.split("\n").collect();
-    //let mut lists: Vec<&FragmentList> = Vec::new();
-    //let mut curr: &mut FragmentList;
-    //for line in &lines {
-    //    let name = get_header(line);
-    //    if name != "" {
-    //        println!("{}", name);
-    //        curr = &mut FragmentList{ name: name, fragments: Vec::new() };
-    //        lists.push(curr)
-    //    } else {
-    //        curr.fragments.push(name);
-    //    }
-    //}
-    Vec::new()
-}
-
 fn name(groups: &Vec<FragmentList>) -> String {
+    let mut rng = rand::thread_rng();
     if groups.len() > 1 {
         let group0 = &groups[0].fragments;
         let group1 = &groups[1].fragments;
         format!("{}{}", 
-            group0.choose(&mut rand::thread_rng()).unwrap(), 
-            group1.choose(&mut rand::thread_rng()).unwrap())
+            group0.choose(&mut rng).unwrap(), 
+            group1.choose(&mut rng).unwrap())
     } else {
         "".to_string()
     }
