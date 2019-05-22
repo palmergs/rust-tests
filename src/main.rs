@@ -83,6 +83,8 @@ fn main() {
            .takes_value(true))
        .get_matches();
 
+    println!("VERSION={}", include_str!("version"));
+
     let file_name = matches.value_of("file")
         .unwrap_or("names.txt");
     let contents = fs::read_to_string(file_name).expect("unable to read name file");
