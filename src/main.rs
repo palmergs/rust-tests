@@ -8,6 +8,7 @@ use rand::prelude::*;
 use rand::seq::SliceRandom;
 use regex::Regex;
 use std::borrow::Borrow;
+use std::collections::hash_map::HashMap;
 
 fn is_integer(text: &str) -> bool {
     lazy_static! {
@@ -41,33 +42,33 @@ impl FragmentList {
     }
 }
 
-fn parse_into_groups(contents: &str) -> Vec<FragmentList> {
-    let mut groups: Vec<FragmentList> = Vec::new();
+fn parse_into_groups(contents: &str) -> HashMap<String, FragmentList> {
+    let mut hash = HashMap::new();
+    let mut curr = "".to_string();
     for line in contents.lines() {
         if line != "" {
             let name = get_header(line);
             if name != "" {
-                groups.push(FragmentList::new(name));
-            } else if groups.len() > 0 {
-                let n = groups.len();
-                groups[n-1].fragments.push(line.to_string());
+                curr = name.to_string();
+                hash.insert(name.to_string(), FragmentList::new(name));
+            } else {
+                match hash.get_mut(&curr) {
+                    Some(list) => list.fragments.push(line.to_string()),
+                    None => (),
+                }
             }
         }
     }
-    groups
+    hash
 }
 
-fn name(groups: &Vec<FragmentList>) -> String {
+fn name(hash: &HashMap<String, FragmentList>) -> String {
     let mut rng = rand::thread_rng();
-    if groups.len() > 1 {
-        let group0 = &groups[0].fragments;
-        let group1 = &groups[1].fragments;
-        format!("{}{}", 
-            group0.choose(&mut rng).unwrap(), 
-            group1.choose(&mut rng).unwrap())
-    } else {
-        "".to_string()
-    }
+    let group0 = &hash.get("[dfirst]").unwrap().fragments;
+    let group1 = &hash.get("[dlast]").unwrap().fragments;
+    format!("{}{}", 
+        group0.choose(&mut rng).unwrap(), 
+        group1.choose(&mut rng).unwrap())
 }
 
 fn main() {
@@ -89,9 +90,9 @@ fn main() {
         .unwrap_or("names.txt");
     let contents = fs::read_to_string(file_name).expect("unable to read name file");
     let groups = parse_into_groups(&contents);
-    for wrapper in &groups {
-        println!("What is in the box? {:?}", wrapper);
-    }
+
+
+    println!("hash map = {:?}", groups);
 
     for n in 0..100 {
         println!("{}. = {}", n, name(&groups));
