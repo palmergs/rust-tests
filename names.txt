@@ -16,6 +16,21 @@ fa
 glo
 gla
 glu
+fi
+fa
+fo
+fu
+ka
+ke
+ki
+ko
+no
+ni
+ma
+o
+e
+pa
+po
 
 [dlast]
 lin
@@ -26,5 +41,6 @@ phour
 phor
 n
 in
+li
 
 
