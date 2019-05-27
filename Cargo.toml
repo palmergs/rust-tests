@@ -1,5 +1,5 @@
 [package]
-name = "rust-randomline"
+name = "rust-names"
 version = "0.1.0"
 authors = ["Galen Palmer <palmergs@gmail.com>"]
 edition = "2018"

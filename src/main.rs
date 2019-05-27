@@ -46,6 +46,14 @@ enum Fragment {
 }
 
 impl Fragment {
+    fn new(value: &str) -> Fragment {
+       let key = get_key(value);
+       match key {
+            Ok(key) => Fragment::Ident(key.to_string()),
+            Err(_) => Fragment::Constant(value.to_string()),
+       }
+    }
+
     fn name(&self, hash: &HashMap<String, FragmentList>) -> String {
         match self {
             Fragment::Constant(val) => val.to_string(),
@@ -86,13 +94,6 @@ impl FragmentList {
     }
 }
 
-fn to_fragment(value: &str) -> Fragment {
-   let key = get_key(value);
-   match key {
-        Ok(key) => Fragment::Ident(key.to_string()),
-        Err(_) => Fragment::Constant(value.to_string()),
-   }
-}
 
 fn parse_into_groups(contents: &str) -> HashMap<String, FragmentList> {
     let mut hash = HashMap::new();
@@ -109,10 +110,10 @@ fn parse_into_groups(contents: &str) -> HashMap<String, FragmentList> {
                     Some(frag) => {
                         let vec: Vec<&str> = line.split('+').collect();
                         if vec.len() == 1 {
-                            let f = to_fragment(vec.first().unwrap());
+                            let f = Fragment::new(vec.first().unwrap());
                             frag.fragments.push(f);
                         } else {
-                            let fs = vec.iter().map(|&x| to_fragment(x)).collect::<Vec<_>>();
+                            let fs = vec.iter().map(|&x| Fragment::new(x)).collect::<Vec<_>>();
                             frag.fragments.push(Fragment::Series(fs));
                         }
                     },
@@ -141,34 +142,39 @@ fn name(hash: &HashMap<String, FragmentList>, key: &str) -> String {
 
 fn main() {
     let matches = App::new("randomlines")
-       .version("1.0")
-       .about("Reads random lines from a file.!")
-       .author("Galen P.")
-       .arg(Arg::with_name("file")
-           .short("f")
-           .long("file")
-           .value_name("FILE")
-           .help("File to load the name strings")
-           .takes_value(true))
+        .version(include_str!("version"))
+        .about("Reads random lines from a file.!")
+        .author("Galen P.")
+        .arg(Arg::with_name("file")
+            .short("f")
+            .long("file")
+            .value_name("FILE")
+            .help("File to load the name strings")
+            .takes_value(true))
+        .arg(Arg::with_name("key")
+            .short("k")
+            .long("key")
+            .value_name("KEY")
+            .help("Key of the strings to generate")
+            .takes_value(true))
+        .arg(Arg::with_name("count")
+            .short("c")
+            .long("count")
+            .value_name("COUNT")
+            .help("Number of strings to generate")
+            .takes_value(true))
        .get_matches();
-
-    println!("VERSION={}", include_str!("version"));
 
     let file_name = matches.value_of("file")
         .unwrap_or("names.txt");
     let contents = fs::read_to_string(file_name).expect("unable to read name file");
     let groups = parse_into_groups(&contents);
 
+    let key = matches.value_of("key").unwrap_or("unknown");
 
-    println!("hash map = {:?}", groups);
-
-    for n in 0..100 {
-        println!("{}. = {}", n, name(&groups, "dwarf"));
+    let count_str = matches.value_of("count").unwrap_or("100");
+    let count = count_str.parse::<i32>().unwrap();
+    for n in 0..count {
+        println!("{}. = {}", n, name(&groups, key));
     }
-
-    let n32 = rand::random::<i32>();
-    let n64 = rand::random::<i64>();
-    println!("A random number: {}", n32);
-    println!("A random number: {}", n64);
-    println!("Is it a integer? {}", is_integer(&"1234".to_string()));
 }

@@ -76,8 +76,10 @@ dagger
 [nickname]
 :material+:weapon
 
-[dwarf]
+[dwarf-name]
 :dfirst+:dlast
-:dfirst+:dlast+ of +:location
-:dfirst+:dlast+ +:nickname
-:dfirst+:dlast+ +:dfirst+:dlast+son
+
+[dwarf]
+:dwarf-name+ of +:location
+:dwarf-name+ +:nickname
+:dwarf-name+ +:dfirst+:dlast+son
