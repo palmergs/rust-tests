@@ -170,11 +170,11 @@ fn main() {
     let contents = fs::read_to_string(file_name).expect("unable to read name file");
     let groups = parse_into_groups(&contents);
 
-    let key = matches.value_of("key").unwrap_or("unknown");
+    let key = matches.value_of("key").unwrap_or("dwarf");
 
     let count_str = matches.value_of("count").unwrap_or("100");
     let count = count_str.parse::<i32>().unwrap();
     for n in 0..count {
-        println!("{}. = {}", n, name(&groups, key));
+        println!("{}", name(&groups, key));
     }
 }

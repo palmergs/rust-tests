@@ -62,6 +62,11 @@ oaken
 iron
 stone
 granite
+silver
+light
+dark
+great
+gold
 fire
 smoke
 mist
@@ -72,6 +77,10 @@ shield
 helm
 sword
 dagger
+mace
+club
+bow
+
 
 [nickname]
 :material+:weapon
@@ -79,7 +88,52 @@ dagger
 [dwarf-name]
 :dfirst+:dlast
 
+[descriptive-dwarf]
+older
+younger
+tall
+short
+fat
+thin
+great
+scarred
+beardless
+drunk
+sober
+small
+large
+
+[descriptive-dwarf2]
+one-arm
+one-eye
+:beard-description+beard
+
+[beard-description]
+white
+red
+black
+blue
+green
+yellow
+grey
+grizzled
+no
+long
+short
+
+[creature]
+wolf
+warg
+orc
+goblin
+troll
+ogre
+
 [dwarf]
 :dwarf-name+ of +:location
 :dwarf-name+ +:nickname
 :dwarf-name+ +:dfirst+:dlast+son
+:dwarf-name+ +:dfirst+:dlast+son
+:dwarf-name+ the +:descriptive-dwarf
+:dwarf-name+ +:descriptive-dwarf2
+:dwarf-name+ +:creature+bane
