@@ -38,8 +38,6 @@ fn get_header(text: &str) -> Result<&str, ()> {
     }
 }
 
-
-
 #[derive(Debug)]
 enum Fragment {
     Constant(String),
@@ -47,16 +45,19 @@ enum Fragment {
     Series(Vec<Fragment>),
 }
 
-impl fmt::Display for Fragment {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Fragment {
+    fn name(&self, hash: &HashMap<String, FragmentList>) -> String {
         match self {
-            Fragment::Constant(value) => write!(f, "{}", value),
-            Fragment::Ident(value) => write!(f, ":{}", value),
-            Fragment::Series(value) => {
-                for item in value.iter() {
-                    write!(f, "{}", item);
+            Fragment::Constant(val) => val.to_string(),
+            Fragment::Ident(val) => {
+                match hash.get(val) {
+                    Some(frag) => frag.name(hash),
+                    None => "".to_string(),
                 }
-                Ok(())
+            },
+            Fragment::Series(vec) => {
+                let strings: Vec<String> = vec.iter().map(|f| f.name(hash)).collect();
+                strings.join("")
             },
         }
     }
@@ -64,16 +65,24 @@ impl fmt::Display for Fragment {
 
 #[derive(Debug)]
 struct FragmentList {
-    name: String,
+    ident: String,
     fragments: Vec<Fragment>
 }
 
 impl FragmentList {
-    fn new(name: &str) -> FragmentList {
+    fn new(ident: &str) -> FragmentList {
         FragmentList {
-            name: name.to_string(),
+            ident: ident.to_string(),
             fragments: Vec::new()
         }
+    }
+
+    fn name(&self, hash: &HashMap<String, FragmentList>) -> String {
+       let mut rng = rand::thread_rng();
+       match self.fragments.choose(&mut rng) {
+            Some(frag) => frag.name(&hash),
+            None => format!("[{}]", self.ident).to_string(),
+       }
     }
 }
 
@@ -115,13 +124,19 @@ fn parse_into_groups(contents: &str) -> HashMap<String, FragmentList> {
     hash
 }
 
-fn name(hash: &HashMap<String, FragmentList>) -> String {
+fn name(hash: &HashMap<String, FragmentList>, key: &str) -> String {
     let mut rng = rand::thread_rng();
-    let group0 = &hash.get("dfirst").unwrap().fragments;
-    let group1 = &hash.get("dlast").unwrap().fragments;
-    format!("{}{}", 
-        group0.choose(&mut rng).unwrap(), 
-        group1.choose(&mut rng).unwrap())
+    match &hash.get(key) {
+        Some(fragment_list) => {
+            match fragment_list.fragments.choose(&mut rng) {
+                Some(fragment) => {
+                    fragment.name(&hash)
+                },
+                None => "unknown".to_string(),
+            }
+        },
+        None => "unknown".to_string(),
+    }
 }
 
 fn main() {
@@ -148,7 +163,7 @@ fn main() {
     println!("hash map = {:?}", groups);
 
     for n in 0..100 {
-        println!("{}. = {}", n, name(&groups));
+        println!("{}. = {}", n, name(&groups, "dwarf"));
     }
 
     let n32 = rand::random::<i32>();

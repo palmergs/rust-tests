@@ -44,6 +44,40 @@ n
 in
 li
 
-[dwarf]
-:dfirst+:dlast+ of helm's deep
+[location]
+lake town
+the lonely mountain
+rivendell
+moria
+helm's deep
+the shire
+mirkwood
+rohan
+the misty mountains
+lothlorien
+bree
 
+[material]
+oaken
+iron
+stone
+granite
+fire
+smoke
+mist
+spark
+
+[weapon]
+shield
+helm
+sword
+dagger
+
+[nickname]
+:material+:weapon
+
+[dwarf]
+:dfirst+:dlast
+:dfirst+:dlast+ of +:location
+:dfirst+:dlast+ +:nickname
+:dfirst+:dlast+ +:dfirst+:dlast+son
