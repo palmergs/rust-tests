@@ -10,9 +10,10 @@ du
 ta
 to
 tu
-ge
 phe
 fa
+gi
+ge
 glo
 gla
 glu
@@ -43,4 +44,6 @@ n
 in
 li
 
+[dwarf]
+:dfirst+:dlast+ of helm's deep
 
