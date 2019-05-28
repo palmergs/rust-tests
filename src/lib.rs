@@ -2,7 +2,6 @@
 extern crate regex;
 use rand::seq::SliceRandom;
 use regex::Regex;
-use std::borrow::Borrow;
 use std::collections::hash_map::HashMap;
 
 fn get_key(text: &str) -> Result<&str, ()> {

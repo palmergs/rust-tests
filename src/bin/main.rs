@@ -1,9 +1,7 @@
 extern crate clap;
 use rust_names::{name, parse_into_groups};
 use std::fs;
-use std::fmt;
 use clap::{App, Arg};
-use rand::prelude::*;
 
 fn main() {
     let matches = App::new("randomlines")
@@ -39,7 +37,7 @@ fn main() {
 
     let count_str = matches.value_of("count").unwrap_or("100");
     let count = count_str.parse::<i32>().unwrap();
-    for n in 0..count {
+    for _ in 0..count {
         println!("{}", name(&groups, key));
     }
 }
