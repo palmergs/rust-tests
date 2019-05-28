@@ -33,12 +33,12 @@ fn main() {
     let contents = fs::read_to_string(file_name)
         .expect("unable to read name file");
     let mut builder = NameBuilder::new();
-    builder.parse(&contents);
+    match builder.parse(&contents) {
+        Ok(_) => (),
+        Err(msg) => println!("Unable to parse file '{}': err={}", file_name, msg),
+    }
 
-    println!("NameBuilder={:?}", builder);
-
-    let key = matches.value_of("key").unwrap_or("dwarf");
-
+    let key = matches.value_of("key").unwrap_or("no key given");
     let count_str = matches.value_of("count").unwrap_or("100");
     let count = count_str.parse::<i32>().unwrap();
     for _ in 0..count {
