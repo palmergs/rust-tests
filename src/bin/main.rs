@@ -38,9 +38,23 @@ fn main() {
         Err(msg) => println!("Unable to parse file '{}': err={}", file_name, msg),
     }
 
-    let key = matches.value_of("key").unwrap_or("no key given");
-    let count_str = matches.value_of("count").unwrap_or("100");
-    let count = count_str.parse::<i32>().unwrap();
+    let key = matches.value_of("key").unwrap_or("");
+    if key == "" {
+        display_keys(&builder);
+    } else {
+        let count_str = matches.value_of("count").unwrap_or("100");
+        let count = count_str.parse::<i32>().unwrap();
+        display_names(&builder, count, key);
+    }
+}
+
+fn display_keys(builder: &NameBuilder) {
+    for s in builder.keys().iter() {
+        println!("{}", s);
+    }
+}
+
+fn display_names(builder: &NameBuilder, count: i32, key: &str) {
     for _ in 0..count {
         println!("{}", builder.name(key));
     }

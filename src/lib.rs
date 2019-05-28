@@ -125,6 +125,9 @@ impl NameBuilder {
         }
     }
 
+    pub fn keys(&self) -> Vec<String> {
+        self.hash.keys().map(|s| s.to_string()).collect::<Vec<String>>()
+    }
 
     fn get_header(text: &str) -> Result<&str, ()> {
         lazy_static! {
