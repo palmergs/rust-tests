@@ -1,22 +1,9 @@
 #[macro_use] extern crate lazy_static;
 extern crate regex;
-extern crate clap;
-use std::fs;
-use std::fmt;
-use std::error::Error;
-use clap::{App, Arg};
-use rand::prelude::*;
 use rand::seq::SliceRandom;
 use regex::Regex;
 use std::borrow::Borrow;
 use std::collections::hash_map::HashMap;
-
-fn is_integer(text: &str) -> bool {
-    lazy_static! {
-        static ref INT: Regex = Regex::new(r"^\d+$").unwrap();
-    }
-    INT.is_match(text)
-}
 
 fn get_key(text: &str) -> Result<&str, ()> {
     lazy_static! {
@@ -39,7 +26,7 @@ fn get_header(text: &str) -> Result<&str, ()> {
 }
 
 #[derive(Debug)]
-enum Fragment {
+pub enum Fragment {
     Constant(String),
     Ident(String),
     Series(Vec<Fragment>),
@@ -72,7 +59,7 @@ impl Fragment {
 }
 
 #[derive(Debug)]
-struct FragmentList {
+pub struct FragmentList {
     ident: String,
     fragments: Vec<Fragment>
 }
@@ -95,7 +82,7 @@ impl FragmentList {
 }
 
 
-fn parse_into_groups(contents: &str) -> HashMap<String, FragmentList> {
+pub fn parse_into_groups(contents: &str) -> HashMap<String, FragmentList> {
     let mut hash = HashMap::new();
     let mut curr = "".to_string();
     for line in contents.lines() {
@@ -125,7 +112,7 @@ fn parse_into_groups(contents: &str) -> HashMap<String, FragmentList> {
     hash
 }
 
-fn name(hash: &HashMap<String, FragmentList>, key: &str) -> String {
+pub fn name(hash: &HashMap<String, FragmentList>, key: &str) -> String {
     let mut rng = rand::thread_rng();
     match &hash.get(key) {
         Some(fragment_list) => {
@@ -137,44 +124,5 @@ fn name(hash: &HashMap<String, FragmentList>, key: &str) -> String {
             }
         },
         None => "unknown".to_string(),
-    }
-}
-
-fn main() {
-    let matches = App::new("randomlines")
-        .version(include_str!("version"))
-        .about("Reads random lines from a file.!")
-        .author("Galen P.")
-        .arg(Arg::with_name("file")
-            .short("f")
-            .long("file")
-            .value_name("FILE")
-            .help("File to load the name strings")
-            .takes_value(true))
-        .arg(Arg::with_name("key")
-            .short("k")
-            .long("key")
-            .value_name("KEY")
-            .help("Key of the strings to generate")
-            .takes_value(true))
-        .arg(Arg::with_name("count")
-            .short("c")
-            .long("count")
-            .value_name("COUNT")
-            .help("Number of strings to generate")
-            .takes_value(true))
-       .get_matches();
-
-    let file_name = matches.value_of("file")
-        .unwrap_or("names.txt");
-    let contents = fs::read_to_string(file_name).expect("unable to read name file");
-    let groups = parse_into_groups(&contents);
-
-    let key = matches.value_of("key").unwrap_or("dwarf");
-
-    let count_str = matches.value_of("count").unwrap_or("100");
-    let count = count_str.parse::<i32>().unwrap();
-    for n in 0..count {
-        println!("{}", name(&groups, key));
     }
 }
