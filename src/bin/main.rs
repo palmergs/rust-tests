@@ -35,6 +35,8 @@ fn main() {
     let mut builder = NameBuilder::new();
     builder.parse(&contents);
 
+    println!("NameBuilder={:?}", builder);
+
     let key = matches.value_of("key").unwrap_or("dwarf");
 
     let count_str = matches.value_of("count").unwrap_or("100");
