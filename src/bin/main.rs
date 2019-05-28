@@ -1,5 +1,5 @@
 extern crate clap;
-use rust_names::{name, parse_into_groups};
+use rust_names::NameBuilder;
 use std::fs;
 use clap::{App, Arg};
 
@@ -30,14 +30,16 @@ fn main() {
 
     let file_name = matches.value_of("file")
         .unwrap_or("names.txt");
-    let contents = fs::read_to_string(file_name).expect("unable to read name file");
-    let groups = parse_into_groups(&contents);
+    let contents = fs::read_to_string(file_name)
+        .expect("unable to read name file");
+    let mut builder = NameBuilder::new();
+    builder.parse(&contents);
 
     let key = matches.value_of("key").unwrap_or("dwarf");
 
     let count_str = matches.value_of("count").unwrap_or("100");
     let count = count_str.parse::<i32>().unwrap();
     for _ in 0..count {
-        println!("{}", name(&groups, key));
+        println!("{}", builder.name(key));
     }
 }
