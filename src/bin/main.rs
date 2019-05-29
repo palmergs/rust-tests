@@ -3,9 +3,11 @@ use rust_names::NameBuilder;
 use std::fs;
 use clap::{App, Arg};
 
+const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+
 fn main() {
     let matches = App::new("randomlines")
-        .version(include_str!("version"))
+        .version(VERSION)
         .about("Reads random lines from a file.!")
         .author("Galen P.")
         .arg(Arg::with_name("file")
