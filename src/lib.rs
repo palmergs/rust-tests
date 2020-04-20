@@ -51,14 +51,18 @@ impl Fragment {
 #[derive(Debug)]
 pub struct FragmentList {
     ident: String,
-    fragments: Vec<Fragment>
+    fragments: Vec<Fragment>,
+    anonymous: bool,
 }
 
 impl FragmentList {
     fn new(ident: &str) -> FragmentList {
+        let anon =  ident.starts_with("_");
+        let ident = ident.to_string();
         FragmentList {
-            ident: ident.to_string(),
-            fragments: Vec::new()
+            ident: ident,
+            fragments: Vec::new(),
+            anonymous: anon,
         }
     }
 
@@ -126,7 +130,18 @@ impl NameBuilder {
     }
 
     pub fn keys(&self) -> Vec<String> {
-        self.hash.keys().map(|s| s.to_string()).collect::<Vec<String>>()
+        self.hash
+            .keys()
+            .filter(|s| !s.starts_with("_") )
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>()
+    }
+
+    pub fn all_keys(&self) ->Vec<String> {
+        self.hash
+            .keys()
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>()
     }
 
     fn get_header(text: &str) -> Result<&str, ()> {

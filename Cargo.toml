@@ -4,6 +4,10 @@ version = "0.1.0"
 authors = ["Galen Palmer <palmergs@gmail.com>"]
 edition = "2018"
 
+[[bin]]
+name = "rnames"
+path = "src/bin/main.rs"
+
 [dependencies]
 rand = "*"
 clap = "*"

@@ -1,4 +1,4 @@
-[dfirst]
+[_dfirst]
 a
 ba
 be
@@ -50,7 +50,7 @@ xa
 xi
 xo
 
-[dlast]
+[_dlast]
 lin
 len
 lan
@@ -111,10 +111,10 @@ sword
 :weapon-descr+:weapon
 
 [dwarf-name]
-:dfirst+:dlast
-:dfirst+:dlast
-:dfirst+:dfirst+:dlast
-:dfirst+:dlast+:dlast
+:_dfirst+:_dlast
+:_dfirst+:_dlast
+:_dfirst+:_dfirst+:_dlast
+:_dfirst+:_dlast+:_dlast
 
 [descriptive-dwarf]
 bald
@@ -176,8 +176,8 @@ wolf
 [dwarf]
 :dwarf-name+ of +:location
 :dwarf-name+ +:nickname
-:dwarf-name+ +:dfirst+:dlast+son
-:dwarf-name+ +:dfirst+:dlast+son
+:dwarf-name+ +:_dfirst+:_dlast+son
+:dwarf-name+ +:_dfirst+:_dlast+son
 :dwarf-name+ the +:descriptive-dwarf
 :dwarf-name+ +:descriptive-dwarf2
 :dwarf-name+ +:creature+bane
