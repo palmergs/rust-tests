@@ -1,0 +1,34 @@
+[weapon]
+:color+ +:simple-weapon
+:gem+ +:simple-weapon
+:metal+ +:simple-weapon
+
+[armor]
+:color+ +:simple-armor
+:gem+ +:simple-armor
+:metal+ +:simple-armor
+
+[simple-weapon]
+dagger
+sword
+axe
+club
+mace
+hammer
+spear
+blade
+spike
+bow
+knife
+pike
+chain
+
+[simple-armor]
+helm
+shield
+belt
+mail
+cloak
+robe
+plate
+

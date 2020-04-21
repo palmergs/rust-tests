@@ -1,3 +1,12 @@
+[dwarf]
+:dwarf-name+ of +:location
+:dwarf-name+ +:nickname
+:dwarf-name+ +:_dfirst+:_dlast+son
+:dwarf-name+ +:_dfirst+:_dlast+son
+:dwarf-name+ the +:descriptive-dwarf
+:dwarf-name+ +:descriptive-dwarf2
+:dwarf-name+ +:creature+bane
+
 [_dfirst]
 a
 ba
@@ -95,18 +104,6 @@ spark
 stone
 white
 
-
-[weapon]
-arrow
-axe
-bow
-club
-dagger
-helm
-mace
-shield
-sword
-
 [nickname]
 :weapon-descr+:weapon
 
@@ -173,11 +170,3 @@ warg
 wolf
 
 
-[dwarf]
-:dwarf-name+ of +:location
-:dwarf-name+ +:nickname
-:dwarf-name+ +:_dfirst+:_dlast+son
-:dwarf-name+ +:_dfirst+:_dlast+son
-:dwarf-name+ the +:descriptive-dwarf
-:dwarf-name+ +:descriptive-dwarf2
-:dwarf-name+ +:creature+bane
