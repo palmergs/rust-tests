@@ -1,63 +1,9 @@
 [dwarf]
-:dwarf-name+ of +:location
+:dwarf-name+ of +:town
 :dwarf-name+ +:nickname
-:dwarf-name+ +:_dfirst+:_dlast+son
-:dwarf-name+ +:_dfirst+:_dlast+son
-:dwarf-name+ the +:descriptive-dwarf
-:dwarf-name+ +:descriptive-dwarf2
-:dwarf-name+ +:creature+bane
-
-[_dfirst]
-a
-ba
-be
-bi
-bo
-bu
-da
-de
-di
-do
-du
-dwa
-e
-fa
-fe
-fi
-fo
-fu
-ga
-ge
-gi
-go
-gu
-gla
-gle
-glo
-glu
-ka
-ke
-ki
-ko
-ku
-ma
-mi
-mo
-na
-ni
-no
-o
-pa
-phe
-po
-ta
-tha
-tho
-to
-tu
-xa
-xi
-xo
+:dwarf-male+ +:dwarf-male+son
+:dwarf-female+ +:dwarf-female+dottir
+:dwarf-name+ the +:_descriptive-dwarf
 
 [_dlast]
 lin
@@ -70,50 +16,57 @@ n
 in
 li
 
-[location]
-lake town
-the lonely mountain
-rivendell
-moria
-helm's deep
-the shire
-mirkwood
-rohan
-the misty mountains
-lothlorien
-bree
+[_dcons]
+d
+dw
+dl
+f
+fl
+g
+gw
+gl
+h
+j
+k
+m
+n
+p
+ph
+pl
+t
+th
+x
 
-[weapon-descr]
-black
-dark
-fire
-gold
-granite
-great
-grey
-iron
-light
-mist
-oak
-oaken
-red
-rune
-silver
-smoke
-spark
-stone
-white
+[_dvowel]
+a
+e
+i
+o
+u
 
 [nickname]
-:weapon-descr+:weapon
+:color+:weapon
+:gem+:weapon
+:metal+:weapon
+:color+:armor
+:gem+:armor
+:metal+:armor
+:_bane-creature+s+bane
 
 [dwarf-name]
-:_dfirst+:_dlast
-:_dfirst+:_dlast
-:_dfirst+:_dfirst+:_dlast
-:_dfirst+:_dlast+:_dlast
+:dwarf-male
+:dwarf-female
 
-[descriptive-dwarf]
+[dwarf-male]
+:_dcons+:_dvowel+:_dlast
+:_dcons+:_dvowel+:_dlast
+
+[dwarf-female]
+:_dcons+:_dvowel+:_dvowel:_dlast
+:_dcons+:_dvowel+:_dvowel:_dlast
+:_dvowel+:_dlast
+
+[_descriptive-dwarf]
 bald
 beardless
 drunk
@@ -137,14 +90,12 @@ thin
 white
 wide
 younger
-
-
-[descriptive-dwarf2]
+:color+:eye
+:_beard-description+beard
 one-arm
 one-eye
-:beard-description+beard
 
-[beard-description]
+[_beard-description]
 black
 blue
 green
@@ -158,15 +109,5 @@ thin
 white
 yellow
 
-
-[creature]
-goblin
-ogre
-orc
-serpent
-snake
-troll
-warg
-wolf
 
 

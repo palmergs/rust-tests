@@ -1,14 +1,4 @@
 [weapon]
-:color+ +:simple-weapon
-:gem+ +:simple-weapon
-:metal+ +:simple-weapon
-
-[armor]
-:color+ +:simple-armor
-:gem+ +:simple-armor
-:metal+ +:simple-armor
-
-[simple-weapon]
 dagger
 sword
 axe
@@ -23,7 +13,7 @@ knife
 pike
 chain
 
-[simple-armor]
+[armor]
 helm
 shield
 belt
