@@ -5,7 +5,7 @@ authors = ["Galen Palmer <palmergs@gmail.com>"]
 edition = "2018"
 
 [[bin]]
-name = "rnames"
+name = "names"
 path = "src/bin/main.rs"
 
 [dependencies]
@@ -13,3 +13,4 @@ rand = "*"
 clap = "*"
 lazy_static = "*"
 regex = "*"
+rust-embed = { debug-embed = true, version = "5.5.1" }

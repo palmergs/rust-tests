@@ -1,9 +1,9 @@
 #[macro_use] extern crate lazy_static;
 extern crate regex;
 use rand::seq::SliceRandom;
+use rust_embed::RustEmbed;
 use regex::Regex;
 use std::collections::hash_map::HashMap;
-
 
 #[derive(Debug)]
 pub enum Fragment {
@@ -75,6 +75,10 @@ impl FragmentList {
     }
 }
 
+#[derive(RustEmbed)]
+#[folder = "resources/"]
+struct Asset;
+
 #[derive(Debug)]
 pub struct NameBuilder {
     hash: HashMap<String, FragmentList>,
@@ -82,10 +86,23 @@ pub struct NameBuilder {
 
 impl NameBuilder {
     pub fn new() -> NameBuilder {
-        return NameBuilder { hash: HashMap::new() }
+        let mut builder = NameBuilder { hash: HashMap::new() };
+        for p in Asset::iter() {
+            let o = Asset::get(&p);
+            match o {
+                Some(cow) => {
+                    match std::str::from_utf8(&cow) {
+                        Ok(s) => builder.parse(s),
+                        _ => ()
+                    }
+                }
+                None => ()
+            };
+        }
+        return builder
     }
 
-    pub fn parse(&mut self, contents: &str) -> Result<(), String> {
+    fn parse(&mut self, contents: &str) {
         let mut curr_ident = "".to_string();
         for line in contents.lines() {
             if line != "" {
@@ -111,7 +128,6 @@ impl NameBuilder {
                 }
             }
         }
-        Ok(())
     }
 
     pub fn name(&self, key: &str) -> String {

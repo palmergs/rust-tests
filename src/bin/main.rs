@@ -1,9 +1,6 @@
 extern crate clap;
 use rust_names::NameBuilder;
-use std::fs;
-use std::path::Path;
 use std::io;
-
 use clap::{App, Arg};
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
@@ -13,12 +10,6 @@ fn main() -> io::Result<()> {
         .version(VERSION)
         .about("Reads random lines from a file.!")
         .author("Galen P.")
-        .arg(Arg::with_name("dir")
-            .short("d")
-            .long("dir")
-            .value_name("DIR")
-            .help("Directory where resources are found")
-            .takes_value(true))
         .arg(Arg::with_name("key")
             .short("k")
             .long("key")
@@ -33,30 +24,7 @@ fn main() -> io::Result<()> {
             .takes_value(true))
        .get_matches();
 
-    let path = matches.value_of("dir").unwrap_or("resources");
-    let path = Path::new(path);
-    let mut builder = NameBuilder::new();
-    if path.is_dir() {
-        for entry in fs::read_dir(path)? {
-            let entry = entry?;
-            let path = entry.path();
-            if path.is_file() {
-                match path.extension() {
-                    Some(ex) => {
-                        if ex == "txt" {
-                            let contents = fs::read_to_string(&path)?;
-                            match builder.parse(&contents) {
-                                Ok(_) => (),
-                                Err(msg) => println!("Unable to parse file{:?}: err={}", &path, msg),
-                            }
-                        }
-                    },
-                    None => ()
-                }
-            }
-        }
-    }
-
+    let builder = NameBuilder::new();
     let key = matches.value_of("key").unwrap_or("");
     if key == "" {
         display_keys(&builder);
