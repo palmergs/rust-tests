@@ -16,7 +16,7 @@
 :occupation
 :male-fnames+son
 :occupation
-:male-fnames+son
+:male-fnames+man
 o'+:male-fnames
 mac+:male-fnames
 
@@ -24,16 +24,23 @@ mac+:male-fnames
 archer
 brewer
 baker
+barker
 carter
 cooper
 cook
+clerk
+clark
 dyer
 fuller
 gardener
 glover
 hunt
+knight
+baron
 hunter
 page
+shepherd
+goddard
 potter
 potts
 slater
@@ -45,6 +52,7 @@ weaver
 woodman
 wright
 cartwright
+wainwright
 miller
 fisher
 fletcher
@@ -52,6 +60,7 @@ palmer
 smith
 smythe
 :metal+smith
+:color+smith
 mason
 carver
 barber
