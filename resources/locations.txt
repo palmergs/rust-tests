@@ -1,10 +1,10 @@
 [town]
 :named-town
 :_direction+ +:named-town
-:_town-feature+:_town-type
-:_town-feature+:_placement-after
-:_placement-before+:_town-feature
-:_direction+ +:_town-feature+:_town-type
+:town-feature+:_town-type
+:town-feature+:_placement-after
+:_placement-before+:town-feature
+:_direction+ +:town-feature+:_town-type
 
 [named-town]
 wells
@@ -22,7 +22,7 @@ ports
 [_direction]
 north
 south
-each
+east
 west
 upper
 lower
@@ -34,7 +34,7 @@ town
 ville
 by
 
-[_town-feature]
+[town-feature]
 bank
 bay
 ceder

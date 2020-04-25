@@ -13,4 +13,4 @@ rand = "*"
 clap = "*"
 lazy_static = "*"
 regex = "*"
-rust-embed = { debug-embed = true, version = "5.5.1" }
+rust-embed = { version = "5.5.1" }

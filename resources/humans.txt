@@ -2,6 +2,12 @@
 :male-fnames+ +:last-name
 :female-fnames+ +:last-name
 
+[human-male]
+:male-fnames+ +:last-name
+
+[human-female]
+:female-fnames+ +:last-name
+
 [male-fnames]
 :_fname-plant-male
 :_fname-material-male
@@ -64,6 +70,7 @@ smythe
 mason
 carver
 barber
+:town-feature+ward
 
 [_fname-given-male]
 john
@@ -87,6 +94,7 @@ ephram
 glen
 harry
 harold
+hale
 james
 jim
 karl

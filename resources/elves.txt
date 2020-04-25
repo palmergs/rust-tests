@@ -3,6 +3,12 @@
 :elf-name+ +:nickname
 :elf-name+ +:elf-name
 
+[elf-male]
+:elf-name
+
+[elf-female]
+:elf-name
+
 [elf-name]
 :_felf+:_melf+:_lelf
 :_felf+:_melf+:_lelf
@@ -19,16 +25,25 @@ aer
 ag
 an
 br
+baer
 b
+byn
+bryn
 c
 cr
 cair
 caer
+cyn
+cryn
+cen
 en
 er
 es
 g
+gy
+gyn
 f
+fy
 hr
 hith
 il
@@ -36,19 +51,23 @@ in
 im
 l
 leg
-l
+lyn
+llyn
 m
 man
 n
 r
+ry
+ryn
+rin
 s
 tol
+toly
 t
 
 [_melf]
 a
 ae
-y
 e
 o
 ú
@@ -76,6 +95,7 @@ las
 les
 luin
 loth
+lynn
 waen
 rond
 rúth
@@ -88,4 +108,6 @@ val
 min
 rod
 waith
-
+ralyn
+mayln
+nayln

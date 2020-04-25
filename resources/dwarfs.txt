@@ -5,6 +5,19 @@
 :dwarf-female+ +:dwarf-female+dottir
 :dwarf-name+ the +:_descriptive-dwarf
 
+[dwarf-name]
+:dwarf-male
+:dwarf-female
+
+[dwarf-male]
+:_dcons+:_dvowel+:_dlast
+:_dcons+:_dvowel+:_dlast
+
+[dwarf-female]
+:_dcons+:_dvowel+:_dvowel:_dlast
+:_dcons+:_dvowel+:_dvowel:_dlast
+:_dvowel+:_dlast
+
 [_dlast]
 lin
 len
@@ -53,18 +66,6 @@ u
 :metal+:armor
 :_bane-creature+s+bane
 
-[dwarf-name]
-:dwarf-male
-:dwarf-female
-
-[dwarf-male]
-:_dcons+:_dvowel+:_dlast
-:_dcons+:_dvowel+:_dlast
-
-[dwarf-female]
-:_dcons+:_dvowel+:_dvowel:_dlast
-:_dcons+:_dvowel+:_dvowel:_dlast
-:_dvowel+:_dlast
 
 [_descriptive-dwarf]
 bald
