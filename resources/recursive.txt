@@ -1,0 +1,5 @@
+[recursive]
+a
+b
+:recursive
+:recursive+ +:recursive
