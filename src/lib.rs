@@ -1,10 +1,15 @@
 #[macro_use] extern crate lazy_static;
 
+extern crate sorted_vec;
+
 use rust_embed::RustEmbed;
 use std::collections::hash_map::HashMap;
 
 mod generator;
 pub use generator::{ Fragment, FragmentList };
+
+mod article;
+pub use article::{ Region, Timeline, GeoFeature };
 
 #[derive(RustEmbed)]
 #[folder = "resources/"]
@@ -19,16 +24,18 @@ impl NameBuilder {
     pub fn new() -> NameBuilder {
         let mut builder = NameBuilder { hash: HashMap::new() };
         for p in Asset::iter() {
-            let o = Asset::get(&p);
-            match o {
-                Some(cow) => {
-                    match std::str::from_utf8(&cow) {
-                        Ok(s) => builder.parse(s),
-                        _ => ()
+            if p.ends_with(".txt") {
+                let o = Asset::get(&p);
+                match o {
+                    Some(cow) => {
+                        match std::str::from_utf8(&cow) {
+                            Ok(s) => builder.parse(s),
+                            _ => ()
+                        }
                     }
-                }
-                None => ()
-            };
+                    None => ()
+                };
+            }
         }
         return builder
     }

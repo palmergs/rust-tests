@@ -14,3 +14,4 @@ clap = "*"
 lazy_static = "*"
 regex = "*"
 rust-embed = { version = "5.5.1" }
+sorted-vec = "*"

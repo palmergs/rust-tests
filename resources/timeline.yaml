@@ -1,0 +1,13 @@
+timeline:
+  eras:
+    - id: antiquity
+      abbr: BA
+      to: 0
+    - id: subjegation
+      abbr: DL
+      from: 0
+      to: 500
+    - id: modern
+      abbr: ME
+      from: 500
+

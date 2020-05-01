@@ -1,0 +1,34 @@
+races:
+  - id: human
+    name: Human
+    plural: Humans
+    alias: 
+      - name: Man 
+        plural: Men
+  - id: elf
+    name: Elf
+    plural: Elves
+  - id: dwarf
+    name: Dwarf
+    plural: Dwarves
+  - id: rulligg
+    name: Rulligg
+    alias:
+      - name: Rock Troll
+        plural: Rock Trolls
+        tone: negative
+  - id: urunai
+    name: Uruk'u
+    plural: Urunai
+  - id: gobru
+    name: Gobr'u
+    plural: Gobrunai
+    alias:
+      - name: Goblin
+        tone: negative
+  - id: urg
+    name: Urg
+    plural: Urgunai
+    alias:
+      - name: Orc
+        tone: negative

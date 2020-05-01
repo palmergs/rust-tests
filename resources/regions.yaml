@@ -1,0 +1,53 @@
+regions:
+  - id: caerlun
+    name: Cærlun
+    alias:
+      - name: Ort
+        race: 
+          - urg
+          - uruku
+          - gobru
+          - lost-tribe
+      - name: Silvenia
+        race:
+          - dragon
+  - id: north-caerlun
+    parent: caerlun
+    name: North Cærlun
+  - id: opal-sea
+    parent: caerlun
+    name: Opal Sea
+  - id: south-caerlun
+    parent: caerlun
+    name: South Cærlun
+  - id: western-ocean
+    parent: caerlun
+    name: Western Ocean
+    alias:
+      - name: Wilding Sea
+      - name: Wéstrani
+        race:
+          - elf
+  - id: levelin-forest
+    parent: north-caerlun
+    name: Levelin Forest
+  - id: opal-plains
+    parent: north-caerlun
+    name: Opal Plains
+  - id: opal-delta
+    parent: opal-plains
+    name: Opal River delta
+  - id: opal
+    parent: opal-delta
+    name: Opal
+    category: city
+    from: -800
+    alias:
+      - name: Ramantha
+        from: -800
+        to: 0
+  - id: hiran-forest
+    parent: north-caerlun
+    name: Hiran Forest
+
+
