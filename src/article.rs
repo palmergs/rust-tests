@@ -42,6 +42,42 @@ pub struct Era {
     races: Vec<String>
 }
 
+impl Era {
+    pub fn start(&self) -> i32 {
+        match self.from {
+            Some(n) => n,
+            None => std::i32::MIN,
+        }
+    }
+
+    pub fn end(&self) -> i32 {
+        match self.to {
+            Some(n) => n,
+            None => std::i32::MAX,
+        }
+    }
+}
+
+impl Ord for Era {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.start().cmp(&other.start())
+    }
+}
+
+impl PartialOrd for Era {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl PartialEq for Era {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
+
+impl Eq for Era {}
+
 pub struct Event {
     id: String,
     name: Option<String>,
