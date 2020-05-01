@@ -1,79 +1,10 @@
 #[macro_use] extern crate lazy_static;
-extern crate regex;
-use rand::seq::SliceRandom;
+
 use rust_embed::RustEmbed;
-use regex::Regex;
 use std::collections::hash_map::HashMap;
 
-#[derive(Debug)]
-pub enum Fragment {
-    Constant(String),
-    Ident(String),
-    Series(Vec<Fragment>),
-}
-
-impl Fragment {
-    fn new(value: &str) -> Fragment {
-       let key = Fragment::get_key(value);
-       match key {
-            Ok(key) => Fragment::Ident(key.to_string()),
-            Err(_) => Fragment::Constant(value.to_string()),
-       }
-    }
-
-    fn name(&self, hash: &HashMap<String, FragmentList>) -> String {
-        match self {
-            Fragment::Constant(val) => val.to_string(),
-            Fragment::Ident(val) => {
-                match hash.get(val) {
-                    Some(frag) => frag.name(hash),
-                    None => "".to_string(),
-                }
-            },
-            Fragment::Series(vec) => {
-                let strings: Vec<String> = vec.iter().map(|f| f.name(hash)).collect();
-                strings.join("")
-            },
-        }
-    }
-
-    fn get_key(text: &str) -> Result<&str, ()> {
-        lazy_static! {
-            static ref KEY: Regex = Regex::new(r"^[:]([a-zA-Z0-9_-]+)").unwrap();
-        }
-        match KEY.captures(text) {
-            Some(capture) => Ok(capture.get(1).unwrap().as_str()),
-            None => Err(())
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct FragmentList {
-    ident: String,
-    fragments: Vec<Fragment>,
-    anonymous: bool,
-}
-
-impl FragmentList {
-    fn new(ident: &str) -> FragmentList {
-        let anon =  ident.starts_with("_");
-        let ident = ident.to_string();
-        FragmentList {
-            ident: ident,
-            fragments: Vec::new(),
-            anonymous: anon,
-        }
-    }
-
-    fn name(&self, hash: &HashMap<String, FragmentList>) -> String {
-       let mut rng = rand::thread_rng();
-       match self.fragments.choose(&mut rng) {
-            Some(frag) => frag.name(&hash),
-            None => format!("[{}]", self.ident).to_string(),
-       }
-    }
-}
+mod generator;
+pub use generator::{ Fragment, FragmentList };
 
 #[derive(RustEmbed)]
 #[folder = "resources/"]
@@ -106,7 +37,7 @@ impl NameBuilder {
         let mut curr_ident = "".to_string();
         for line in contents.lines() {
             if line != "" {
-                let head = NameBuilder::get_header(line);
+                let head = FragmentList::get_header(line);
                 if head.is_ok() {
                     let name = head.unwrap();
                     curr_ident = name.to_string();
@@ -117,10 +48,10 @@ impl NameBuilder {
                             let vec: Vec<&str> = line.split('+').collect();
                             if vec.len() == 1 {
                                 let f = Fragment::new(vec.first().unwrap());
-                                frag.fragments.push(f);
+                                frag.add(f);
                             } else {
                                 let fs = vec.iter().map(|&x| Fragment::new(x)).collect::<Vec<_>>();
-                                frag.fragments.push(Fragment::Series(fs));
+                                frag.add(Fragment::Series(fs));
                             }
                         },
                         None => (),
@@ -131,10 +62,9 @@ impl NameBuilder {
     }
 
     pub fn name(&self, key: &str) -> String {
-        let mut rng = rand::thread_rng();
         match &self.hash.get(key) {
             Some(fragment_list) => {
-                match fragment_list.fragments.choose(&mut rng) {
+                match fragment_list.choose() {
                     Some(fragment) => {
                         fragment.name(&self.hash)
                     },
@@ -160,13 +90,4 @@ impl NameBuilder {
             .collect::<Vec<String>>()
     }
 
-    fn get_header(text: &str) -> Result<&str, ()> {
-        lazy_static! {
-            static ref SECTION_HEAD: Regex = Regex::new(r"^\[([a-z0-9_-]+)\]$").unwrap();
-        }
-        match SECTION_HEAD.captures(text) {
-            Some(capture) => Ok(capture.get(1).unwrap().as_str()),
-            None => Err(())
-        }
-    }
 }
