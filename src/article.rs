@@ -5,7 +5,7 @@ use std::cmp::{ Ordering };
 
 pub struct Region {
     id: String,
-    name: Option<String>,
+    name: String,
     plural: Option<String>,
     alias: Vec<Alias>,
     parent: Option<String>,
@@ -34,23 +34,30 @@ pub struct Timeline {
     events: SortedVec<Event>, 
 }
 
+
 pub struct Era {
     id: String,
-    abbr: String,
+    name: String,
     from: Option<i32>,
     to: Option<i32>,
     races: Vec<String>
 }
 
 impl Era {
-    pub fn start(&self) -> i32 {
+    fn new(id: &str, name: &str) -> Era {
+        Era { id: id.to_string(), name: name.to_string(), from: None, to: None, races: Vec::new() }
+    }
+
+    fn id(&self) -> &String { &self.id }
+
+    fn start(&self) -> i32 {
         match self.from {
             Some(n) => n,
             None => std::i32::MIN,
         }
     }
 
-    pub fn end(&self) -> i32 {
+    fn end(&self) -> i32 {
         match self.to {
             Some(n) => n,
             None => std::i32::MAX,
@@ -71,16 +78,14 @@ impl PartialOrd for Era {
 }
 
 impl PartialEq for Era {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
-    }
+    fn eq(&self, other: &Self) -> bool { self.id() == other.id() }
 }
 
 impl Eq for Era {}
 
 pub struct Event {
     id: String,
-    name: Option<String>,
+    name: String,
     from: Option<i32>,
     to: Option<i32>,
     alias: Vec<Alias>,
@@ -90,14 +95,16 @@ pub struct Event {
 }
 
 impl Event {
-    pub fn start(&self) -> i32 {
+    fn id(&self) -> &String { &self.id }
+
+    fn start(&self) -> i32 {
         match self.from {
             Some(n) => n,
             None => std::i32::MIN,
         }
     }
 
-    pub fn end(&self) -> i32 {
+    fn end(&self) -> i32 {
         match self.to {
             Some(n) => n,
             None => std::i32::MAX,
@@ -118,9 +125,7 @@ impl PartialOrd for Event {
 }
 
 impl PartialEq for Event {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
-    }
+    fn eq(&self, other: &Self) -> bool { self.id() == other.id() }
 }
 
 impl Eq for Event {}
