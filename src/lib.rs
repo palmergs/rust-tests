@@ -5,11 +5,11 @@ extern crate sorted_vec;
 use rust_embed::RustEmbed;
 use std::collections::hash_map::HashMap;
 
-mod generator;
-pub use generator::{ NameBuilder, Fragment, FragmentList };
+mod names;
+pub use names::{ NameBuilder, Fragment, FragmentList };
 
-mod article;
-pub use article::{ Region, Timeline, GeoFeature };
+mod articles;
+pub use articles::{ Region, Timeline, GeoFeature };
 
 #[derive(RustEmbed)]
 #[folder = "resources/"]
