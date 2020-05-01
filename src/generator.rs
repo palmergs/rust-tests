@@ -77,9 +77,12 @@ impl FragmentList {
         self.fragments.push(frag);
     }
 
-    pub fn choose(&self) -> Option<&Fragment> {
+    pub fn choose(&self, hash: &HashMap<String, FragmentList>) -> String {
         let mut rng = rand::thread_rng();
-        self.fragments.choose(&mut rng)
+        match self.fragments.choose(&mut rng) {
+            Some(fragment) => fragment.name(hash),
+            None => "<frag>".to_string(),
+        }
     }
 
     pub fn get_header(text: &str) -> Result<&str, ()> {

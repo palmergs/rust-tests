@@ -61,20 +61,16 @@ impl NameBuilder {
         }
     }
 
+    // Given a key, return a string generated from that key.
+    // Returns <list> if the key was not found
     pub fn name(&self, key: &str) -> String {
         match &self.hash.get(key) {
-            Some(fragment_list) => {
-                match fragment_list.choose() {
-                    Some(fragment) => {
-                        fragment.name(&self.hash)
-                    },
-                    None => "<frag>".to_string(),
-                }
-            },
+            Some(fragment_list) => fragment_list.choose(&self.hash),
             None => "<list>".to_string(),
         }
     }
 
+    // Return all non-anonlymous keys included in the builder
     pub fn keys(&self) -> Vec<String> {
         self.hash
             .keys()
@@ -83,11 +79,11 @@ impl NameBuilder {
             .collect::<Vec<String>>()
     }
 
+    // Return all keys included in the builder
     pub fn all_keys(&self) ->Vec<String> {
         self.hash
             .keys()
             .map(|s| s.to_string())
             .collect::<Vec<String>>()
     }
-
 }
