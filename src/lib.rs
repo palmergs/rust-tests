@@ -12,6 +12,9 @@ pub use names::{ NameBuilder, Fragment, FragmentList };
 mod articles;
 pub use articles::{ Region, Timeline, GeoFeature };
 
+pub mod characters;
+pub use characters::{ CharacterBuilder };
+
 #[derive(RustEmbed)]
 #[folder = "resources/"]
 struct Asset;

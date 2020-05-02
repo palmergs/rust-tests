@@ -10,7 +10,7 @@ path = "src/bin/main.rs"
 
 [dependencies]
 rand = "*"
-clap = "*"
+clap = "2.33"
 lazy_static = "*"
 regex = "*"
 rust-embed = { version = "5.5.1" }
