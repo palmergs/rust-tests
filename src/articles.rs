@@ -12,10 +12,53 @@ pub struct Region {
     children: Vec<String>,
 }
 
+impl Region {
+    pub fn new(id: &str, name: &str) -> Region {
+        Region {
+            id: id.to_string(),
+            name: name.to_string(),
+            plural: None,
+            alias: Vec::new(),
+            parent: None,
+            children: Vec::new()
+        }
+    }
+
+    pub fn id(&self) -> &String { &self.id }
+}
+
+impl PartialEq for Region {
+    fn eq(&self, other: &Self) -> bool { self.id == other.id }
+}
+
+impl Eq for Region {}
+
+impl Ord for Region {
+    fn cmp(&self, other: &Self) -> Ordering { self.name.cmp(&other.name) }
+}
+
+impl PartialOrd for Region {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 pub struct GeoFeature {
     id: String,
     name: String,
 }
+
+impl GeoFeature {
+    pub fn new(id: &str, name: &str) -> GeoFeature { 
+        GeoFeature { id: id.to_string(), name: name.to_string() }
+    }
+}
+
+impl PartialEq for GeoFeature {
+    fn eq(&self, other: &Self) -> bool { self.id == other.id }
+}
+
+impl Eq for GeoFeature {}
 
 pub enum Tone {
     Positive,
@@ -67,7 +110,12 @@ impl Era {
 
 impl Ord for Era {
     fn cmp(&self, other: &Self) -> Ordering {
-        self.start().cmp(&other.start())
+        let ord = self.start().cmp(&other.start());
+        if ord == Ordering::Equal {
+            (self.end() - self.start()).cmp(&(other.end() - other.start()))
+        } else {
+            ord
+        }
     }
 }
 
@@ -114,7 +162,12 @@ impl Event {
 
 impl Ord for Event {
     fn cmp(&self, other: &Self) -> Ordering {
-        self.start().cmp(&other.start())
+        let ord = self.start().cmp(&other.start());
+        if ord == Ordering::Equal {
+            (self.end() - self.start()).cmp(&(other.end() - other.start()))
+        } else {
+            ord
+        }
     }
 }
 
