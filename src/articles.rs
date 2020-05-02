@@ -1,7 +1,49 @@
+use yaml_rust::{ YamlLoader, Yaml };
 use sorted_vec::SortedVec;
 
 use std::i32::{ MIN, MAX };
 use std::cmp::{ Ordering };
+use std::collections::hash_map::HashMap;
+
+pub struct Caerlun<'a> {
+    id_key: Yaml,
+    name_key: Yaml,
+
+    timeline: Timeline<'a>,
+    races: HashMap<String, &'a Race>,
+    regions: HashMap<String, &'a Region>,
+    events: HashMap<String, &'a Event>, 
+    features: HashMap<String, &'a GeoFeature>,
+}
+
+impl<'a> Caerlun<'a> {
+    pub fn new() -> Caerlun<'a> {
+        Caerlun {
+            id_key: Yaml::from_str("id"),
+            name_key: Yaml::from_str("name"),
+            timeline: Timeline::new(),
+            races: HashMap::new(),
+            regions: HashMap::new(),
+            events: HashMap::new(),
+            features: HashMap::new(),
+        }
+    }
+}
+
+pub struct Timeline<'a> {
+    eras: SortedVec<&'a Era>,
+    events: SortedVec<&'a Event>, 
+}
+
+impl<'a> Timeline<'a> {
+    pub fn new() -> Timeline<'a> {
+        Timeline {
+            eras: SortedVec::new(),
+            events: SortedVec::new(),
+        }
+    }
+}
+
 
 pub struct Race {
     id: String,
@@ -11,6 +53,9 @@ pub struct Race {
 }
 
 impl Race {
+    pub fn build(yaml: &Yaml) {
+    }
+
     pub fn id(&self) -> &String { &self.id }
 }
 
@@ -97,11 +142,6 @@ pub struct Alias {
     name: String,
     tone: Tone,
     races: Vec<String>,
-}
-
-pub struct Timeline {
-    eras: SortedVec<Era>,
-    events: SortedVec<Event>, 
 }
 
 
