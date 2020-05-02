@@ -3,6 +3,33 @@ use sorted_vec::SortedVec;
 use std::i32::{ MIN, MAX };
 use std::cmp::{ Ordering };
 
+pub struct Race {
+    id: String,
+    name: String,
+    plural: Option<String>,
+    alias: Vec<Alias>,
+}
+
+impl Race {
+    pub fn id(&self) -> &String { &self.id }
+}
+
+impl PartialEq for Race {
+    fn eq(&self, other: &Self) -> bool { self.id == other.id }
+}
+
+impl Eq for Race {}
+
+impl Ord for Race {
+    fn cmp(&self, other: &Self) -> Ordering { self.name.cmp(&other.name) }
+}
+
+impl PartialOrd for Race {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 pub struct Region {
     id: String,
     name: String,

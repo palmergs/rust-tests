@@ -20,6 +20,9 @@ races:
   - id: urunai
     name: Uruk'u
     plural: Urunai
+    alias:
+      - name: Lupen
+        tone: negative
   - id: gobru
     name: Gobr'u
     plural: Gobrunai
