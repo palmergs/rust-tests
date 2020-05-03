@@ -23,7 +23,7 @@ fn main() -> io::Result<()> {
             .takes_value(true)
             .help("If set, generate a randomly created character"))
         .arg(Arg::with_name("count")
-            .short("c")
+            .short("n")
             .long("count")
             .value_name("COUNT")
             .help("Number of strings to generate")

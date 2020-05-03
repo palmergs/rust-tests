@@ -1,13 +1,21 @@
+extern crate regex;
+use regex::Regex;
+
 use yaml_rust::{ YamlLoader, Yaml };
 use sorted_vec::SortedVec;
 
 use std::i32::{ MIN, MAX };
-use std::cmp::{ Ordering };
+use std::cmp::{ min, max, Ordering };
 use std::collections::hash_map::HashMap;
 
 pub struct Caerlun<'a> {
     id_key: Yaml,
     name_key: Yaml,
+    alias_key: Yaml,
+    parent_key: Yaml,
+    race_key: Yaml,
+    tone_key: Yaml,
+    year_key: Yaml,
 
     timeline: Timeline<'a>,
     races: HashMap<String, &'a Race>,
@@ -21,6 +29,12 @@ impl<'a> Caerlun<'a> {
         Caerlun {
             id_key: Yaml::from_str("id"),
             name_key: Yaml::from_str("name"),
+            alias_key: Yaml::from_str("alias"),
+            parent_key: Yaml::from_str("parent"),
+            race_key: Yaml::from_str("race"),
+            tone_key: Yaml::from_str("tone"),
+            year_key: Yaml::from_str("year"),
+
             timeline: Timeline::new(),
             races: HashMap::new(),
             regions: HashMap::new(),
@@ -144,45 +158,60 @@ pub struct Alias {
     races: Vec<String>,
 }
 
+#[derive(Eq, PartialEq, Ord, PartialOrd)]
+struct TimeRange {
+    start: Option<i32>,
+    end: Option<i32>,
+}
+
+impl TimeRange {
+    pub fn new(time: &str) -> TimeRange {
+        lazy_static! {
+            static ref RANGE: Regex = Regex::new(r"\s*(to|before|until|after)\s*").unwrap();
+            static ref NUMBER: Regex = Regex::new(r"\s*([-]?[0-9]+)\s*").unwrap();
+        }
+        match RANGE.captures(time) {
+            Some(capture) => {
+                let nums = NUMBER.captures(time).unwrap();
+                let one: i32 = nums[1].parse().unwrap();
+                match capture.get(1).unwrap().as_str() {
+                    "to" => {
+                        let two: i32 = nums[2].parse().unwrap();
+                        TimeRange{ start: Some(std::cmp::min(one, two)), end: Some(std::cmp::max(one, two)) }
+                    },
+                    "before" | "until" => TimeRange{ start: None, end: Some(one) },
+                    "after" => TimeRange{ start: Some(one), end: None },
+                    _ => panic!("Unable to parse time range with {}", time),
+                }
+            },
+            None => {
+                let year = time.to_string();
+                let year = year.trim();
+                let year: i32 = year.parse().unwrap();
+                TimeRange{ start: Some(year), end: Some(year) }
+            }
+        }
+    }
+}
 
 pub struct Era {
     id: String,
     name: String,
-    from: Option<i32>,
-    to: Option<i32>,
+    range: TimeRange,
     races: Vec<String>
 }
 
 impl Era {
     fn new(id: &str, name: &str) -> Era {
-        Era { id: id.to_string(), name: name.to_string(), from: None, to: None, races: Vec::new() }
+        Era { id: id.to_string(), name: name.to_string(), range: TimeRange::new("1980 to 1990"), races: Vec::new() }
     }
 
     fn id(&self) -> &String { &self.id }
-
-    fn start(&self) -> i32 {
-        match self.from {
-            Some(n) => n,
-            None => std::i32::MIN,
-        }
-    }
-
-    fn end(&self) -> i32 {
-        match self.to {
-            Some(n) => n,
-            None => std::i32::MAX,
-        }
-    }
 }
 
 impl Ord for Era {
     fn cmp(&self, other: &Self) -> Ordering {
-        let ord = self.start().cmp(&other.start());
-        if ord == Ordering::Equal {
-            (self.end() - self.start()).cmp(&(other.end() - other.start()))
-        } else {
-            ord
-        }
+        self.range.cmp(&other.range)
     }
 }
 
@@ -201,8 +230,7 @@ impl Eq for Era {}
 pub struct Event {
     id: String,
     name: String,
-    from: Option<i32>,
-    to: Option<i32>,
+    range: TimeRange,
     alias: Vec<Alias>,
     races: Vec<String>,
     parent: Option<String>,
@@ -211,30 +239,11 @@ pub struct Event {
 
 impl Event {
     fn id(&self) -> &String { &self.id }
-
-    fn start(&self) -> i32 {
-        match self.from {
-            Some(n) => n,
-            None => std::i32::MIN,
-        }
-    }
-
-    fn end(&self) -> i32 {
-        match self.to {
-            Some(n) => n,
-            None => std::i32::MAX,
-        }
-    }
 }
 
 impl Ord for Event {
     fn cmp(&self, other: &Self) -> Ordering {
-        let ord = self.start().cmp(&other.start());
-        if ord == Ordering::Equal {
-            (self.end() - self.start()).cmp(&(other.end() - other.start()))
-        } else {
-            ord
-        }
+        self.range.cmp(&other.range)
     }
 }
 

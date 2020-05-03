@@ -41,11 +41,10 @@ regions:
     parent: opal-delta
     name: Opal
     category: city
-    from: -800
+    year: -800 to now
     alias:
       - name: Ramantha
-        from: -800
-        to: 0
+        year: -800 to 0
   - id: hiran-forest
     parent: north-caerlun
     name: Hiran Forest
