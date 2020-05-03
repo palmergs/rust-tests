@@ -22,7 +22,7 @@ pub struct Caerlun<'a> {
     timeline: Timeline<'a>,
     races: HashMap<String, Race>,
     regions: HashMap<String, Region>,
-    events: HashMap<&'a String, &'a Event>, 
+    events: HashMap<String, Event>, 
     features: HashMap<String, GeoFeature>,
 }
 
@@ -135,7 +135,7 @@ impl<'a> Caerlun<'a> {
                     plural: self.optional_string(&h[&self.plural_key]),
                     alias: self.build_aliases(&h[&self.alias_key]),
                     parent: opt_parent.clone(),
-                    children: Vec::new()
+                    children: Vec::new(),
                 };
                 self.regions.insert(id.clone(), r);
                 match opt_parent {
@@ -148,6 +148,34 @@ impl<'a> Caerlun<'a> {
                 }
             },
             _ => panic!("Expected to build a region instance from hash"),
+        }
+    }
+
+    pub fn append_event(&mut self, yaml: &Yaml) {
+        match yaml {
+            Yaml::Hash(h) => {
+                let id = h[&self.id_key].as_str().unwrap().to_string();
+                let opt_parent = self.optional_string(&h[&self.parent_key]);
+                let e = Event{
+                    id: id.clone(),
+                    name: h[&self.name_key].as_str().unwrap().to_string(),
+                    alias: self.build_aliases(&h[&self.alias_key]),
+                    range: TimeRange::new(h[&self.year_key].as_str().unwrap()),
+                    races: self.strings(&h[&self.race_key]),
+                    parent: opt_parent.clone(),
+                    children: Vec::new(),
+                };
+                self.events.insert(id.clone(), e);
+                match opt_parent {
+                    Some(parent_id) => {
+                        if let Some(parent) = self.events.get_mut(&parent_id) {
+                            parent.children.push(id.clone());
+                        }
+                    },
+                    None => (),
+                }
+            },
+            _ => panic!("Expected to build an event instance from hash"),
         }
     }
 }
