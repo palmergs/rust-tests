@@ -23,7 +23,7 @@ pub struct Caerlun<'a> {
     races: HashMap<String, Race>,
     regions: HashMap<String, Region>,
     events: HashMap<&'a String, &'a Event>, 
-    features: HashMap<&'a String, &'a GeoFeature>,
+    features: HashMap<String, GeoFeature>,
 }
 
 impl<'a> Caerlun<'a> {
@@ -113,7 +113,12 @@ impl<'a> Caerlun<'a> {
     pub fn append_geo(&mut self, yaml: &Yaml) {
         match yaml {
             Yaml::Hash(h) => {
-
+                let id = h[&self.id_key].as_str().unwrap().to_string();
+                let g = GeoFeature{
+                    id: id.clone(),
+                    name: h[&self.name_key].as_str().unwrap().to_string(),
+                };
+                self.features.insert(id, g);
             },
             _ => panic!("Expected to build a geo instance from hash"),
         }
