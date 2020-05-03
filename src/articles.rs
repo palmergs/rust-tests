@@ -7,10 +7,12 @@ use sorted_vec::SortedVec;
 use std::i32::{ MIN, MAX };
 use std::cmp::{ min, max, Ordering };
 use std::collections::hash_map::HashMap;
+use std::str::FromStr;
 
 pub struct Caerlun<'a> {
     pub id_key: Yaml,
     pub name_key: Yaml,
+    pub plural_key: Yaml,
     pub alias_key: Yaml,
     pub parent_key: Yaml,
     pub race_key: Yaml,
@@ -18,10 +20,10 @@ pub struct Caerlun<'a> {
     pub year_key: Yaml,
 
     timeline: Timeline<'a>,
-    races: HashMap<String, &'a Race>,
-    regions: HashMap<String, &'a Region>,
-    events: HashMap<String, &'a Event>, 
-    features: HashMap<String, &'a GeoFeature>,
+    races: HashMap<String, Race>,
+    regions: HashMap<String, Region>,
+    events: HashMap<&'a String, &'a Event>, 
+    features: HashMap<&'a String, &'a GeoFeature>,
 }
 
 impl<'a> Caerlun<'a> {
@@ -29,6 +31,7 @@ impl<'a> Caerlun<'a> {
         Caerlun {
             id_key: Yaml::from_str("id"),
             name_key: Yaml::from_str("name"),
+            plural_key: Yaml::from_str("plural"),
             alias_key: Yaml::from_str("alias"),
             parent_key: Yaml::from_str("parent"),
             race_key: Yaml::from_str("race"),
@@ -40,6 +43,106 @@ impl<'a> Caerlun<'a> {
             regions: HashMap::new(),
             events: HashMap::new(),
             features: HashMap::new(),
+        }
+    }
+
+    fn optional_string(&self, yaml: &Yaml) -> Option<String> {
+        match yaml {
+            Yaml::String(s) => Some(s.to_string()),
+            _ => None
+        }
+    }
+
+    fn strings(&self, yaml: &Yaml) -> Vec<String> {
+        match yaml {
+            Yaml::Array(arr) => arr.iter().map(|s| s.as_str().unwrap().to_string()).collect(),
+            _ => Vec::new()
+        }
+    }
+
+    fn build_aliases(&self, yaml: &Yaml) -> Vec<Alias> {
+        match yaml {
+            Yaml::Array(arr) => {
+                let mut vec = Vec::new();
+                for a in arr {
+                    match self.build_alias(a) {
+                        Some(alias) => vec.push(alias),
+                        None => ()
+                    }
+                }
+                vec
+            },
+            _ => Vec::new()
+        }
+    }
+
+    fn build_alias(&self, yaml: &Yaml) -> Option<Alias> {
+        match yaml {
+            Yaml::Hash(h) => {
+                let tone = match h[&self.tone_key].as_str() {
+                    Some(s) => Tone::from_str(s).unwrap(),
+                    None => Tone::Neutral,
+                };
+                let alias = Alias{
+                    name: h[&self.name_key].as_str().unwrap().to_string(),
+                    tone: tone,
+                    races: self.strings(&h[&self.race_key]),
+                };
+                Some(alias)
+            },
+            _ => None
+        }
+    }    
+
+    pub fn append_race(&mut self, yaml: &Yaml) {
+        match yaml {
+            Yaml::Hash(h) => {
+                let id = h[&self.id_key].as_str().unwrap().to_string();
+                let r = Race{
+                    id: id.clone(),
+                    name: h[&self.name_key].as_str().unwrap().to_string(),
+                    plural: self.optional_string(&h[&self.plural_key]),
+                    alias: self.build_aliases(&h[&self.alias_key]),
+                };
+                self.races.insert(id, r);
+            },
+            _ => panic!("Expected to build race instance from hash"),
+        }
+    }
+
+    pub fn append_geo(&mut self, yaml: &Yaml) {
+        match yaml {
+            Yaml::Hash(h) => {
+
+            },
+            _ => panic!("Expected to build a geo instance from hash"),
+        }
+    }
+
+    pub fn append_region(&mut self, yaml: &Yaml) {
+        match yaml {
+            Yaml::Hash(h) => {
+                let id = h[&self.id_key].as_str().unwrap().to_string();
+                let opt_parent = self.optional_string(&h[&self.parent_key]);
+                let r = Region{
+                    id: id.clone(),
+                    name: h[&self.name_key].as_str().unwrap().to_string(),
+                    plural: self.optional_string(&h[&self.plural_key]),
+                    alias: self.build_aliases(&h[&self.alias_key]),
+                    parent: opt_parent.clone(),
+                    children: Vec::new()
+                };
+                self.regions.insert(id.clone(), r);
+                match opt_parent {
+                    Some(parent_id) => {
+                        if let Some(parent) = self.regions.get_mut(&parent_id) {
+                            parent.children.push(id.clone());
+                        }
+                    },
+                    None => (),
+                }
+            },
+            _ => panic!("Expected to build a region instance from hash"),
         }
     }
 }
@@ -66,20 +169,6 @@ pub struct Race {
 }
 
 impl Race {
-    pub fn build(caerlun: &Caerlun, yaml: &Yaml) -> Race {
-        match yaml {
-            Yaml::Hash(h) => {
-                Race{
-                    id: h[&caerlun.id_key].as_str().unwrap().to_string(),
-                    name: h[&caerlun.name_key].as_str().unwrap().to_string(),
-                    plural: None,
-                    alias: Vec::new(),
-                }
-            },
-            _ => panic!("Expected to build race instance from hash")
-        }
-    }
-
     pub fn id(&self) -> &String { &self.id }
 }
 
@@ -160,6 +249,19 @@ pub enum Tone {
     Positive,
     Neutral,
     Negative,
+}
+
+impl FromStr for Tone {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Tone, ()> {
+        match s {
+            "positive" => Ok(Tone::Positive),
+            "neutral" => Ok(Tone::Neutral),
+            "negative" => Ok(Tone::Negative),
+            _ => Ok(Tone::Neutral),
+        }
+    }
 }
 
 pub struct Alias {
