@@ -172,11 +172,11 @@ impl TimeRange {
         }
         match RANGE.captures(time) {
             Some(capture) => {
-                let nums = NUMBER.captures(time).unwrap();
-                let one: i32 = nums[1].parse().unwrap();
+                let nums: Vec<&str> = NUMBER.find_iter(time).map(|mat| mat.as_str().trim()).collect();
+                let one: i32 = nums[0].parse().unwrap();
                 match capture.get(1).unwrap().as_str() {
                     "to" => {
-                        let two: i32 = nums[2].parse().unwrap();
+                        let two: i32 = nums[1].parse().unwrap();
                         TimeRange{ start: Some(std::cmp::min(one, two)), end: Some(std::cmp::max(one, two)) }
                     },
                     "before" | "until" => TimeRange{ start: None, end: Some(one) },
@@ -258,3 +258,31 @@ impl PartialEq for Event {
 }
 
 impl Eq for Event {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn time_range_from_string() {
+        let range = TimeRange::new("1234");
+        assert_eq!(1234 as i32, range.start.unwrap());
+        assert_eq!(1234 as i32, range.end.unwrap());
+
+        let range = TimeRange::new(" -432  ");
+        assert_eq!(-432 as i32, range.start.unwrap());
+        assert_eq!(-432 as i32, range.end.unwrap());
+
+        let range = TimeRange::new("-100 to 200");
+        assert_eq!(-100 as i32, range.start.unwrap());
+        assert_eq!(200 as i32, range.end.unwrap());
+
+        let range = TimeRange::new("after 1000");
+        assert_eq!(1000 as i32, range.start.unwrap());
+        assert_eq!(None, range.end);
+
+        let range = TimeRange::new("before 888");
+        assert_eq!(None, range.start);
+        assert_eq!(888, range.end.unwrap());
+    }
+}
