@@ -9,13 +9,13 @@ use std::cmp::{ min, max, Ordering };
 use std::collections::hash_map::HashMap;
 
 pub struct Caerlun<'a> {
-    id_key: Yaml,
-    name_key: Yaml,
-    alias_key: Yaml,
-    parent_key: Yaml,
-    race_key: Yaml,
-    tone_key: Yaml,
-    year_key: Yaml,
+    pub id_key: Yaml,
+    pub name_key: Yaml,
+    pub alias_key: Yaml,
+    pub parent_key: Yaml,
+    pub race_key: Yaml,
+    pub tone_key: Yaml,
+    pub year_key: Yaml,
 
     timeline: Timeline<'a>,
     races: HashMap<String, &'a Race>,
@@ -58,7 +58,6 @@ impl<'a> Timeline<'a> {
     }
 }
 
-
 pub struct Race {
     id: String,
     name: String,
@@ -67,7 +66,18 @@ pub struct Race {
 }
 
 impl Race {
-    pub fn build(yaml: &Yaml) {
+    pub fn build(caerlun: &Caerlun, yaml: &Yaml) -> Race {
+        match yaml {
+            Yaml::Hash(h) => {
+                Race{
+                    id: h[&caerlun.id_key].as_str().unwrap().to_string(),
+                    name: h[&caerlun.name_key].as_str().unwrap().to_string(),
+                    plural: None,
+                    alias: Vec::new(),
+                }
+            },
+            _ => panic!("Expected to build race instance from hash")
+        }
     }
 
     pub fn id(&self) -> &String { &self.id }
@@ -165,6 +175,8 @@ struct TimeRange {
 }
 
 impl TimeRange {
+
+    // Can be built from `### to ###`, `before ###`, `after ###` or `until ###`
     pub fn new(time: &str) -> TimeRange {
         lazy_static! {
             static ref RANGE: Regex = Regex::new(r"\s*(to|before|until|after)\s*").unwrap();
