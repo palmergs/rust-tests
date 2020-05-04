@@ -4,7 +4,6 @@ extern crate sorted_vec;
 extern crate yaml_rust;
 
 use rust_embed::RustEmbed;
-use std::collections::hash_map::HashMap;
 
 mod names;
 pub use names::{ NameBuilder, Fragment, FragmentList };

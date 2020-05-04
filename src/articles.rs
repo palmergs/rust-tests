@@ -11,6 +11,7 @@ use std::str::FromStr;
 
 use super::Asset;
 
+#[derive(Debug)]
 pub struct Caerlun<'a> {
     pub id_key: Yaml,
     pub name_key: Yaml,
@@ -58,7 +59,29 @@ impl<'a> Caerlun<'a> {
                                 let doc = &docs[0];
                                 match doc {
                                     Yaml::Hash(h) => {
-                                        // todo
+                                        match &h.get(&Yaml::from_str("regions")) {
+                                            Some(entry) => {
+                                                match entry {
+                                                    Yaml::Array(arr) => {
+                                                        for a in arr { caerlun.append_region(&a); }
+                                                    },
+                                                    _ => (),
+                                                }
+                                            },
+                                            None => (),
+                                        }
+
+                                        match &h.get(&Yaml::from_str("races")) {
+                                            Some(entry) => {
+                                                match entry {
+                                                    Yaml::Array(arr) => {
+                                                        for a in arr { caerlun.append_race(&a); }
+                                                    },
+                                                    _ => (),
+                                                }
+                                            },
+                                            None => (),
+                                        }
                                     },
                                     _ => (),
                                 }
@@ -74,47 +97,62 @@ impl<'a> Caerlun<'a> {
         caerlun
     }
 
-    fn optional_string(&self, yaml: &Yaml) -> Option<String> {
-        match yaml {
-            Yaml::String(s) => Some(s.to_string()),
-            _ => None
-        }
-    }
-
-    fn strings(&self, yaml: &Yaml) -> Vec<String> {
-        match yaml {
-            Yaml::Array(arr) => arr.iter().map(|s| s.as_str().unwrap().to_string()).collect(),
-            _ => Vec::new()
-        }
-    }
-
-    fn build_aliases(&self, yaml: &Yaml) -> Vec<Alias> {
-        match yaml {
-            Yaml::Array(arr) => {
-                let mut vec = Vec::new();
-                for a in arr {
-                    match self.build_alias(a) {
-                        Some(alias) => vec.push(alias),
-                        None => ()
-                    }
+    fn optional_string(&self, opt: Option<&Yaml>) -> Option<String> {
+        match opt {
+            Some(yaml) => {
+                match yaml {
+                    Yaml::String(s) => Some(s.to_string()),
+                    _ => None,
                 }
-                vec
             },
-            _ => Vec::new()
+            None => None,
+        }
+    }
+
+    fn strings(&self, opt: Option<&Yaml>) -> Vec<String> {
+        match opt {
+            Some(yaml) => {
+                match yaml {
+                    Yaml::Array(arr) => arr.iter().map(|s| s.as_str().unwrap().to_string()).collect(),
+                    _ => Vec::new()
+                }        
+            },
+            None => Vec::new()
+        }
+    }
+
+    fn build_aliases(&self, opt: Option<&Yaml>) -> Vec<Alias> {
+        match opt {
+            Some(yaml) => {
+                match yaml {
+                    Yaml::Array(arr) => {
+                        let mut vec = Vec::new();
+                        for a in arr {
+                            match self.build_alias(a) {
+                                Some(alias) => vec.push(alias),
+                                None => ()
+                            }
+                        }
+                        vec
+                    },
+                    _ => Vec::new()
+                }
+            },
+            None => Vec::new()
         }
     }
 
     fn build_alias(&self, yaml: &Yaml) -> Option<Alias> {
         match yaml {
             Yaml::Hash(h) => {
-                let tone = match h[&self.tone_key].as_str() {
-                    Some(s) => Tone::from_str(s).unwrap(),
+                let tone = match h.get(&self.tone_key) {
+                    Some(s) => Tone::from_str(s.as_str().unwrap()).unwrap(),
                     None => Tone::Neutral,
                 };
                 let alias = Alias{
                     name: h[&self.name_key].as_str().unwrap().to_string(),
                     tone: tone,
-                    races: self.strings(&h[&self.race_key]),
+                    races: self.strings(h.get(&self.race_key)),
                 };
                 Some(alias)
             },
@@ -129,8 +167,8 @@ impl<'a> Caerlun<'a> {
                 let r = Race{
                     id: id.clone(),
                     name: h[&self.name_key].as_str().unwrap().to_string(),
-                    plural: self.optional_string(&h[&self.plural_key]),
-                    alias: self.build_aliases(&h[&self.alias_key]),
+                    plural: self.optional_string(h.get(&self.plural_key)),
+                    alias: self.build_aliases(h.get(&self.alias_key)),
                 };
                 self.races.insert(id, r);
             },
@@ -156,12 +194,12 @@ impl<'a> Caerlun<'a> {
         match yaml {
             Yaml::Hash(h) => {
                 let id = h[&self.id_key].as_str().unwrap().to_string();
-                let opt_parent = self.optional_string(&h[&self.parent_key]);
+                let opt_parent = self.optional_string(h.get(&self.parent_key));
                 let r = Region{
                     id: id.clone(),
                     name: h[&self.name_key].as_str().unwrap().to_string(),
-                    plural: self.optional_string(&h[&self.plural_key]),
-                    alias: self.build_aliases(&h[&self.alias_key]),
+                    plural: self.optional_string(h.get(&self.plural_key)),
+                    alias: self.build_aliases(h.get(&self.alias_key)),
                     parent: opt_parent.clone(),
                     children: Vec::new(),
                 };
@@ -183,13 +221,13 @@ impl<'a> Caerlun<'a> {
         match yaml {
             Yaml::Hash(h) => {
                 let id = h[&self.id_key].as_str().unwrap().to_string();
-                let opt_parent = self.optional_string(&h[&self.parent_key]);
+                let opt_parent = self.optional_string(h.get(&self.parent_key));
                 let e = Event{
                     id: id.clone(),
                     name: h[&self.name_key].as_str().unwrap().to_string(),
-                    alias: self.build_aliases(&h[&self.alias_key]),
+                    alias: self.build_aliases(h.get(&self.alias_key)),
                     range: TimeRange::new(h[&self.year_key].as_str().unwrap()),
-                    races: self.strings(&h[&self.race_key]),
+                    races: self.strings(h.get(&self.race_key)),
                     parent: opt_parent.clone(),
                     children: Vec::new(),
                 };
@@ -208,6 +246,7 @@ impl<'a> Caerlun<'a> {
     }
 }
 
+#[derive(Debug)]
 pub struct Timeline<'a> {
     eras: SortedVec<&'a Era>,
     events: SortedVec<&'a Event>, 
@@ -222,6 +261,7 @@ impl<'a> Timeline<'a> {
     }
 }
 
+#[derive(Debug)]
 pub struct Race {
     id: String,
     name: String,
@@ -249,6 +289,7 @@ impl PartialOrd for Race {
     }
 }
 
+#[derive(Debug)]
 pub struct Region {
     id: String,
     name: String,
@@ -289,6 +330,7 @@ impl PartialOrd for Region {
     }
 }
 
+#[derive(Debug)]
 pub struct GeoFeature {
     id: String,
     name: String,
@@ -306,6 +348,7 @@ impl PartialEq for GeoFeature {
 
 impl Eq for GeoFeature {}
 
+#[derive(Debug)]
 pub enum Tone {
     Positive,
     Neutral,
@@ -325,13 +368,14 @@ impl FromStr for Tone {
     }
 }
 
+#[derive(Debug)]
 pub struct Alias {
     name: String,
     tone: Tone,
     races: Vec<String>,
 }
 
-#[derive(Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
 struct TimeRange {
     start: Option<i32>,
     end: Option<i32>,
@@ -369,6 +413,7 @@ impl TimeRange {
     }
 }
 
+#[derive(Debug)]
 pub struct Era {
     id: String,
     name: String,
@@ -402,6 +447,7 @@ impl PartialEq for Era {
 
 impl Eq for Era {}
 
+#[derive(Debug)]
 pub struct Event {
     id: String,
     name: String,
