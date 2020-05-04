@@ -1,7 +1,7 @@
 extern crate clap;
 use clap::{App, Arg};
 
-use rust_names::{ NameBuilder, CharacterBuilder };
+use rust_names::{ NameBuilder, Caerlun, CharacterBuilder };
 use std::io;
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
@@ -34,6 +34,7 @@ fn main() -> io::Result<()> {
     let count = count.parse::<i32>().unwrap();
 
     if matches.is_present("character") {
+        let caerlun = Caerlun::new();
         let builder = CharacterBuilder::new();
         for _ in 0..count {
             builder.build(

@@ -4,10 +4,12 @@ use regex::Regex;
 use yaml_rust::{ YamlLoader, Yaml };
 use sorted_vec::SortedVec;
 
-use std::i32::{ MIN, MAX };
+//use std::i32::{ MIN, MAX };
 use std::cmp::{ min, max, Ordering };
 use std::collections::hash_map::HashMap;
 use std::str::FromStr;
+
+use super::Asset;
 
 pub struct Caerlun<'a> {
     pub id_key: Yaml,
@@ -28,7 +30,7 @@ pub struct Caerlun<'a> {
 
 impl<'a> Caerlun<'a> {
     pub fn new() -> Caerlun<'a> {
-        Caerlun {
+        let mut caerlun = Caerlun {
             id_key: Yaml::from_str("id"),
             name_key: Yaml::from_str("name"),
             plural_key: Yaml::from_str("plural"),
@@ -43,7 +45,33 @@ impl<'a> Caerlun<'a> {
             regions: HashMap::new(),
             events: HashMap::new(),
             features: HashMap::new(),
+        };
+
+        for p in Asset::iter() {
+            if p.ends_with(".yaml") {
+                let o = Asset::get(&p);
+                match o {
+                    Some(cow) => {
+                        match std::str::from_utf8(&cow) {
+                            Ok(s) => {
+                                let docs = YamlLoader::load_from_str(s).unwrap();
+                                let doc = &docs[0];
+                                match doc {
+                                    Yaml::Hash(h) => {
+                                        // todo
+                                    },
+                                    _ => (),
+                                }
+                            },
+                            _ => (),
+                        }
+                    },
+                    None => (),
+                }
+            }
         }
+        
+        caerlun
     }
 
     fn optional_string(&self, yaml: &Yaml) -> Option<String> {
