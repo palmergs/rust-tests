@@ -1,13 +1,33 @@
-timeline:
-  eras:
-    - id: antiquity
-      abbr: BA
-      to: 0
-    - id: subjegation
-      abbr: DL
-      from: 0
-      to: 500
-    - id: modern
-      abbr: ME
-      from: 500
-
+eras:
+  - id: antiquity
+    abbr: BA
+    year: until 0
+  - id: subjegation
+    abbr: DL
+    year: 0 to 501
+  - id: modern
+    abbr: ME
+    year: after 501
+events:
+  - id: dragon-lords
+    name: Dragon Lords
+    year: 0 to 501
+  - id: ramanji-nation
+    name: Ramanji
+    year: -1200 to 3
+  - id: ramanji-migration
+    name: Ramanji Migration
+    year: -1200 to -1050
+    parent: ramanji-nation
+  - id: ramanji-states
+    name: Ramanji States
+    year: -1050 to -740
+    parent: ramanji-nation
+  - id: ramanji-republic
+    name: Ramanji Republic
+    year: -740 to -340
+    parent: ramanji-nation
+  - id: ramanji-empire
+    name: Remanji Empire
+    year: -340 to 3
+    parent: ramanji-nation

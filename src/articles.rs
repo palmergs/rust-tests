@@ -5,7 +5,7 @@ use yaml_rust::{ YamlLoader, Yaml };
 use sorted_vec::SortedVec;
 
 //use std::i32::{ MIN, MAX };
-use std::cmp::{ min, max, Ordering };
+use std::cmp::Ordering;
 use std::collections::hash_map::HashMap;
 use std::str::FromStr;
 
@@ -54,38 +54,7 @@ impl<'a> Caerlun<'a> {
                 match o {
                     Some(cow) => {
                         match std::str::from_utf8(&cow) {
-                            Ok(s) => {
-                                let docs = YamlLoader::load_from_str(s).unwrap();
-                                let doc = &docs[0];
-                                match doc {
-                                    Yaml::Hash(h) => {
-                                        match &h.get(&Yaml::from_str("regions")) {
-                                            Some(entry) => {
-                                                match entry {
-                                                    Yaml::Array(arr) => {
-                                                        for a in arr { caerlun.append_region(&a); }
-                                                    },
-                                                    _ => (),
-                                                }
-                                            },
-                                            None => (),
-                                        }
-
-                                        match &h.get(&Yaml::from_str("races")) {
-                                            Some(entry) => {
-                                                match entry {
-                                                    Yaml::Array(arr) => {
-                                                        for a in arr { caerlun.append_race(&a); }
-                                                    },
-                                                    _ => (),
-                                                }
-                                            },
-                                            None => (),
-                                        }
-                                    },
-                                    _ => (),
-                                }
-                            },
+                            Ok(s) => caerlun.build_type(s),
                             _ => (),
                         }
                     },
@@ -95,6 +64,64 @@ impl<'a> Caerlun<'a> {
         }
         
         caerlun
+    }
+
+    fn build_type(&mut self, s: &str) {
+        let docs = YamlLoader::load_from_str(s).unwrap();
+        let doc = &docs[0];
+        match doc {
+            Yaml::Hash(h) => {
+                match &h.get(&Yaml::from_str("regions")) {
+                    Some(entry) => {
+                        match entry {
+                            Yaml::Array(arr) => {
+                                for a in arr { self.append_region(&a); }
+                            },
+                            _ => (),
+                        }
+                    },
+                    None => (),
+                }
+
+                match &h.get(&Yaml::from_str("races")) {
+                    Some(entry) => {
+                        match entry {
+                            Yaml::Array(arr) => {
+                                for a in arr { self.append_race(&a); }
+                            },
+                            _ => (),
+                        }
+                    },
+                    None => (),
+                }
+
+                match &h.get(&Yaml::from_str("eras")) {
+                    Some(entry) => {
+                        match entry {
+                            Yaml::Array(arr) => {
+                                for a in arr { self.append_era(&a); }
+                            },
+                            _ => (),
+                        }
+                    },
+                    None => (),
+                }
+
+                match &h.get(&Yaml::from_str("events")) {
+                    Some(entry) => {
+                        match entry {
+                            Yaml::Array(arr) => {
+                                for a in arr { self.append_event(&a); }
+                            },
+                            _ => (),
+                        }
+                    },
+                    None => (),
+                }
+            },
+            _ => (),
+        }
+
     }
 
     fn optional_string(&self, opt: Option<&Yaml>) -> Option<String> {
@@ -217,6 +244,11 @@ impl<'a> Caerlun<'a> {
         }
     }
 
+    pub fn append_era(&mut self, yaml: &Yaml) {
+
+
+    }
+
     pub fn append_event(&mut self, yaml: &Yaml) {
         match yaml {
             Yaml::Hash(h) => {
@@ -269,10 +301,6 @@ pub struct Race {
     alias: Vec<Alias>,
 }
 
-impl Race {
-    pub fn id(&self) -> &String { &self.id }
-}
-
 impl PartialEq for Race {
     fn eq(&self, other: &Self) -> bool { self.id == other.id }
 }
@@ -310,8 +338,6 @@ impl Region {
             children: Vec::new()
         }
     }
-
-    pub fn id(&self) -> &String { &self.id }
 }
 
 impl PartialEq for Region {
@@ -425,8 +451,6 @@ impl Era {
     fn new(id: &str, name: &str) -> Era {
         Era { id: id.to_string(), name: name.to_string(), range: TimeRange::new("1980 to 1990"), races: Vec::new() }
     }
-
-    fn id(&self) -> &String { &self.id }
 }
 
 impl Ord for Era {
@@ -442,7 +466,7 @@ impl PartialOrd for Era {
 }
 
 impl PartialEq for Era {
-    fn eq(&self, other: &Self) -> bool { self.id() == other.id() }
+    fn eq(&self, other: &Self) -> bool { self.id == other.id }
 }
 
 impl Eq for Era {}
@@ -458,10 +482,6 @@ pub struct Event {
     children: Vec<String>,
 }
 
-impl Event {
-    fn id(&self) -> &String { &self.id }
-}
-
 impl Ord for Event {
     fn cmp(&self, other: &Self) -> Ordering {
         self.range.cmp(&other.range)
@@ -475,7 +495,7 @@ impl PartialOrd for Event {
 }
 
 impl PartialEq for Event {
-    fn eq(&self, other: &Self) -> bool { self.id() == other.id() }
+    fn eq(&self, other: &Self) -> bool { self.id == other.id }
 }
 
 impl Eq for Event {}
