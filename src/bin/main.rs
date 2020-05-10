@@ -22,6 +22,11 @@ fn main() -> io::Result<()> {
             .long("character")
             .takes_value(false)
             .help("If set, generate a randomly created character"))
+        .arg(Arg::with_name("race")
+            .short("r")
+            .long("race")
+            .help("Specify the race of a generated character")
+            .takes_value(true))
         .arg(Arg::with_name("count")
             .short("n")
             .long("count")
@@ -35,8 +40,7 @@ fn main() -> io::Result<()> {
 
     if matches.is_present("character") {
         let caerlun = Caerlun::new();
-        println!("CAERLUN = {:?}", caerlun);
-        let builder = CharacterBuilder::new();
+        let builder = CharacterBuilder::new(&caerlun);
         for _ in 0..count {
             builder.build(
                 matches.value_of("key"),

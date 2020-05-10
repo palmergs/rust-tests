@@ -2,6 +2,7 @@
 
 extern crate sorted_vec;
 extern crate yaml_rust;
+extern crate indexmap;
 
 use rust_embed::RustEmbed;
 

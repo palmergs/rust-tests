@@ -3,10 +3,10 @@ use regex::Regex;
 
 use yaml_rust::{ YamlLoader, Yaml };
 use sorted_vec::SortedVec;
+use indexmap::IndexMap;
 
 //use std::i32::{ MIN, MAX };
 use std::cmp::Ordering;
-use std::collections::hash_map::HashMap;
 use std::str::FromStr;
 
 use super::Asset;
@@ -22,11 +22,11 @@ pub struct Caerlun<'a> {
     pub tone_key: Yaml,
     pub year_key: Yaml,
 
-    timeline: Timeline<'a>,
-    races: HashMap<String, Race>,
-    regions: HashMap<String, Region>,
-    events: HashMap<String, Event>, 
-    features: HashMap<String, GeoFeature>,
+    pub timeline: Timeline<'a>,
+    pub races: IndexMap<String, Race>,
+    pub regions: IndexMap<String, Region>,
+    pub events: IndexMap<String, Event>, 
+    pub features: IndexMap<String, GeoFeature>,
 }
 
 impl<'a> Caerlun<'a> {
@@ -42,10 +42,10 @@ impl<'a> Caerlun<'a> {
             year_key: Yaml::from_str("year"),
 
             timeline: Timeline::new(),
-            races: HashMap::new(),
-            regions: HashMap::new(),
-            events: HashMap::new(),
-            features: HashMap::new(),
+            races: IndexMap::new(),
+            regions: IndexMap::new(),
+            events: IndexMap::new(),
+            features: IndexMap::new(),
         };
 
         for p in Asset::iter() {
@@ -295,10 +295,10 @@ impl<'a> Timeline<'a> {
 
 #[derive(Debug)]
 pub struct Race {
-    id: String,
-    name: String,
-    plural: Option<String>,
-    alias: Vec<Alias>,
+    pub id: String,
+    pub name: String,
+    pub plural: Option<String>,
+    pub alias: Vec<Alias>,
 }
 
 impl PartialEq for Race {
