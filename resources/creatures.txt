@@ -11,6 +11,9 @@ urg
 urunai
 grollim
 gobru
+centaur
+feletaur
+giant
 
 [monster]
 drake

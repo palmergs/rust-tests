@@ -2,36 +2,102 @@ races:
   - id: human
     name: Human
     plural: Humans
+    alignment: contestant
+    height: 5'2" - 6'0"
+    weight: 90 - 220
+    lifespan: 0-15, 15-30, 30-60, 60-75
     alias: 
       - name: Man 
         plural: Men
   - id: elf
     name: Elf
     plural: Elves
+    alignment: contestant
+    height: 5'2" - 5'6"
+    weight: 70 - 100
+    lifespan: 0-40, 40-80, 80-160, 160-240
   - id: dwarf
     name: Dwarf
     plural: Dwarves
-  - id: rulligg
-    name: Rulligg
-    alias:
-      - name: Rock Troll
-        plural: Rock Trolls
-        tone: negative
+    alignment: contestant
+    height: 4'10" - 5'3"
+    weight: 140 - 220
+    lifespan: 0-30, 30-60, 60-120, 120-150
   - id: urunai
     name: Uruk'u
     plural: Urunai
+    alignment: native
+    height: 6'0" - 7'0"
+    weight: 140 - 200
+    lifespan: 0-12, 12-32, 42-50, 50-58
     alias:
-      - name: Lupen
+      - name: Lupin
         tone: negative
   - id: gobru
     name: Gobr'u
     plural: Gobrunai
+    alignment: native
+    height: 3'0" - 3'6"
+    weight: 0-10, 10-40, 40-50, 50-60
     alias:
       - name: Goblin
         tone: negative
   - id: urg
     name: Urg
     plural: Urgunai
+    alignment: native
+    height: 5'5" - 5'10"
+    weight: 180 - 240
+    lifespan: 0-8, 8-32, 32-40, 40-48
     alias:
       - name: Orc
         tone: negative
+  - id: rulligg
+    name: Rulligg
+    alignment: dragon-brought
+    height: 5'6" - 5'10"
+    weight: 300 - 400
+    lifespan: 0-8, 8-24, 25-54, 54-200
+    alias:
+      - name: Rock Troll
+        plural: Rock Trolls
+        tone: negative
+  - id: feletaur
+    name: Felataur
+    alignment: dragon-brought
+    height: 5'0" - 5'6"
+    weight: 150 - 200
+    lifespan: 0-5, 5-15, 15-45, 45-60
+  - id: centaur
+    name: Centaur
+    alignment: dragon-brought
+    height: 6'6" - 8'0"
+    weight: 600 - 900
+    lifespan: 0-8, 8-16, 16-48, 48-64
+  - id: balor
+    name: Balor
+    plural: Balors
+    alignment: opposition
+    height: 6'0 - 7'0
+    weight: 160 - 220
+    lifespan: 0-50, 50-100, 100-150, 150-250
+  - id: ice-giant
+    name: Ice Giant
+    plural: Ice Giants
+    alignment: opposition
+    height: 15'0" - 18'0"
+    weight: 650 - 950
+    lifespan: 0-30, 30-60, 60-90, 90-120
+  - id: fire-giant
+    name: Fire Giant
+    plural: Fire Giants
+    alignment: opposition
+    height: 13'0" - 16'0"
+    weight: 650 - 950
+    lifespan: 0-30, 30-60, 60-90, 90-120
+  - id: grollim
+    name: Grollim
+    alignment: opposition
+    height: 5'5" - 5'10"
+    weight: 130 - 200
+    lifespan: 0-20, 20-40, 40-60, 60-80
