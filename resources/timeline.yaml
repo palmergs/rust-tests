@@ -1,11 +1,18 @@
 eras:
+  - id: pre-history
+    name: Before the Contest
+    abbr: BC
+    year: until -3000
   - id: antiquity
+    name: Age of Antiquity
     abbr: BA
-    year: until 0
+    year: -3000 to 0
   - id: subjegation
+    name: Subjegation of the Dragon Lords
     abbr: DL
     year: 0 to 501
   - id: modern
+    name: Modern Era
     abbr: ME
     year: after 501
 events:

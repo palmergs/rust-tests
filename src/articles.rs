@@ -15,6 +15,7 @@ use super::Asset;
 pub struct Caerlun<'a> {
     pub id_key: Yaml,
     pub name_key: Yaml,
+    pub abbr_key: Yaml,
     pub plural_key: Yaml,
     pub alias_key: Yaml,
     pub parent_key: Yaml,
@@ -26,6 +27,7 @@ pub struct Caerlun<'a> {
     pub races: IndexMap<String, Race>,
     pub regions: IndexMap<String, Region>,
     pub events: IndexMap<String, Event>, 
+    pub eras: IndexMap<String, Era>,
     pub features: IndexMap<String, GeoFeature>,
 }
 
@@ -34,6 +36,7 @@ impl<'a> Caerlun<'a> {
         let mut caerlun = Caerlun {
             id_key: Yaml::from_str("id"),
             name_key: Yaml::from_str("name"),
+            abbr_key: Yaml::from_str("abbr"),
             plural_key: Yaml::from_str("plural"),
             alias_key: Yaml::from_str("alias"),
             parent_key: Yaml::from_str("parent"),
@@ -45,6 +48,7 @@ impl<'a> Caerlun<'a> {
             races: IndexMap::new(),
             regions: IndexMap::new(),
             events: IndexMap::new(),
+            eras: IndexMap::new(),
             features: IndexMap::new(),
         };
 
@@ -245,7 +249,21 @@ impl<'a> Caerlun<'a> {
     }
 
     pub fn append_era(&mut self, yaml: &Yaml) {
-
+        match yaml {
+            Yaml::Hash(h) => {
+                let id = h[&self.id_key].as_str().unwrap().to_string();
+                let e = Era{
+                    id: id.clone(),
+                    name: h[&self.name_key].as_str().unwrap().to_string(),
+                    abbr: h[&self.abbr_key].as_str().unwrap().to_string(),
+                    alias: self.build_aliases(h.get(&self.alias_key)),
+                    range: TimeRange::new(h[&self.year_key].as_str().unwrap()),
+                    races: self.strings(h.get(&self.race_key)),
+                };
+                self.eras.insert(id.clone(), e);
+            },
+            _ => panic!("Expected to build a region instance from hash"),
+        }
 
     }
 
@@ -442,15 +460,11 @@ impl TimeRange {
 #[derive(Debug)]
 pub struct Era {
     pub id: String,
+    pub abbr: String,
     pub name: String,
     range: TimeRange,
+    pub alias: Vec<Alias>,
     pub races: Vec<String>
-}
-
-impl Era {
-    fn new(id: &str, name: &str) -> Era {
-        Era { id: id.to_string(), name: name.to_string(), range: TimeRange::new("1980 to 1990"), races: Vec::new() }
-    }
 }
 
 impl Ord for Era {
