@@ -319,12 +319,12 @@ impl PartialOrd for Race {
 
 #[derive(Debug)]
 pub struct Region {
-    id: String,
-    name: String,
-    plural: Option<String>,
-    alias: Vec<Alias>,
-    parent: Option<String>,
-    children: Vec<String>,
+    pub id: String,
+    pub name: String,
+    pub plural: Option<String>,
+    pub alias: Vec<Alias>,
+    pub parent: Option<String>,
+    pub children: Vec<String>,
 }
 
 impl Region {

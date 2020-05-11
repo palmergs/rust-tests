@@ -10,7 +10,7 @@ mod names;
 pub use names::{ NameBuilder, Fragment, FragmentList };
 
 mod articles;
-pub use articles::{ Caerlun, Region, Timeline, GeoFeature };
+pub use articles::{ Caerlun, Region, Race, Timeline, GeoFeature };
 
 pub mod characters;
 pub use characters::{ CharacterBuilder };
