@@ -441,10 +441,10 @@ impl TimeRange {
 
 #[derive(Debug)]
 pub struct Era {
-    id: String,
-    name: String,
+    pub id: String,
+    pub name: String,
     range: TimeRange,
-    races: Vec<String>
+    pub races: Vec<String>
 }
 
 impl Era {
@@ -473,13 +473,13 @@ impl Eq for Era {}
 
 #[derive(Debug)]
 pub struct Event {
-    id: String,
-    name: String,
+    pub id: String,
+    pub name: String,
     range: TimeRange,
-    alias: Vec<Alias>,
-    races: Vec<String>,
-    parent: Option<String>,
-    children: Vec<String>,
+    pub alias: Vec<Alias>,
+    pub races: Vec<String>,
+    pub parent: Option<String>,
+    pub children: Vec<String>,
 }
 
 impl Ord for Event {

@@ -1,4 +1,4 @@
-use super::{ Caerlun, Race, Region };
+use super::{ NameBuilder, Caerlun, Race, Region };
 
 use rand::Rng;
 
@@ -6,11 +6,15 @@ pub struct Character {}
 
 pub struct CharacterBuilder<'a> {
     store: &'a Caerlun<'a>,
+    names: NameBuilder,
 }
 
 impl<'a> CharacterBuilder<'a> {
     pub fn new(store: &'a Caerlun) -> CharacterBuilder<'a> {
-        CharacterBuilder { store: store }
+        CharacterBuilder { 
+            store: store,
+            names: NameBuilder::new(),
+        }
     }
 
     pub fn build(
@@ -20,14 +24,13 @@ impl<'a> CharacterBuilder<'a> {
         region_key: Option<&str>,
         dob: Option<&str>) {
 
-        println!("Name: {:?}", name_key);
-
         let race = self.race(race_key);
-        println!("Race: {}", race.name);
-
         let region = self.region(region_key, &race.id);
-        println!("Region: {}", region.name);
+        let name = self.name(name_key, &race.id);
 
+        println!("Name: {}", name);
+        println!("Race: {}", race.name);
+        println!("Region: {}", region.name);
         println!("DOB: {:?}", dob);
     }
 
@@ -63,6 +66,17 @@ impl<'a> CharacterBuilder<'a> {
                 let n = self.store.regions.len();
                 let (_, region) = self.store.regions.get_index(rng.gen_range(0, n)).unwrap();
                 region
+            }
+        }
+    }
+
+    fn name(&self, name_key: Option<&str>, race_key: &str) -> String {
+        match name_key {
+            Some(s) => {
+                self.names.name(s)
+            },
+            None => {
+                self.names.name(race_key)
             }
         }
     }
