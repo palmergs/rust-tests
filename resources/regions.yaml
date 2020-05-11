@@ -17,12 +17,14 @@ regions:
   - id: opal-sea
     parent: caerlun
     name: Opal Sea
+    category: sea
   - id: south-caerlun
     parent: caerlun
     name: South Cærlun
   - id: western-ocean
     parent: caerlun
     name: Western Ocean
+    category: sea
     alias:
       - name: Wilding Sea
       - name: Wéstrani
@@ -31,6 +33,7 @@ regions:
   - id: levelin-forest
     parent: north-caerlun
     name: Levelin Forest
+    category: forest
   - id: opal-plains
     parent: north-caerlun
     name: Opal Plains
@@ -47,6 +50,30 @@ regions:
         year: -800 to 0
   - id: hiran-forest
     parent: north-caerlun
+    category: forest
     name: Hiran Forest
+  - id: south-reach
+    parent: north-caerlun
+    name: South Reach
+  - id: palisades
+    parent: north-caerlun
+    name: Palisades
+    category: mountains
+  - id: quarterlands
+    parent: north-caerlun
+    name: Quarterlands
+  - id: crown-reach
+    parent: north-caerlun
+    category: mountains
+    name: Crown Reach
+  - id: iron-reach
+    parent: north-caerlun
+    category: mountains
+    name: Iron Reach
+  - id: kettlelands
+    parent: north-caerlun
+    name: Kettlelands
+  
+
 
 
