@@ -11,7 +11,25 @@ mod names;
 pub use names::{ NameBuilder, Fragment, FragmentList };
 
 mod articles;
-pub use articles::{ Caerlun, Region, Race, GeoFeature };
+pub use articles::{ Caerlun };
+
+mod aliases;
+pub use aliases::{ Tone, Alias };
+
+mod races;
+pub use races::{ Race };
+
+mod regions;
+pub use regions::{ Region };
+
+mod events;
+pub use events::{ Event };
+
+mod eras;
+pub use eras::{ Era };
+
+mod features;
+pub use features::{ Geo };
 
 pub mod characters;
 pub use characters::{ CharacterBuilder };

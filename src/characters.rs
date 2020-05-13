@@ -5,7 +5,7 @@ use rand::Rng;
 pub struct Character {}
 
 pub struct CharacterBuilder<'a> {
-    store: &'a Caerlun,
+    store: &'a Caerlun<'a>,
     names: NameBuilder,
     pc_race_keys: Vec<&'a str>,
 }
@@ -27,8 +27,8 @@ impl<'a> CharacterBuilder<'a> {
         dob: Option<&str>) {
 
         let race = self.race(race_key);
-        let region = self.region(region_key, &race.id);
-        let name = self.name(name_key, &race.id);
+        let region = self.region(region_key, race.key);
+        let name = self.name(name_key, race.key);
 
         println!("Name: {}", name);
         println!("Race: {}", race.name);
@@ -40,16 +40,16 @@ impl<'a> CharacterBuilder<'a> {
         let mut rng = rand::thread_rng(); 
         match race_key {
             Some(s) => {
-                if let Some(race) = self.store.races.get(s) {
+                if let Some(race) = self.store.race(s) {
                     race
                 } else {
-                    self.store.races.get("human").unwrap()
+                    self.store.race("human").unwrap()
                 }
             },
             None => {
                 let n = self.pc_race_keys.len();
                 let key = self.pc_race_keys[rng.gen_range(0, n)];
-                self.store.races.get(key).unwrap()
+                self.store.race(key).unwrap()
             }
         }
     }
@@ -58,10 +58,10 @@ impl<'a> CharacterBuilder<'a> {
         let mut rng = rand::thread_rng();
         match region_key {
             Some(s) => {
-                if let Some(region) = self.store.regions.get(s) {
+                if let Some(region) = self.store.region(s) {
                     region
                 } else {
-                    self.store.regions.get("opal").unwrap()
+                    self.store.region("opal").unwrap()
                 }
             },
             None => {
