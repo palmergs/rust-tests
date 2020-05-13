@@ -30,9 +30,9 @@ pub struct Caerlun<'a> {
     idsToKeys: HashMap<usize, &'a str>,
     keysToIds: HashMap<&'a str, usize>,
 
-    pub races: IndexMap<usize, Race<'a>>,
-    pub regions: IndexMap<usize, Region<'a>>,
-    pub events: IndexMap<usize, Event<'a>>, 
+    pub races: IndexMap<usize, Race>,
+    pub regions: IndexMap<usize, Region>,
+    pub events: IndexMap<usize, Event>, 
     pub features: IndexMap<usize, Geo>,
 
     pub event_intervals: IntervalSet,
