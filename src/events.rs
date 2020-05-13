@@ -6,7 +6,7 @@ use super::Alias;
 pub struct Event<'a> {
     pub key: &'a str,
     pub name: &'a str,
-    range: Range<u32>,
+    pub range: Range<u32>,
     pub alias: Vec<Alias<'a>>,
     pub races: Vec<u32>,
     pub parent: Option<u32>,

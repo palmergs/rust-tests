@@ -1,7 +1,7 @@
 extern crate regex;
-use regex::Regex;
+// use regex::Regex;
 
-use yaml_rust::{ YamlLoader, Yaml };
+use yaml_rust::{ Yaml, YamlLoader };
 // use sorted_vec::SortedVec;
 use indexmap::IndexMap;
 use nested_intervals::IntervalSet;
@@ -10,7 +10,7 @@ use nested_intervals::IntervalSet;
 use std::collections::HashMap;
 use std::str::FromStr;
 
-use super::{ Asset, Race, Region, Event, Era, Geo, Tone, Alias };
+use super::{ Race, Region, Event, Era, Geo, Tone, Alias };
 
 const YEAR_OFFSET: u32 = 10000;
 
@@ -69,23 +69,10 @@ impl<'a> Caerlun<'a> {
             event_intervals: interval2,
         };
 
-        for p in Asset::iter() {
-            if p.ends_with(".yaml") {
-                let o = Asset::get(&p);
-                match o {
-                    Some(cow) => {
-                        match std::str::from_utf8(&cow) {
-                            Ok(s) => caerlun.build_type(s),
-                            _ => (),
-                        }
-                    },
-                    None => (),
-                }
-            }
-        }
-
         caerlun
     }
+
+    // pub fn read_assets(&mut self, 
 
     pub fn region_by_id(&self, id: u32) -> Option<&Region> {
         self.regions.get::<u32>(&id)
@@ -115,7 +102,7 @@ impl<'a> Caerlun<'a> {
         id
     }
 
-    fn build_type(&mut self, s: &str) {
+    pub fn build_type(&mut self, s: &'a str) {
         let docs = YamlLoader::load_from_str(s).unwrap();
         let doc = &docs[0];
         match doc {

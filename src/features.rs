@@ -1,7 +1,7 @@
 #[derive(Debug)]
 pub struct Geo<'a> {
-    key: &'a str,
-    name: &'a str,
+    pub key: &'a str,
+    pub name: &'a str,
 }
 
 impl<'a> Geo<'a> {

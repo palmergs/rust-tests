@@ -3,6 +3,12 @@ use clap::{App, Arg};
 
 use rust_names::{ NameBuilder, Caerlun, CharacterBuilder };
 use std::io;
+use yaml_rust::YamlLoader;
+use rust_embed::RustEmbed;
+
+#[derive(RustEmbed)]
+#[folder = "resources/"]
+struct Asset;
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
@@ -44,7 +50,23 @@ fn main() -> io::Result<()> {
     let count = count.parse::<i32>().unwrap();
 
     if matches.is_present("character") {
-        let caerlun = Caerlun::new();
+        let mut caerlun = Caerlun::new();
+        for p in Asset::iter() {
+            if p.ends_with(".yaml") {
+                let o = Asset::get(&p);
+                match o {
+                    Some(cow) => {
+                        match std::str::from_utf8(&cow) {
+                            Ok(s) => {
+                                caerlun.build_type(s.clone());
+                            },
+                            _ => (),
+                        }
+                    },
+                    None => (),
+                }
+            }
+        }        
         let builder = CharacterBuilder::new(&caerlun);
         for _ in 0..count {
             builder.build(
