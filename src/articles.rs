@@ -4,6 +4,7 @@ use regex::Regex;
 use yaml_rust::{ YamlLoader, Yaml };
 use sorted_vec::SortedVec;
 use indexmap::IndexMap;
+use nested_intervals::IntervalSet;
 
 //use std::i32::{ MIN, MAX };
 use std::cmp::Ordering;
@@ -12,7 +13,7 @@ use std::str::FromStr;
 use super::Asset;
 
 #[derive(Debug)]
-pub struct Caerlun<'a> {
+pub struct Caerlun {
     pub id_key: Yaml,
     pub name_key: Yaml,
     pub abbr_key: Yaml,
@@ -23,16 +24,20 @@ pub struct Caerlun<'a> {
     pub tone_key: Yaml,
     pub year_key: Yaml,
 
-    pub timeline: Timeline<'a>,
     pub races: IndexMap<String, Race>,
     pub regions: IndexMap<String, Region>,
     pub events: IndexMap<String, Event>, 
     pub eras: IndexMap<String, Era>,
     pub features: IndexMap<String, GeoFeature>,
+
+    pub era_intervals: IntervalSet,
+    pub event_intervals: IntervalSet,
 }
 
-impl<'a> Caerlun<'a> {
-    pub fn new() -> Caerlun<'a> {
+impl Caerlun {
+    pub fn new() -> Caerlun {
+        let interval1 = IntervalSet::new(&vec![0..20, 15..30, 50..100]).unwrap();
+        let interval2 = IntervalSet::new(&vec![0..20, 15..30, 50..100]).unwrap();
         let mut caerlun = Caerlun {
             id_key: Yaml::from_str("id"),
             name_key: Yaml::from_str("name"),
@@ -44,12 +49,14 @@ impl<'a> Caerlun<'a> {
             tone_key: Yaml::from_str("tone"),
             year_key: Yaml::from_str("year"),
 
-            timeline: Timeline::new(),
             races: IndexMap::new(),
             regions: IndexMap::new(),
             events: IndexMap::new(),
             eras: IndexMap::new(),
             features: IndexMap::new(),
+
+            era_intervals: interval1,
+            event_intervals: interval2,
         };
 
         for p in Asset::iter() {
@@ -66,7 +73,7 @@ impl<'a> Caerlun<'a> {
                 }
             }
         }
-        
+
         caerlun
     }
 
@@ -292,21 +299,6 @@ impl<'a> Caerlun<'a> {
                 }
             },
             _ => panic!("Expected to build an event instance from hash"),
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct Timeline<'a> {
-    eras: SortedVec<&'a Era>,
-    events: SortedVec<&'a Event>, 
-}
-
-impl<'a> Timeline<'a> {
-    pub fn new() -> Timeline<'a> {
-        Timeline {
-            eras: SortedVec::new(),
-            events: SortedVec::new(),
         }
     }
 }

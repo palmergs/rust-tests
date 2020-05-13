@@ -5,7 +5,7 @@ use rand::Rng;
 pub struct Character {}
 
 pub struct CharacterBuilder<'a> {
-    store: &'a Caerlun<'a>,
+    store: &'a Caerlun,
     names: NameBuilder,
     pc_race_keys: Vec<&'a str>,
 }
