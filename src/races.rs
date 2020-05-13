@@ -7,7 +7,7 @@ pub struct Race<'a> {
     pub name: &'a str,
     pub plural: Option<&'a str>,
     pub alias: Vec<Alias<'a>>,
-    pub regions: Vec<u32>,
+    pub regions: Vec<usize>,
 }
 
 impl<'a> PartialEq for Race<'a> {

@@ -1,17 +1,17 @@
 #[derive(Debug)]
-pub struct Geo<'a> {
-    pub key: &'a str,
-    pub name: &'a str,
+pub struct Geo {
+    pub key: String,
+    pub name: String,
 }
 
-impl<'a> Geo<'a> {
-    pub fn new(key: &'a str, name: &'a str) -> Geo<'a> { 
-        Geo { key: key, name: name }
+impl Geo {
+    pub fn new(key: &str, name: &str) -> Geo { 
+        Geo { key: key.to_string(), name: name.to_string() }
     }
 }
 
-impl<'a> PartialEq for Geo<'a> {
+impl PartialEq for Geo {
     fn eq(&self, other: &Self) -> bool { self.key == other.key }
 }
 
-impl<'a> Eq for Geo<'a> {}
+impl Eq for Geo {}

@@ -7,8 +7,8 @@ pub struct Region<'a> {
     pub name: &'a str,
     pub plural: Option<&'a str>,
     pub alias: Vec<Alias<'a>>,
-    pub parent: Option<u32>,
-    pub children: Vec<u32>,
+    pub parent: Option<usize>,
+    pub children: Vec<usize>,
 }
 
 impl<'a> Region<'a> {

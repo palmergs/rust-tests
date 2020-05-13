@@ -26,9 +26,6 @@ pub use regions::{ Region };
 mod events;
 pub use events::{ Event };
 
-mod eras;
-pub use eras::{ Era };
-
 mod features;
 pub use features::{ Geo };
 
