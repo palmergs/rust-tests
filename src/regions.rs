@@ -6,7 +6,7 @@ pub struct Region<'a> {
     pub key: &'a str,
     pub name: &'a str,
     pub plural: Option<&'a str>,
-    pub alias: Vec<Alias<'a>>,
+    pub alias: Vec<Alias>,
     pub parent: Option<usize>,
     pub children: Vec<usize>,
 }

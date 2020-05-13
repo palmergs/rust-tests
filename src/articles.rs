@@ -195,7 +195,7 @@ impl<'a> Caerlun<'a> {
         vec
     }
 
-    fn build_aliases(&self, opt: Option<&'a Yaml>) -> Vec<Alias<'a>> {
+    fn build_aliases(&self, opt: Option<&'a Yaml>) -> Vec<Alias> {
         match opt {
             Some(yaml) => {
                 match yaml {
@@ -216,7 +216,7 @@ impl<'a> Caerlun<'a> {
         }
     }
 
-    fn build_alias(&self, yaml: &'a Yaml) -> Option<Alias<'a>> {
+    fn build_alias(&self, yaml: &'a Yaml) -> Option<Alias> {
         match yaml {
             Yaml::Hash(h) => {
                 let tone = match h.get(&self.tone_key) {
@@ -225,7 +225,7 @@ impl<'a> Caerlun<'a> {
                 };
 
                 let alias = Alias{
-                    name: h[&self.name_key].as_str().unwrap(),
+                    name: h[&self.name_key].as_str().unwrap().to_string(),
                     tone: tone,
                     races: self.ids(h.get(&self.race_key)),
                 };

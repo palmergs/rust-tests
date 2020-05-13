@@ -7,7 +7,7 @@ pub struct Event<'a> {
     pub key: &'a str,
     pub name: &'a str,
     pub range: Range<i64>,
-    pub alias: Vec<Alias<'a>>,
+    pub alias: Vec<Alias>,
     pub races: Vec<usize>,
     pub parent: Option<usize>,
     pub children: Vec<usize>,

@@ -21,8 +21,8 @@ impl FromStr for Tone {
 }
 
 #[derive(Debug)]
-pub struct Alias<'a> {
-    pub name: &'a str,
+pub struct Alias {
+    pub name: String,
     pub tone: Tone,
     pub races: Vec<usize>,
 }
