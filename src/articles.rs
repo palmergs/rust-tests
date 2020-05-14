@@ -4,7 +4,7 @@ extern crate regex;
 use yaml_rust::{ Yaml, YamlLoader };
 // use sorted_vec::SortedVec;
 use indexmap::IndexMap;
-use nested_intervals::IntervalSet;
+// use nested_intervals::IntervalSet;
 
 //use std::i32::{ MIN, MAX };
 use std::collections::HashMap;
@@ -12,10 +12,10 @@ use std::str::FromStr;
 
 use super::{ Race, Region, Event, Geo, Tone, Alias };
 
-const YEAR_OFFSET: usize = 10000;
+// const YEAR_OFFSET: usize = 10000;
 
 #[derive(Debug)]
-pub struct Caerlun<'a> {
+pub struct Caerlun {
     pub id_key: Yaml,
     pub name_key: Yaml,
     pub abbr_key: Yaml,
@@ -27,21 +27,17 @@ pub struct Caerlun<'a> {
     pub year_key: Yaml,
 
     count: usize,
-    idsToKeys: HashMap<usize, &'a str>,
-    keysToIds: HashMap<&'a str, usize>,
+    ids_to_keys: HashMap<usize, String>,
+    keys_to_ids: HashMap<String, usize>,
 
     pub races: IndexMap<usize, Race>,
     pub regions: IndexMap<usize, Region>,
     pub events: IndexMap<usize, Event>, 
     pub features: IndexMap<usize, Geo>,
-
-    pub event_intervals: IntervalSet,
 }
 
-impl<'a> Caerlun<'a> {
-    pub fn new() -> Caerlun<'a> {
-        let interval1 = IntervalSet::new(&vec![0..20, 15..30, 50..100]).unwrap();
-        let interval2 = IntervalSet::new(&vec![0..20, 15..30, 50..100]).unwrap();
+impl Caerlun {
+    pub fn new() -> Caerlun {
         let caerlun = Caerlun {
             id_key: Yaml::from_str("id"),
             name_key: Yaml::from_str("name"),
@@ -54,15 +50,13 @@ impl<'a> Caerlun<'a> {
             year_key: Yaml::from_str("year"),
 
             count: 0,
-            idsToKeys: HashMap::new(),
-            keysToIds: HashMap::new(),
+            ids_to_keys: HashMap::new(),
+            keys_to_ids: HashMap::new(),
 
             races: IndexMap::new(),
             regions: IndexMap::new(),
             events: IndexMap::new(),
             features: IndexMap::new(),
-
-            event_intervals: interval2,
         };
 
         caerlun
@@ -75,7 +69,7 @@ impl<'a> Caerlun<'a> {
     }
 
     pub fn region(&self, key: &str) -> Option<&Region> {
-        if let Some(id) = self.keysToIds.get::<str>(key) {
+        if let Some(id) = self.keys_to_ids.get::<str>(key) {
             return self.regions.get::<usize>(&id)
         }
         None
@@ -86,19 +80,21 @@ impl<'a> Caerlun<'a> {
     }
 
     pub fn race(&self, key: &str) -> Option<&Race> {
-        if let Some(id) = self.keysToIds.get::<str>(key) {
+        if let Some(id) = self.keys_to_ids.get::<str>(key) {
             return self.races.get::<usize>(&id);
         }
         None
     }
 
-    fn next(&mut self) -> usize {
+    fn register(&mut self, key: &str) -> usize {
         let id = self.count;
+        self.ids_to_keys.insert(id, key.to_string());
+        self.keys_to_ids.insert(key.to_string(), id);
         self.count = self.count + 1;
         id
     }
 
-    pub fn build_type(&mut self, s: &'a str) {
+    pub fn build_type(&mut self, s: &str) {
         let docs = YamlLoader::load_from_str(s).unwrap();
         let doc = &docs[0];
         match doc {
@@ -149,7 +145,7 @@ impl<'a> Caerlun<'a> {
             Some(yaml) => {
                 match yaml {
                     Yaml::String(s) => {
-                        if let Some(n) = self.keysToIds.get::<str>(&s) {
+                        if let Some(n) = self.keys_to_ids.get::<str>(&s) {
                             Some(*n)
                         } else {
                             None
@@ -162,11 +158,11 @@ impl<'a> Caerlun<'a> {
         }
     }
 
-    fn optional_str(&self, opt: Option<&'a Yaml>) -> Option<&'a str> {
+    fn optional_string(&self, opt: Option<&Yaml>) -> Option<String> {
         match opt {
             Some(yaml) => {
                 match yaml {
-                    Yaml::String(s) => Some(s),
+                    Yaml::String(s) => Some(s.to_string()),
                     _ => None,
                 }
             },
@@ -174,11 +170,11 @@ impl<'a> Caerlun<'a> {
         }
     }
 
-    fn strings(&self, opt: Option<&'a Yaml>) -> Vec<&str> {
+    fn strings(&self, opt: Option<&Yaml>) -> Vec<String> {
         match opt {
             Some(yaml) => {
                 match yaml {
-                    Yaml::Array(arr) => arr.iter().map(|s| s.as_str().unwrap()).collect(),
+                    Yaml::Array(arr) => arr.iter().map(|s| s.as_str().unwrap().to_string()).collect(),
                     _ => Vec::new()
                 }        
             },
@@ -186,16 +182,16 @@ impl<'a> Caerlun<'a> {
         }
     }
 
-    fn ids(&self, opt: Option<&'a Yaml>) -> Vec<usize> {
+    fn ids(&self, opt: Option<&Yaml>) -> Vec<usize> {
         let keys = self.strings(opt);
         let mut vec: Vec<usize> = Vec::new();
         for k in keys {
-            if let Some(n) = self.keysToIds.get::<str>(k) { vec.push(*n); }
+            if let Some(n) = self.keys_to_ids.get(&k) { vec.push(*n); }
         }
         vec
     }
 
-    fn build_aliases(&self, opt: Option<&'a Yaml>) -> Vec<Alias> {
+    fn build_aliases(&self, opt: Option<&Yaml>) -> Vec<Alias> {
         match opt {
             Some(yaml) => {
                 match yaml {
@@ -216,7 +212,7 @@ impl<'a> Caerlun<'a> {
         }
     }
 
-    fn build_alias(&self, yaml: &'a Yaml) -> Option<Alias> {
+    fn build_alias(&self, yaml: &Yaml) -> Option<Alias> {
         match yaml {
             Yaml::Hash(h) => {
                 let tone = match h.get(&self.tone_key) {
@@ -236,60 +232,48 @@ impl<'a> Caerlun<'a> {
         }
     }    
 
-    pub fn append_race(&mut self, yaml: &'a Yaml) {
+    pub fn append_race(&mut self, yaml: &Yaml) {
         match yaml {
             Yaml::Hash(h) => {
                 let key = h[&self.id_key].as_str().unwrap();
-                let r = Race{
-                    key: key,
-                    name: h[&self.name_key].as_str().unwrap(),
-                    plural: self.optional_str(h.get(&self.plural_key)),
-                    alias: self.build_aliases(h.get(&self.alias_key)),
-                    regions: Vec::new(),
-                };
+                let name = h[&self.name_key].as_str().unwrap();
+                let mut r = Race::new(key, name);
+                r.plural = self.optional_string(h.get(&self.plural_key));
+                r.alias = self.build_aliases(h.get(&self.alias_key));
 
-                let id = self.next();
+                let id = self.register(key);
                 self.races.insert(id, r);
-                self.idsToKeys.insert(id, key);
-                self.keysToIds.insert(key, id);
             },
             _ => panic!("Expected to build race instance from hash"),
         }
     }
 
-    pub fn append_geo(&mut self, yaml: &'a Yaml) {
+    pub fn append_geo(&mut self, yaml: &Yaml) {
         match yaml {
             Yaml::Hash(h) => {
                 let key = h[&self.id_key].as_str().unwrap();
                 let name = h[&self.name_key].as_str().unwrap();
                 let g = Geo::new(key, name);
 
-                let id = self.next();
+                let id = self.register(key);
                 self.features.insert(id, g);
-                self.idsToKeys.insert(id, key);
-                self.keysToIds.insert(key, id);
             },
             _ => panic!("Expected to build a geo instance from hash"),
         }
     }
 
-    pub fn append_region(&mut self, yaml: &'a Yaml) {
+    pub fn append_region(&mut self, yaml: &Yaml) {
         match yaml {
             Yaml::Hash(h) => {
                 let key = h[&self.id_key].as_str().unwrap();
+                let name = h[&self.name_key].as_str().unwrap();
                 let parent_id = self.optional_id(h.get(&self.parent_key));
-                let r = Region{
-                    key: key,
-                    name: h[&self.name_key].as_str().unwrap(),
-                    plural: self.optional_str(h.get(&self.plural_key)),
-                    alias: self.build_aliases(h.get(&self.alias_key)),
-                    parent: parent_id,
-                    children: Vec::new(),
-                };
+                let mut r = Region::new(key, name);
+                r.plural = self.optional_string(h.get(&self.plural_key));
+                r.alias = self.build_aliases(h.get(&self.alias_key));
+                r.parent = parent_id;
 
-                let id = self.next();
-                self.idsToKeys.insert(id, key);
-                self.keysToIds.insert(key, id);
+                let id = self.register(key);
                 self.regions.insert(id, r);
 
                 match parent_id {
@@ -305,24 +289,19 @@ impl<'a> Caerlun<'a> {
         }
     }
 
-    pub fn append_event(&mut self, yaml: &'a Yaml) {
+    pub fn append_event(&mut self, yaml: &Yaml) {
         match yaml {
             Yaml::Hash(h) => {
                 let key = h[&self.id_key].as_str().unwrap();
+                let name = h[&self.name_key].as_str().unwrap();
                 let parent_id = self.optional_id(h.get(&self.parent_key));
-                let e = Event{
-                    key: key,
-                    name: h[&self.name_key].as_str().unwrap(),
-                    alias: self.build_aliases(h.get(&self.alias_key)),
-                    range: 0..10,
-                    races: self.ids(h.get(&self.race_key)),
-                    parent: parent_id,
-                    children: Vec::new(),
-                };
+                let mut e = Event::new(key, name);
+                e.alias = self.build_aliases(h.get(&self.alias_key));
+                e.range = 0..10;
+                e.races = self.ids(h.get(&self.race_key));
+                e.parent = parent_id;
                 
-                let id = self.next();
-                self.idsToKeys.insert(id, key);
-                self.keysToIds.insert(key, id);
+                let id = self.register(key);
                 self.events.insert(id, e);
 
                 match parent_id {

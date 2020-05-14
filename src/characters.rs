@@ -5,7 +5,7 @@ use rand::Rng;
 pub struct Character {}
 
 pub struct CharacterBuilder<'a> {
-    store: &'a Caerlun<'a>,
+    store: &'a Caerlun,
     names: NameBuilder,
     pc_race_keys: Vec<&'a str>,
 }
@@ -27,8 +27,8 @@ impl<'a> CharacterBuilder<'a> {
         dob: Option<&str>) {
 
         let race = self.race(race_key);
-        let region = self.region(region_key, race.key);
-        let name = self.name(name_key, race.key);
+        let region = self.region(region_key, &race.key);
+        let name = self.name(name_key, &race.key);
 
         println!("Name: {}", name);
         println!("Race: {}", race.name);

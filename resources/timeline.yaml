@@ -22,10 +22,14 @@ events:
   - id: ramanji-nation
     name: Ramanji
     year: -1200 to 3
+    regions:
+      - opal
   - id: ramanji-migration
     name: Ramanji Migration
     year: -1200 to -1050
     parent: ramanji-nation
+    regions:
+      - opal-delta
   - id: ramanji-states
     name: Ramanji States
     year: -1050 to -740
