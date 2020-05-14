@@ -1,6 +1,8 @@
-use super::{ NameBuilder, Caerlun, Race, Region };
+use super::{ NameBuilder, Caerlun, Race, Region, Event };
 
 use rand::Rng;
+
+static CURRENT_YEAR: i64 = 840;
 
 pub struct Character {}
 
@@ -26,14 +28,20 @@ impl<'a> CharacterBuilder<'a> {
         region_key: Option<&str>,
         dob: Option<&str>) {
 
+        let mut rng = rand::thread_rng();
         let race = self.race(race_key);
         let region = self.region(region_key, &race.key);
         let name = self.name(name_key, &race.key);
+        let year = match dob {
+            Some(s) => s.parse::<i64>().unwrap(),
+            None => (CURRENT_YEAR - (20 + rng.gen_range(0, 20))),
+        };
+        let events = self.events_from(&region.key, year, CURRENT_YEAR);
 
         println!("Name: {}", name);
         println!("Race: {}", race.name);
         println!("Region: {}", region.name);
-        println!("DOB: {:?}", dob);
+        println!("DOB: {}", year);
     }
 
     fn race(&self, race_key: Option<&str>) -> &Race {
@@ -81,6 +89,13 @@ impl<'a> CharacterBuilder<'a> {
                 self.names.name(race_key)
             }
         }
+    }
+
+    fn events_from(&self, region_key: &str, from: i64, to: i64) -> Vec<Event> {
+        for n in from..to {
+
+        }
+        Vec::new()
     }
 }
 
