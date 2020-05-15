@@ -5,9 +5,8 @@ regions:
       - name: Ort
         race: 
           - urg
-          - uruku
+          - urunai
           - gobru
-          - lost-tribe
       - name: Silvenia
         race:
           - dragon
@@ -17,14 +16,25 @@ regions:
   - id: opal-sea
     parent: caerlun
     name: Opal Sea
-    category: sea
+    alias:
+      - name: Great Orren
+        race:
+          - urg
+          - urunai
+          - gobru
+
+    category: body-of-water
+  - id: bessen-bay
+    parent: opal-sea
+    name: Bessen Bay
+    category: body-of-water
   - id: south-caerlun
     parent: caerlun
     name: South Cærlun
   - id: western-ocean
     parent: caerlun
     name: Western Ocean
-    category: sea
+    category: body-of-water
     alias:
       - name: Wilding Sea
       - name: Wéstrani
@@ -40,6 +50,9 @@ regions:
   - id: opal-delta
     parent: opal-plains
     name: Opal River delta
+  - id: opal-river-valley
+    parent: opal-plains
+    name: Opal River Valley
   - id: opal
     parent: opal-delta
     name: Opal
@@ -52,6 +65,14 @@ regions:
     parent: north-caerlun
     category: forest
     name: Hiran Forest
+  - id: hiran-river-valley
+    parent: north-caerlun
+    category: plains
+    name: Hiran River Valley
+  - id: breemish-river-valley
+    parent: north-caerlun
+    caregory: valley
+    name: Breemish River Valley
   - id: south-reach
     parent: north-caerlun
     name: South Reach
@@ -73,6 +94,11 @@ regions:
   - id: kettlelands
     parent: north-caerlun
     name: Kettlelands
+  - id: terminymm-city
+    parent: kettlands
+    name: Terminymm
+    year: -4500 to -3000
+    category: city
   
 
 

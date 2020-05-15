@@ -2,11 +2,11 @@ eras:
   - id: pre-history
     name: Before the Contest
     abbr: BC
-    year: until -3000
+    year: until -5000
   - id: antiquity
     name: Age of Antiquity
     abbr: BA
-    year: -3000 to 0
+    year: -5000 to 0
   - id: subjegation
     name: Subjegation of the Dragon Lords
     abbr: DL
@@ -16,9 +16,81 @@ eras:
     abbr: ME
     year: after 501
 events:
+  - id: early-levelin
+    name: Early Levelin Civilization
+    year: -4700 to -2900
+    type: civilzation
+    regions:
+      - levelin-forest
+    races:
+      - elf
+  - id: early-iron-reach
+    name: Early Iron Reach Civilization
+    year: -4700 to -2190
+    regions:
+      - iron-reach
+    races:
+      - dwarf
+  - id: terminymm-civilization
+    name: Terminymm Civilization
+    year: -4500 to -3000
+    type: civilization
+    regions:
+      - kettlelands
+    races: 
+      - human
+  - id: the-summoning
+    name: The Summoning
+    year: -2997
+    type: battle
+    regions:
+      - kettlelands
+      - terminymm-city
+    races:
+      - human
+  - id: reavers
+    name: War of the Reavers
+    year: -3030 to -2700
+    type: war
+    regions:
+      - kettlelands
+      - levelin-forest
+      - opal-plains
+    races:
+      - human
+      - elf
+      - grollim
+  - id: orphan-armies
+    name: War of the Orphan Armies
+    year: -2300 to -2100
+    type: war
+    regions:
+      - iron-reach
+      - shattered-lands
+      - crown-reach
+    races:
+      - dwarf
+      - urg
+      - gobru
+      - ice-giant
+      - fire-giant
+  - id: fall-of-kaz-dur
+    name: The Sack of Kaz Dur
+    year: -2190
+    type: battle
+    regions:
+      - iron-reach
+    races:
+      - dwarf
+      - ice-giant
+      - fire-giant
+      - urg
+      - gobru
   - id: dragon-lords
     name: Dragon Lords
     year: 0 to 501
+    regions:
+      - north-caerlun
   - id: ramanji-nation
     name: Ramanji
     year: -1200 to 3
@@ -42,3 +114,55 @@ events:
     name: Remanji Empire
     year: -340 to 3
     parent: ramanji-nation
+  - id: kiren-nation
+    name: Kiren
+    year: -1500 to -1000
+    type: civilization
+    regions:
+      - hiren-forest
+      - hiren-river-valley
+  - id: kiren-empire
+    name: Kiren Empire
+    year: -1500 to -1000
+    type: government
+    regions:
+      - hiren-forest
+      - hiren-river-valley
+      - breemish-river-valley
+  - id: kiren-sundering
+    name: The Kiren Sundering
+    type: war
+    year: -1020 to -990
+  - id: norn-kiren-empire
+    name: Norn Kiren
+    year: -990 to 2
+    type: civilization
+    regions:
+      - hiren-forest
+      - breemish-river-valley
+  - id: defeat-ber-barenni
+    name: Surrender of Ber Barenni
+    year: 2
+    type: battle
+    races:
+      - human
+      - rulligg
+      - feletaur
+      - centaur
+  - id: sund-kiren-empire
+    name: Sund Kiren Empire
+    year: -990 to 33
+    type: civilization
+    regions:
+      - hiren-forest
+      - hiren-river-valley
+  - id: sack-korenni
+    name: Sack of Korenni
+    year: 33
+    type: battle
+    races:
+      - human
+      - rulligg
+      - feletaur
+      - centaur
+  

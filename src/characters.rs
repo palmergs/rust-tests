@@ -92,9 +92,10 @@ impl<'a> CharacterBuilder<'a> {
     }
 
     fn events_from(&self, region_key: &str, from: i64, to: i64) -> Vec<Event> {
-        for n in from..to {
+        let mut rng = rand::thread_rng();
+        
+        let idx = rng.gen_range(from, to);
 
-        }
         Vec::new()
     }
 }
