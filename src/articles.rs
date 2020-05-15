@@ -86,6 +86,28 @@ impl Caerlun {
         None
     }
 
+    pub fn event_by_id(&self, id: usize) -> Option<&Event> {
+        self.events.get::<usize>(&id)
+    }    
+
+    pub fn event(&self, key: &str) -> Option<&Event> {
+        if let Some(id) = self.keys_to_ids.get::<str>(key) {
+            return self.events.get::<usize>(&id);
+        }
+        None
+    }
+
+    pub fn feature_by_id(&self, id: usize) -> Option<&Geo> {
+        self.features.get::<usize>(&id)
+    }
+
+    pub fn feature(&self, key: &str) -> Option<&Geo> {
+        if let Some(id) = self.keys_to_ids.get::<str>(key) {
+            return self.features.get::<usize>(&id)
+        }
+        None
+    }
+
     fn register(&mut self, key: &str) -> usize {
         let id = self.count;
         self.ids_to_keys.insert(id, key.to_string());
