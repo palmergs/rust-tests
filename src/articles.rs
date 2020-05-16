@@ -8,9 +8,10 @@ use indexmap::IndexMap;
 
 //use std::i32::{ MIN, MAX };
 use std::collections::HashMap;
+use std::cmp::{ min, max };
 use std::str::FromStr;
 
-use super::{ Race, Region, Event, Geo, Tone, Alias };
+use super::{ Race, Region, parse_years, Event, Geo, Tone, Alias };
 
 // const YEAR_OFFSET: usize = 10000;
 
@@ -109,14 +110,18 @@ impl Caerlun {
     }
 
     pub fn timeline(&self) {
-        for (_, e) in &self.events {
-            let start = e.range.start;
-            let end = e.range.end;
+        let start: i64 = -5000;
+        let end: i64 = 840;
+        let mut events: Vec<&Event> = self.events.values().collect();
+        events.sort_by(|a, b| a.range.start.cmp(&b.range.start));
+        for e in events {
+            let start = max(start, e.range.start);
+            let end = min(e.range.end, end);
             let total = (5000 + 900) as i64;
             let per = total / 100;
             let offset = ((start + 5000) / per) as usize;
             let width = (((end - start) / per) + 1) as usize;
-            println!("{:>30} {:>5}-{:<5} {:o$}{:w$}", e.name, start, end, " ", "*", o = offset, w = width);
+            println!("{:>30} {:>5} to {:<5} {:o$}{:*<w$}", e.name, start, end, " ", "*", o = offset, w = width);
         }
     }
 
@@ -192,14 +197,17 @@ impl Caerlun {
         }
     }
 
+    fn string(&self, yaml: &Yaml) -> Option<String> {
+        match yaml {
+            Yaml::String(s) => Some(s.to_string()),
+            Yaml::Integer(n) => Some(n.to_string()),
+            _ => None,
+        }
+    }
+
     fn optional_string(&self, opt: Option<&Yaml>) -> Option<String> {
         match opt {
-            Some(yaml) => {
-                match yaml {
-                    Yaml::String(s) => Some(s.to_string()),
-                    _ => None,
-                }
-            },
+            Some(yaml) => self.string(yaml),
             _ => None,
         }
     }
@@ -331,7 +339,7 @@ impl Caerlun {
                 let parent_id = self.optional_id(h.get(&self.parent_key));
                 let mut e = Event::new(key, name);
                 e.alias = self.build_aliases(h.get(&self.alias_key));
-                e.range = 0..10;
+                e.range = parse_years(&self.string(&h[&self.year_key]).unwrap());
                 e.races = self.ids(h.get(&self.race_key));
                 e.parent = parent_id;
                 
@@ -351,73 +359,3 @@ impl Caerlun {
         }
     }
 }
-
-// #[derive(Debug, Eq, PartialEq, Ord, PartialOrd)]
-// struct TimeRange {
-//     start: Option<i32>,
-//     end: Option<i32>,
-// }
-
-// impl TimeRange {
-
-//     // Can be built from `### to ###`, `before ###`, `after ###` or `until ###`
-//     pub fn new(time: &str) -> TimeRange {
-//         lazy_static! {
-//             static ref RANGE: Regex = Regex::new(r"\s*(to|before|until|after)\s*").unwrap();
-//             static ref NUMBER: Regex = Regex::new(r"\s*([-]?[0-9]+)\s*").unwrap();
-//         }
-//         match RANGE.captures(time) {
-//             Some(capture) => {
-//                 let nums: Vec<&str> = NUMBER.find_iter(time).map(|mat| mat.as_str().trim()).collect();
-//                 let one: i32 = nums[0].parse().unwrap();
-//                 match capture.get(1).unwrap().as_str() {
-//                     "to" => {
-//                         let two: i32 = nums[1].parse().unwrap();
-//                         TimeRange{ start: Some(std::cmp::min(one, two)), end: Some(std::cmp::max(one, two)) }
-//                     },
-//                     "before" | "until" => TimeRange{ start: None, end: Some(one) },
-//                     "after" => TimeRange{ start: Some(one), end: None },
-//                     _ => panic!("Unable to parse time range with {}", time),
-//                 }
-//             },
-//             None => {
-//                 let year = time.to_string();
-//                 let year = year.trim();
-//                 let year: i32 = year.parse().unwrap();
-//                 TimeRange{ start: Some(year), end: Some(year) }
-//             }
-//         }
-//     }
-// }
-
-
-
-
-
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-
-//     #[test]
-//     fn time_range_from_string() {
-//         let range = TimeRange::new("1234");
-//         assert_eq!(1234 as i32, range.start.unwrap());
-//         assert_eq!(1234 as i32, range.end.unwrap());
-
-//         let range = TimeRange::new(" -432  ");
-//         assert_eq!(-432 as i32, range.start.unwrap());
-//         assert_eq!(-432 as i32, range.end.unwrap());
-
-//         let range = TimeRange::new("-100 to 200");
-//         assert_eq!(-100 as i32, range.start.unwrap());
-//         assert_eq!(200 as i32, range.end.unwrap());
-
-//         let range = TimeRange::new("after 1000");
-//         assert_eq!(1000 as i32, range.start.unwrap());
-//         assert_eq!(None, range.end);
-
-//         let range = TimeRange::new("before 888");
-//         assert_eq!(None, range.start);
-//         assert_eq!(888, range.end.unwrap());
-//     }
-// }
