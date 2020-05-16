@@ -108,6 +108,18 @@ impl Caerlun {
         None
     }
 
+    pub fn timeline(&self) {
+        for (_, e) in &self.events {
+            let start = e.range.start;
+            let end = e.range.end;
+            let total = (5000 + 900) as i64;
+            let per = total / 100;
+            let offset = ((start + 5000) / per) as usize;
+            let width = (((end - start) / per) + 1) as usize;
+            println!("{:>30} {:>5}-{:<5} {:o$}{:w$}", e.name, start, end, " ", "*", o = offset, w = width);
+        }
+    }
+
     fn register(&mut self, key: &str) -> usize {
         let id = self.count;
         self.ids_to_keys.insert(id, key.to_string());

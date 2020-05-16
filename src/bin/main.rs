@@ -36,7 +36,12 @@ fn main() -> io::Result<()> {
             .short("p")
             .long("region")
             .help("Specify the region the generated character is from")
-            .takes_value(true))            
+            .takes_value(true))       
+        .arg(Arg::with_name("timeline")
+            .short("t")
+            .long("timeline")
+            .help("Generate a graph showing events by time")
+            .takes_value(false))     
         .arg(Arg::with_name("count")
             .short("n")
             .long("count")
@@ -49,21 +54,7 @@ fn main() -> io::Result<()> {
     let count = count.parse::<i32>().unwrap();
 
     if matches.is_present("character") {
-        let mut caerlun = Caerlun::new();
-        for p in Asset::iter() {
-            if p.ends_with(".yaml") {
-                let o = Asset::get(&p);
-                match o {
-                    Some(cow) => {
-                        match std::str::from_utf8(&cow) {
-                            Ok(s) => caerlun.build_type(s),
-                            _ => (),
-                        }
-                    },
-                    None => (),
-                }
-            }
-        }        
+        let caerlun = build_store();
         let builder = CharacterBuilder::new(&caerlun);
         for _ in 0..count {
             builder.build(
@@ -72,6 +63,9 @@ fn main() -> io::Result<()> {
                 matches.value_of("region"),
                 matches.value_of("dob"))
         }
+    } else if matches.is_present("timeline") {
+        let caerlun = build_store();
+        caerlun.timeline();
     } else if let Some(key) = matches.value_of("key") {
         let builder = NameBuilder::new();
         for _ in 0..count {
@@ -85,4 +79,23 @@ fn main() -> io::Result<()> {
     }
 
     Ok(())
+}
+
+fn build_store() -> Caerlun {
+    let mut caerlun = Caerlun::new();
+    for p in Asset::iter() {
+        if p.ends_with(".yaml") {
+            let o = Asset::get(&p);
+            match o {
+                Some(cow) => {
+                    match std::str::from_utf8(&cow) {
+                        Ok(s) => caerlun.build_type(s),
+                        _ => (),
+                    }
+                },
+                None => (),
+            }
+        }
+    }
+    caerlun
 }

@@ -7,8 +7,8 @@ eras:
     name: Age of Antiquity
     abbr: BA
     year: -5000 to 0
-  - id: subjegation
-    name: Subjegation of the Dragon Lords
+  - id: dragon-lords
+    name: Dragon Lords
     abbr: DL
     year: 0 to 501
   - id: modern
