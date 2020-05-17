@@ -22,7 +22,6 @@ regions:
           - urg
           - urunai
           - gobru
-
     category: body-of-water
   - id: bessen-bay
     parent: opal-sea
@@ -44,6 +43,14 @@ regions:
     parent: north-caerlun
     name: Levelin Forest
     category: forest
+  - id: levelin
+    parent: levelin-forest
+    name: Levelin
+    category: city
+  - id: winter-wall
+    name: Winter Wall
+    parent: north-caerlun
+    category: plains
   - id: opal-plains
     parent: north-caerlun
     name: Opal Plains
@@ -61,18 +68,66 @@ regions:
     alias:
       - name: Ramantha
         year: -800 to 0
-  - id: hiran-forest
+  - id: bessen-highlands
     parent: north-caerlun
+    name: Bessen Highlands
+    category: mountains
+  - id: bessen-coast
+    parent: north-caerlun
+    name: Bessen Coast
+    category: plains
+  - id: bessen
+    name: Bessen
+    parent: bessen-coast
+    name: Bessen
+    category: city
+    year: after 780
+  - id: worthing
+    name: Worthing
+    parent: bessen-coast
+    name: Worthing
+    category: city
+    year: after -2500
+  - id: wells
+    name: Wells
+    parent: bessen-coast
+    category: city
+    year: after -2560
+  - id: ostari-passage
+    name: Ostari Passage
+    parent: north-caerlun
+    category: plains
+  - id: hiran-forest
+    parent: ostari-passage
     category: forest
     name: Hiran Forest
   - id: hiran-river-valley
-    parent: north-caerlun
+    parent: ostari-passage
     category: plains
     name: Hiran River Valley
+  - id: irendi
+    parent: hiran-river-valley
+    category: city
+    name: Irendi
   - id: breemish-river-valley
-    parent: north-caerlun
+    parent: ostari-passage
     caregory: valley
     name: Breemish River Valley
+  - id: ber-barenni
+    name: Ber Barenni
+    parent: breemish-river-valley
+    category: city
+    year: -990 to 2
+  - id: korenni 
+    name: Korenni
+    parent: hiran-river-valley
+    category: city
+    year: -1500 to 33
+  - id: breem
+    name: Breem
+    parent: breemish-river-valley
+    category: city
+    year: after 580
   - id: south-reach
     parent: north-caerlun
     name: South Reach
@@ -95,7 +150,7 @@ regions:
     parent: north-caerlun
     name: Kettlelands
   - id: terminymm-city
-    parent: kettlands
+    parent: kettlelands
     name: Terminymm
     year: -4500 to -3000
     category: city

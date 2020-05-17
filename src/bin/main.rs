@@ -42,6 +42,11 @@ fn main() -> io::Result<()> {
             .long("timeline")
             .help("Generate a graph showing events by time")
             .takes_value(false))     
+        .arg(Arg::with_name("regions")
+            .short("m")
+            .long("regions")
+            .help("Generate a nested tree showing regions")
+            .takes_value(false))
         .arg(Arg::with_name("count")
             .short("n")
             .long("count")
@@ -71,6 +76,9 @@ fn main() -> io::Result<()> {
         for _ in 0..count {
             println!("{}", builder.name(key));        
         }
+    } else if matches.is_present("regions") {
+        let caerlun = build_store();
+        caerlun.print_regions();
     } else {
         let builder = NameBuilder::new();
         for s in builder.keys().iter() {

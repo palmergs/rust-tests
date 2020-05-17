@@ -125,6 +125,27 @@ impl Caerlun {
         }
     }
 
+    pub fn print_regions(&self) {
+        let regions = self.regions.values();
+        for r in regions {
+            match r.parent {
+                None => {
+                    println!("{}", r.name);
+                    self.print_recurse_regions(r, 2);
+                },
+                _ => (),
+            }
+        }
+    }
+
+    fn print_recurse_regions(&self, region: &Region, depth: usize) {
+        for id in &region.children {
+            let r = &self.regions[id];
+            println!("{:depth$}{}", " ", r.name, depth = depth);
+            self.print_recurse_regions(&r, depth + 1);
+        }
+    }
+
     fn register(&mut self, key: &str) -> usize {
         let id = self.count;
         self.ids_to_keys.insert(id, key.to_string());
