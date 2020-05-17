@@ -39,6 +39,14 @@ regions:
       - name: Wéstrani
         race:
           - elf
+  - id: brixtony-islands
+    name: Brixtony Islands
+    parent: western-ocean
+    category: islands
+  - id: aelhus
+    name: Aelhus
+    parent: brixtony-islands
+    category: city
   - id: levelin-forest
     parent: north-caerlun
     name: Levelin Forest
@@ -51,15 +59,31 @@ regions:
     name: Winter Wall
     parent: north-caerlun
     category: plains
+    alias:
+      - name: The Rift
   - id: opal-plains
     parent: north-caerlun
     name: Opal Plains
   - id: opal-delta
     parent: opal-plains
-    name: Opal River delta
+    name: Opal River dzdelta
   - id: opal-river-valley
     parent: opal-plains
     name: Opal River Valley
+  - id: crown-river-valley
+    parent: opal-plains
+    name: Crown River Valley
+  - id: shattered-river-valley
+    parent: opal-plains
+    name: Shattered River Valley
+  - id: forkes
+    name: Forkes
+    parent: crown-river-valley
+    category: city
+    after: after -80
+  - id: opal-coast
+    name: Opal Coast
+    parent: opal-plains
   - id: opal
     parent: opal-delta
     name: Opal
@@ -68,10 +92,69 @@ regions:
     alias:
       - name: Ramantha
         year: -800 to 0
+  - id: winesgate
+    parent: opal-river-valley
+    name: Winesgate
+    category: city
+    year: after 580        
+  - id: kaltish-plains
+    name: Kaltish Plains
+    category: plains
+    parent: opal-plains
+  - id: hamish-river-valley
+    name: Hamish River Valley
+    parent: kaltish-plains
+  - id: kalt-river-valley
+    name: Kalt River Valley
+    parent: kaltish-plains
+  - id: kalt
+    name: Kalt
+    parent: kalt-river-valley
+    category: city
+    year: after -332
+  - id: hamish
+    parent: hamish-river-valley
+    name: Hamish
+    category: city
+    year: after -600
+    alias: 
+      - name: Halan
+        year: -600 to 3
+  - id: portsmouth
+    parent: kalt-river-valley
+    name: Portsmouth
+    category: city
+    year: after 740
+  - id: gayles
+    parent: opal-coast
+    category: city
+    name: Gayles
+    year: after 550
   - id: bessen-highlands
     parent: north-caerlun
     name: Bessen Highlands
     category: mountains
+  - id: kerel-pass
+    parent: bessen-highlands
+    name: Kerel Pass
+    category: valley
+  - id: kerel
+    parent: kerel-pass
+    name: Kerel
+    category: city
+    year: after 722
+  - id: bessen-pass
+    name: Bessen Pass
+    parent: bessen-highlands
+    category: valley
+    alias:
+      - name: Dragon Pass
+      - name: Bethesda Pass
+  - id: ironsgate
+    name: Ironsgate
+    parent: bessen-pass
+    category: city
+    year: after 660
   - id: bessen-coast
     parent: north-caerlun
     name: Bessen Coast
@@ -97,10 +180,26 @@ regions:
     name: Ostari Passage
     parent: north-caerlun
     category: plains
+  - id: ostari-archipelago
+    name: Ostari Archipelago
+    parent: ostari-passage
+    category: islands
+  - id: catspaws-islands
+    name: The Catspaws
+    parent: bessen-coast
+    category: islands
   - id: hiran-forest
     parent: ostari-passage
     category: forest
     name: Hiran Forest
+  - id: kells
+    parent: hiran-forest
+    name: Kells
+    category: city
+  - id: hiran
+    parent: hiran-forest
+    name: Hiran
+    category: city
   - id: hiran-river-valley
     parent: ostari-passage
     category: plains
@@ -131,10 +230,24 @@ regions:
   - id: south-reach
     parent: north-caerlun
     name: South Reach
+  - id: crowneholme
+    parent: south-reach
+    name: Crownholme
+    category: city
+  - id: watchholme
+    parent: south-reach
+    name: Watchholme
+    category: city
   - id: palisades
     parent: north-caerlun
     name: Palisades
     category: mountains
+  - id: shadow-pass
+    parent: palisades
+    name: Shadow Pass
+    category: valley
+    alias: 
+      - Smoke Pass
   - id: quarterlands
     parent: north-caerlun
     name: Quarterlands
@@ -146,13 +259,36 @@ regions:
     parent: north-caerlun
     category: mountains
     name: Iron Reach
+  - id: kaz-dur
+    parent: iron-reach
+    name: Kaz Dur
+    category: city
+    year: -4700 to -2190
+  - id: shattered-lands
+    parent: north-caerlun
+    name: Shattered Lands
+    alias: 
+      - name: Greylands
   - id: kettlelands
     parent: north-caerlun
     name: Kettlelands
+  - id: shards-islands
+    name: The Shards
+    parent: kettlelands
+    category: islands
   - id: terminymm-city
     parent: kettlelands
     name: Terminymm
     year: -4500 to -3000
+    category: city
+  - id: seven-ceders
+    name: Seven Ceders
+    parent: levelin-forest
+    year: after 780
+    category: city
+  - id: legast
+    name: Legast
+    parent: opal-plains
     category: city
   
 

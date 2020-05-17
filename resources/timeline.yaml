@@ -114,6 +114,14 @@ events:
     name: Remanji Empire
     year: -340 to 3
     parent: ramanji-nation
+  - id: defeat-of-ramantha
+    name: Surrender of Ramantha
+    year: 3
+    parent: ramanji-empire
+  - id: siege-of-kalt
+    name: Siege of Kalt
+    year: 24 to 320
+    type: war
   - id: kiren-nation
     name: Kiren
     year: -1500 to -1000

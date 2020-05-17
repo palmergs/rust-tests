@@ -6,6 +6,7 @@ pub struct Region {
     pub key: String,
     pub name: String,
     pub plural: Option<String>,
+    pub category: Option<String>,
     pub alias: Vec<Alias>,
     pub parent: Option<usize>,
     pub children: Vec<usize>,
@@ -17,6 +18,7 @@ impl Region {
             key: key.to_string(),
             name: name.to_string(),
             plural: None,
+            category: None,
             alias: Vec::new(),
             parent: None,
             children: Vec::new()
