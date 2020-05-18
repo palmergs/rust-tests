@@ -1,4 +1,6 @@
 use std::cmp::Ordering;
+use std::ops::Range;
+
 use super::Alias;
 
 #[derive(Debug)]
@@ -9,6 +11,7 @@ pub struct Region {
     pub category: Option<String>,
     pub alias: Vec<Alias>,
     pub races: Vec<String>,
+    pub range: Option<Range<i64>>,
     pub parent: Option<String>,
     pub children: Vec<String>,
 }
@@ -22,9 +25,25 @@ impl Region {
             category: None,
             alias: Vec::new(),
             races: Vec::new(),
+            range: None,
             parent: None,
             children: Vec::new()
         }
+    }
+
+    pub fn in_range(&self, year: i64) -> bool {
+        match &self.range {
+            Some(range) => range.start <= year && range.end >= year,
+            None => true,
+        }
+    }
+
+    pub fn in_race(&self, key: &str) -> bool {
+        if self.races.len() == 0 { return true; }
+        for r in &self.races {
+            if r == key { return true; }
+        }
+        false
     }
 }
 

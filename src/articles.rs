@@ -290,6 +290,9 @@ impl Caerlun {
                 r.plural = self.optional_string(h.get(&self.plural_key));
                 r.alias = self.build_aliases(h.get(&self.alias_key));
                 r.races = self.strings(h.get(&self.race_key));
+                if let Some(year) = self.optional_string(h.get(&self.parent_key)) {
+                    r.range = Some(parse_years(&year))
+                }
 
                 if let Some(k) = parent_key {
                     r.parent = Some(k.to_string());
