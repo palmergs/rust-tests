@@ -1,5 +1,5 @@
-use std::cmp::Ordering;
 use super::Alias;
+use std::cmp::Ordering;
 
 #[derive(Debug)]
 pub struct Race {
@@ -12,7 +12,7 @@ pub struct Race {
 
 impl Race {
     pub fn new(key: &str, name: &str) -> Race {
-        Race{
+        Race {
             key: key.to_string(),
             name: name.to_string(),
             plural: None,
@@ -22,18 +22,24 @@ impl Race {
     }
 
     pub fn pc() -> Vec<&'static str> {
-        vec!["human", "elf", "dwarf", "rulligg", "feletaur", "centaur", "urunai", "gobru", "urg"]
+        vec![
+            "human", "elf", "dwarf", "rulligg", "feletaur", "centaur", "urunai", "gobru", "urg",
+        ]
     }
 }
 
 impl PartialEq for Race {
-    fn eq(&self, other: &Self) -> bool { self.key == other.key }
+    fn eq(&self, other: &Self) -> bool {
+        self.key == other.key
+    }
 }
 
 impl Eq for Race {}
 
 impl Ord for Race {
-    fn cmp(&self, other: &Self) -> Ordering { self.name.cmp(&other.name) }
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.name.cmp(&other.name)
+    }
 }
 
 impl PartialOrd for Race {

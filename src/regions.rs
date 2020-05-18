@@ -27,7 +27,7 @@ impl Region {
             races: Vec::new(),
             range: None,
             parent: None,
-            children: Vec::new()
+            children: Vec::new(),
         }
     }
 
@@ -39,22 +39,30 @@ impl Region {
     }
 
     pub fn has_race(&self, key: &str) -> bool {
-        if self.races.len() == 0 { return true; }
+        if self.races.len() == 0 {
+            return true;
+        }
         for r in &self.races {
-            if r == key { return true; }
+            if r == key {
+                return true;
+            }
         }
         false
     }
 }
 
 impl PartialEq for Region {
-    fn eq(&self, other: &Self) -> bool { self.key == other.key }
+    fn eq(&self, other: &Self) -> bool {
+        self.key == other.key
+    }
 }
 
 impl Eq for Region {}
 
 impl Ord for Region {
-    fn cmp(&self, other: &Self) -> Ordering { self.name.cmp(&other.name) }
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.name.cmp(&other.name)
+    }
 }
 
 impl PartialOrd for Region {

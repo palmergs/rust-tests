@@ -5,13 +5,18 @@ pub struct Geo {
 }
 
 impl Geo {
-    pub fn new(key: &str, name: &str) -> Geo { 
-        Geo { key: key.to_string(), name: name.to_string() }
+    pub fn new(key: &str, name: &str) -> Geo {
+        Geo {
+            key: key.to_string(),
+            name: name.to_string(),
+        }
     }
 }
 
 impl PartialEq for Geo {
-    fn eq(&self, other: &Self) -> bool { self.key == other.key }
+    fn eq(&self, other: &Self) -> bool {
+        self.key == other.key
+    }
 }
 
 impl Eq for Geo {}

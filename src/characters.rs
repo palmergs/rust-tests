@@ -1,4 +1,4 @@
-use super::{ NameBuilder, Caerlun, Race, Region, Event };
+use super::{Caerlun, Event, NameBuilder, Race, Region};
 
 use rand::Rng;
 
@@ -13,7 +13,7 @@ pub struct CharacterBuilder<'a> {
 
 impl<'a> CharacterBuilder<'a> {
     pub fn new(store: &'a Caerlun) -> CharacterBuilder<'a> {
-        CharacterBuilder { 
+        CharacterBuilder {
             store: store,
             names: NameBuilder::new(),
         }
@@ -24,8 +24,8 @@ impl<'a> CharacterBuilder<'a> {
         name_key: Option<&str>,
         race_key: Option<&str>,
         region_key: Option<&str>,
-        dob: Option<&str>) {
-
+        dob: Option<&str>,
+    ) {
         let mut rng = rand::thread_rng();
         let race = self.race(race_key);
         let year = match dob {
@@ -45,7 +45,7 @@ impl<'a> CharacterBuilder<'a> {
     }
 
     fn race(&self, race_key: Option<&str>) -> &Race {
-        let mut rng = rand::thread_rng(); 
+        let mut rng = rand::thread_rng();
         match race_key {
             Some(s) => {
                 if let Some(race) = self.store.race(s) {
@@ -53,7 +53,7 @@ impl<'a> CharacterBuilder<'a> {
                 } else {
                     self.store.race("human").unwrap()
                 }
-            },
+            }
             None => {
                 let n = Race::pc().len();
                 let key = Race::pc()[rng.gen_range(0, n)];
@@ -70,28 +70,23 @@ impl<'a> CharacterBuilder<'a> {
                 } else {
                     self.store.leaf_region(dob, race_key)
                 }
-            },
+            }
             None => self.store.leaf_region(dob, race_key),
         }
     }
 
     fn name(&self, name_key: Option<&str>, race_key: &str) -> String {
         match name_key {
-            Some(s) => {
-                self.names.name(s)
-            },
-            None => {
-                self.names.name(race_key)
-            }
+            Some(s) => self.names.name(s),
+            None => self.names.name(race_key),
         }
     }
 
     fn events_from(&self, region_key: &str, from: i64, to: i64) -> Vec<Event> {
         let mut rng = rand::thread_rng();
-        
+
         let idx = rng.gen_range(from, to);
 
         Vec::new()
     }
 }
-

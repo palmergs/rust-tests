@@ -1,9 +1,9 @@
 extern crate regex;
 use regex::Regex;
 
+use super::Alias;
 use std::cmp::Ordering;
 use std::ops::Range;
-use super::Alias;
 
 #[derive(Debug)]
 pub struct Event {
@@ -18,7 +18,7 @@ pub struct Event {
 
 impl Event {
     pub fn new(key: &str, name: &str) -> Event {
-        Event{
+        Event {
             key: key.to_string(),
             name: name.to_string(),
             range: 0..1,
@@ -43,7 +43,9 @@ impl PartialOrd for Event {
 }
 
 impl PartialEq for Event {
-    fn eq(&self, other: &Self) -> bool { self.key == other.key }
+    fn eq(&self, other: &Self) -> bool {
+        self.key == other.key
+    }
 }
 
 impl Eq for Event {}
@@ -56,7 +58,10 @@ pub fn parse_years(time: &str) -> Range<i64> {
 
     match RANGE.captures(time) {
         Some(capture) => {
-            let nums: Vec<&str> = NUMBER.find_iter(time).map(|mat| mat.as_str().trim()).collect();
+            let nums: Vec<&str> = NUMBER
+                .find_iter(time)
+                .map(|mat| mat.as_str().trim())
+                .collect();
             let one: i64 = nums[0].parse().unwrap();
             match capture.get(1).unwrap().as_str() {
                 "to" => {
@@ -66,12 +71,12 @@ pub fn parse_years(time: &str) -> Range<i64> {
                     } else {
                         one..i64::max_value()
                     }
-                },
+                }
                 "before" | "until" => i64::min_value()..one,
                 "after" => one..i64::max_value(),
                 _ => 0..0,
             }
-        },
+        }
         None => {
             let year = time.to_string();
             let year = year.trim();

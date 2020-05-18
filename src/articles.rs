@@ -1,19 +1,19 @@
 extern crate regex;
 // use regex::Regex;
 
-use yaml_rust::{ Yaml, YamlLoader };
+use yaml_rust::{Yaml, YamlLoader};
 // use sorted_vec::SortedVec;
 use indexmap::IndexMap;
 // use nested_intervals::IntervalSet;
 
 //use std::i32::{ MIN, MAX };
+use std::cmp::{max, min};
 use std::collections::HashMap;
-use std::cmp::{ min, max };
 use std::str::FromStr;
 
 use rand::Rng;
 
-use super::{ Race, Region, parse_years, Event, Geo, Tone, Alias };
+use super::{parse_years, Alias, Event, Geo, Race, Region, Tone};
 
 // const YEAR_OFFSET: usize = 10000;
 
@@ -31,10 +31,10 @@ pub struct Caerlun {
 
     pub races: IndexMap<String, Race>,
     pub regions: IndexMap<String, Region>,
-    pub events: IndexMap<String, Event>, 
+    pub events: IndexMap<String, Event>,
     pub features: IndexMap<String, Geo>,
 
-    pub leaf_regions: Vec<String>
+    pub leaf_regions: Vec<String>,
 }
 
 impl Caerlun {
@@ -79,7 +79,7 @@ impl Caerlun {
 
     pub fn leaf_region(&self, dob: i64, race: Option<&str>) -> &Region {
         let len = self.leaf_regions.len();
-        if len == 0 { 
+        if len == 0 {
             panic!("no regions to select leaf from");
         }
 
@@ -87,7 +87,7 @@ impl Caerlun {
         let idx = rng.gen_range(0, len);
         let mut cnt = idx;
 
-        // randomly select a region; if it fails to meet the criteria 
+        // randomly select a region; if it fails to meet the criteria
         // then get the next one until one that matches the criteria
         // is found; if none is ever found after a complete loop then
         // return the last one
@@ -97,10 +97,10 @@ impl Caerlun {
             if region.in_range(dob) {
                 match race {
                     Some(key) => {
-                        if region.has_race(key) { 
-                            return region; 
+                        if region.has_race(key) {
+                            return region;
                         }
-                    },
+                    }
                     None => {
                         return region;
                     }
@@ -108,11 +108,14 @@ impl Caerlun {
             }
 
             cnt = cnt + 1;
-            if cnt == idx { return region; }
-            if cnt == len { cnt = 0; }
+            if cnt == idx {
+                return region;
+            }
+            if cnt == len {
+                cnt = 0;
+            }
         }
     }
-
 
     pub fn timeline(&self) {
         let start: i64 = -5000;
@@ -126,7 +129,16 @@ impl Caerlun {
             let per = total / 100;
             let offset = ((start + 5000) / per) as usize;
             let width = (((end - start) / per) + 1) as usize;
-            println!("{:>30} {:>5} to {:<5} {:o$}{:*<w$}", e.name, start, end, " ", "*", o = offset, w = width);
+            println!(
+                "{:>30} {:>5} to {:<5} {:o$}{:*<w$}",
+                e.name,
+                start,
+                end,
+                " ",
+                "*",
+                o = offset,
+                w = width
+            );
         }
     }
 
@@ -137,7 +149,7 @@ impl Caerlun {
                 None => {
                     println!("{}", r.name);
                     self.print_recurse_regions(r, 2);
-                },
+                }
                 _ => (),
             }
         }
@@ -161,41 +173,41 @@ impl Caerlun {
         match doc {
             Yaml::Hash(h) => {
                 match &h.get(&Yaml::from_str("regions")) {
-                    Some(entry) => {
-                        match entry {
-                            Yaml::Array(arr) => {
-                                for a in arr { self.append_region(&a); }
-                            },
-                            _ => (),
+                    Some(entry) => match entry {
+                        Yaml::Array(arr) => {
+                            for a in arr {
+                                self.append_region(&a);
+                            }
                         }
+                        _ => (),
                     },
                     None => (),
                 }
 
                 match &h.get(&Yaml::from_str("races")) {
-                    Some(entry) => {
-                        match entry {
-                            Yaml::Array(arr) => {
-                                for a in arr { self.append_race(&a); }
-                            },
-                            _ => (),
+                    Some(entry) => match entry {
+                        Yaml::Array(arr) => {
+                            for a in arr {
+                                self.append_race(&a);
+                            }
                         }
+                        _ => (),
                     },
                     None => (),
                 }
 
                 match &h.get(&Yaml::from_str("events")) {
-                    Some(entry) => {
-                        match entry {
-                            Yaml::Array(arr) => {
-                                for a in arr { self.append_event(&a); }
-                            },
-                            _ => (),
+                    Some(entry) => match entry {
+                        Yaml::Array(arr) => {
+                            for a in arr {
+                                self.append_event(&a);
+                            }
                         }
+                        _ => (),
                     },
                     None => (),
                 }
-            },
+            }
             _ => (),
         }
     }
@@ -225,34 +237,33 @@ impl Caerlun {
 
     fn strings(&self, opt: Option<&Yaml>) -> Vec<String> {
         match opt {
-            Some(yaml) => {
-                match yaml {
-                    Yaml::Array(arr) => arr.iter().map(|s| s.as_str().unwrap().to_string()).collect(),
-                    _ => Vec::new()
-                }        
+            Some(yaml) => match yaml {
+                Yaml::Array(arr) => arr
+                    .iter()
+                    .map(|s| s.as_str().unwrap().to_string())
+                    .collect(),
+                _ => Vec::new(),
             },
-            None => Vec::new()
+            None => Vec::new(),
         }
     }
 
     fn build_aliases(&self, opt: Option<&Yaml>) -> Vec<Alias> {
         match opt {
-            Some(yaml) => {
-                match yaml {
-                    Yaml::Array(arr) => {
-                        let mut vec = Vec::new();
-                        for a in arr {
-                            match self.build_alias(a) {
-                                Some(alias) => vec.push(alias),
-                                None => ()
-                            }
+            Some(yaml) => match yaml {
+                Yaml::Array(arr) => {
+                    let mut vec = Vec::new();
+                    for a in arr {
+                        match self.build_alias(a) {
+                            Some(alias) => vec.push(alias),
+                            None => (),
                         }
-                        vec
-                    },
-                    _ => Vec::new()
+                    }
+                    vec
                 }
+                _ => Vec::new(),
             },
-            None => Vec::new()
+            None => Vec::new(),
         }
     }
 
@@ -264,17 +275,17 @@ impl Caerlun {
                     None => Tone::Neutral,
                 };
 
-                let alias = Alias{
+                let alias = Alias {
                     name: h[&self.name_key].as_str().unwrap().to_string(),
                     tone: tone,
                     races: self.strings(h.get(&self.race_key)),
                 };
 
                 Some(alias)
-            },
-            _ => None
+            }
+            _ => None,
         }
-    }    
+    }
 
     pub fn append_race(&mut self, yaml: &Yaml) {
         match yaml {
@@ -286,7 +297,7 @@ impl Caerlun {
                 r.alias = self.build_aliases(h.get(&self.alias_key));
 
                 self.races.insert(key.to_string(), r);
-            },
+            }
             _ => panic!("Expected to build race instance from hash"),
         }
     }
@@ -299,7 +310,7 @@ impl Caerlun {
                 let g = Geo::new(key, name);
 
                 self.features.insert(key.to_string(), g);
-            },
+            }
             _ => panic!("Expected to build a geo instance from hash"),
         }
     }
@@ -326,7 +337,7 @@ impl Caerlun {
                 }
 
                 self.regions.insert(key.to_string(), r);
-            },
+            }
             _ => panic!("Expected to build a region instance from hash"),
         }
     }
@@ -350,7 +361,7 @@ impl Caerlun {
                 }
 
                 self.events.insert(key.to_string(), e);
-            },
+            }
             _ => panic!("Expected to build an event instance from hash"),
         }
     }

@@ -1,8 +1,8 @@
 extern crate regex;
 use regex::Regex;
 
-use std::collections::hash_map::HashMap;
 use rand::seq::SliceRandom;
+use std::collections::hash_map::HashMap;
 
 use super::Asset;
 
@@ -15,26 +15,24 @@ pub enum Fragment {
 
 impl Fragment {
     pub fn new(value: &str) -> Fragment {
-       let key = Fragment::get_key(value);
-       match key {
+        let key = Fragment::get_key(value);
+        match key {
             Ok(key) => Fragment::Ident(key.to_string()),
             Err(_) => Fragment::Constant(value.to_string()),
-       }
+        }
     }
 
     pub fn name(&self, hash: &HashMap<String, FragmentList>) -> String {
         match self {
             Fragment::Constant(val) => val.to_string(),
-            Fragment::Ident(val) => {
-                match hash.get(val) {
-                    Some(frag) => frag.name(hash),
-                    None => "".to_string(),
-                }
+            Fragment::Ident(val) => match hash.get(val) {
+                Some(frag) => frag.name(hash),
+                None => "".to_string(),
             },
             Fragment::Series(vec) => {
                 let strings: Vec<String> = vec.iter().map(|f| f.name(hash)).collect();
                 strings.join("")
-            },
+            }
         }
     }
 
@@ -44,7 +42,7 @@ impl Fragment {
         }
         match KEY.captures(text) {
             Some(capture) => Ok(capture.get(1).unwrap().as_str()),
-            None => Err(())
+            None => Err(()),
         }
     }
 }
@@ -58,7 +56,7 @@ pub struct FragmentList {
 
 impl FragmentList {
     pub fn new(ident: &str) -> FragmentList {
-        let anon =  ident.starts_with("_");
+        let anon = ident.starts_with("_");
         let ident = ident.to_string();
         FragmentList {
             ident: ident,
@@ -68,11 +66,11 @@ impl FragmentList {
     }
 
     pub fn name(&self, hash: &HashMap<String, FragmentList>) -> String {
-       let mut rng = rand::thread_rng();
-       match self.fragments.choose(&mut rng) {
+        let mut rng = rand::thread_rng();
+        match self.fragments.choose(&mut rng) {
             Some(frag) => frag.name(&hash),
             None => format!("[{}]", self.ident).to_string(),
-       }
+        }
     }
 
     pub fn add(&mut self, frag: Fragment) {
@@ -93,7 +91,7 @@ impl FragmentList {
         }
         match SECTION_HEAD.captures(text) {
             Some(capture) => Ok(capture.get(1).unwrap().as_str()),
-            None => Err(())
+            None => Err(()),
         }
     }
 }
@@ -105,22 +103,22 @@ pub struct NameBuilder {
 
 impl NameBuilder {
     pub fn new() -> NameBuilder {
-        let mut builder = NameBuilder { hash: HashMap::new() };
+        let mut builder = NameBuilder {
+            hash: HashMap::new(),
+        };
         for p in Asset::iter() {
             if p.ends_with(".txt") {
                 let o = Asset::get(&p);
                 match o {
-                    Some(cow) => {
-                        match std::str::from_utf8(&cow) {
-                            Ok(s) => builder.parse(s),
-                            _ => ()
-                        }
-                    }
-                    None => ()
+                    Some(cow) => match std::str::from_utf8(&cow) {
+                        Ok(s) => builder.parse(s),
+                        _ => (),
+                    },
+                    None => (),
                 };
             }
         }
-        return builder
+        return builder;
     }
 
     fn parse(&mut self, contents: &str) {
@@ -143,7 +141,7 @@ impl NameBuilder {
                                 let fs = vec.iter().map(|&x| Fragment::new(x)).collect::<Vec<_>>();
                                 frag.add(Fragment::Series(fs));
                             }
-                        },
+                        }
                         None => (),
                     }
                 }
@@ -164,13 +162,13 @@ impl NameBuilder {
     pub fn keys(&self) -> Vec<String> {
         self.hash
             .keys()
-            .filter(|s| !s.starts_with("_") )
+            .filter(|s| !s.starts_with("_"))
             .map(|s| s.to_string())
             .collect::<Vec<String>>()
     }
 
     // Return all keys included in the builder
-    pub fn all_keys(&self) ->Vec<String> {
+    pub fn all_keys(&self) -> Vec<String> {
         self.hash
             .keys()
             .map(|s| s.to_string())
