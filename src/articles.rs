@@ -29,16 +29,12 @@ pub struct Caerlun {
     pub tone_key: Yaml,
     pub year_key: Yaml,
 
-    count: usize,
-    ids_to_keys: HashMap<usize, String>,
-    keys_to_ids: HashMap<String, usize>,
+    pub races: IndexMap<String, Race>,
+    pub regions: IndexMap<String, Region>,
+    pub events: IndexMap<String, Event>, 
+    pub features: IndexMap<String, Geo>,
 
-    pub races: IndexMap<usize, Race>,
-    pub regions: IndexMap<usize, Region>,
-    pub events: IndexMap<usize, Event>, 
-    pub features: IndexMap<usize, Geo>,
-
-    pub leaf_regions: Vec<usize>
+    pub leaf_regions: Vec<String>
 }
 
 impl Caerlun {
@@ -54,10 +50,6 @@ impl Caerlun {
             tone_key: Yaml::from_str("tone"),
             year_key: Yaml::from_str("year"),
 
-            count: 0,
-            ids_to_keys: HashMap::new(),
-            keys_to_ids: HashMap::new(),
-
             races: IndexMap::new(),
             regions: IndexMap::new(),
             events: IndexMap::new(),
@@ -69,17 +61,20 @@ impl Caerlun {
         caerlun
     }
 
-    // pub fn read_assets(&mut self, 
+    pub fn race(&self, key: &str) -> Option<&Race> {
+        self.races.get(key)
+    }
 
-    pub fn region_by_id(&self, id: usize) -> Option<&Region> {
-        self.regions.get::<usize>(&id)
+    pub fn event(&self, key: &str) -> Option<&Event> {
+        self.events.get(key)
+    }
+
+    pub fn feature(&self, key: &str) -> Option<&Geo> {
+        self.features.get(key)
     }
 
     pub fn region(&self, key: &str) -> Option<&Region> {
-        if let Some(id) = self.keys_to_ids.get::<str>(key) {
-            return self.regions.get::<usize>(&id)
-        }
-        None
+        self.regions.get(key)
     }
 
     pub fn leaf_region(&self, _dob: i64, _race: Option<&str>) -> &Region {
@@ -94,38 +89,6 @@ impl Caerlun {
         region
     }
 
-    pub fn race_by_id(&self, id: usize) -> Option<&Race> {
-        self.races.get::<usize>(&id)
-    }
-
-    pub fn race(&self, key: &str) -> Option<&Race> {
-        if let Some(id) = self.keys_to_ids.get::<str>(key) {
-            return self.races.get::<usize>(&id);
-        }
-        None
-    }
-
-    pub fn event_by_id(&self, id: usize) -> Option<&Event> {
-        self.events.get::<usize>(&id)
-    }    
-
-    pub fn event(&self, key: &str) -> Option<&Event> {
-        if let Some(id) = self.keys_to_ids.get::<str>(key) {
-            return self.events.get::<usize>(&id);
-        }
-        None
-    }
-
-    pub fn feature_by_id(&self, id: usize) -> Option<&Geo> {
-        self.features.get::<usize>(&id)
-    }
-
-    pub fn feature(&self, key: &str) -> Option<&Geo> {
-        if let Some(id) = self.keys_to_ids.get::<str>(key) {
-            return self.features.get::<usize>(&id)
-        }
-        None
-    }
 
     pub fn timeline(&self) {
         let start: i64 = -5000;
@@ -157,19 +120,15 @@ impl Caerlun {
     }
 
     fn print_recurse_regions(&self, region: &Region, depth: usize) {
+        if depth > 99 {
+            println!("Currently looking at region {:?}", region);
+            panic!("Depth greater than 5!");
+        }
         for id in &region.children {
             let r = &self.regions[id];
             println!("{:depth$}{}", " ", r.name, depth = depth);
             self.print_recurse_regions(&r, depth + 1);
         }
-    }
-
-    fn register(&mut self, key: &str) -> usize {
-        let id = self.count;
-        self.ids_to_keys.insert(id, key.to_string());
-        self.keys_to_ids.insert(key.to_string(), id);
-        self.count = self.count + 1;
-        id
     }
 
     pub fn build_type(&mut self, s: &str) {
@@ -220,26 +179,8 @@ impl Caerlun {
     pub fn find_leaves(&mut self) {
         for (k, region) in &self.regions {
             if region.children.len() == 0 {
-                self.leaf_regions.push(*k)
+                self.leaf_regions.push(k.to_string())
             }
-        }
-    }
-
-    fn optional_id(&self, opt: Option<&Yaml>) -> Option<usize> {
-        match opt {
-            Some(yaml) => {
-                match yaml {
-                    Yaml::String(s) => {
-                        if let Some(n) = self.keys_to_ids.get::<str>(&s) {
-                            Some(*n)
-                        } else {
-                            None
-                        }
-                    },
-                    _ => None,
-                }
-            },
-            None => None,
         }
     }
 
@@ -268,15 +209,6 @@ impl Caerlun {
             },
             None => Vec::new()
         }
-    }
-
-    fn ids(&self, opt: Option<&Yaml>) -> Vec<usize> {
-        let keys = self.strings(opt);
-        let mut vec: Vec<usize> = Vec::new();
-        for k in keys {
-            if let Some(n) = self.keys_to_ids.get(&k) { vec.push(*n); }
-        }
-        vec
     }
 
     fn build_aliases(&self, opt: Option<&Yaml>) -> Vec<Alias> {
@@ -311,7 +243,7 @@ impl Caerlun {
                 let alias = Alias{
                     name: h[&self.name_key].as_str().unwrap().to_string(),
                     tone: tone,
-                    races: self.ids(h.get(&self.race_key)),
+                    races: self.strings(h.get(&self.race_key)),
                 };
 
                 Some(alias)
@@ -329,8 +261,7 @@ impl Caerlun {
                 r.plural = self.optional_string(h.get(&self.plural_key));
                 r.alias = self.build_aliases(h.get(&self.alias_key));
 
-                let id = self.register(key);
-                self.races.insert(id, r);
+                self.races.insert(key.to_string(), r);
             },
             _ => panic!("Expected to build race instance from hash"),
         }
@@ -343,8 +274,7 @@ impl Caerlun {
                 let name = h[&self.name_key].as_str().unwrap();
                 let g = Geo::new(key, name);
 
-                let id = self.register(key);
-                self.features.insert(id, g);
+                self.features.insert(key.to_string(), g);
             },
             _ => panic!("Expected to build a geo instance from hash"),
         }
@@ -355,24 +285,20 @@ impl Caerlun {
             Yaml::Hash(h) => {
                 let key = h[&self.id_key].as_str().unwrap();
                 let name = h[&self.name_key].as_str().unwrap();
-                let parent_id = self.optional_id(h.get(&self.parent_key));
+                let parent_key = self.optional_string(h.get(&self.parent_key));
                 let mut r = Region::new(key, name);
                 r.plural = self.optional_string(h.get(&self.plural_key));
                 r.alias = self.build_aliases(h.get(&self.alias_key));
                 r.races = self.strings(h.get(&self.race_key));
-                r.parent = parent_id;
 
-                let id = self.register(key);
-                self.regions.insert(id, r);
-
-                match parent_id {
-                    Some(n) => {
-                        if let Some(parent) = self.regions.get_mut::<usize>(&n) {
-                            parent.children.push(id);
-                        }
-                    },
-                    None => (),
+                if let Some(k) = parent_key {
+                    r.parent = Some(k.to_string());
+                    if let Some(parent) = self.regions.get_mut(&k) {
+                        parent.children.push(key.to_string());
+                    }
                 }
+
+                self.regions.insert(key.to_string(), r);
             },
             _ => panic!("Expected to build a region instance from hash"),
         }
@@ -383,24 +309,22 @@ impl Caerlun {
             Yaml::Hash(h) => {
                 let key = h[&self.id_key].as_str().unwrap();
                 let name = h[&self.name_key].as_str().unwrap();
-                let parent_id = self.optional_id(h.get(&self.parent_key));
+                let parent_key = self.optional_string(h.get(&self.parent_key));
                 let mut e = Event::new(key, name);
                 e.alias = self.build_aliases(h.get(&self.alias_key));
                 e.range = parse_years(&self.string(&h[&self.year_key]).unwrap());
-                e.races = self.ids(h.get(&self.race_key));
-                e.parent = parent_id;
+                e.races = self.strings(h.get(&self.race_key));
                 
-                let id = self.register(key);
-                self.events.insert(id, e);
+                
 
-                match parent_id {
-                    Some(n) => {
-                        if let Some(parent) = self.events.get_mut::<usize>(&(n as usize)) {
-                            parent.children.push(id);
-                        }
-                    },
-                    None => (),
+                if let Some(k) = parent_key {
+                    e.parent = Some(k.to_string());
+                    if let Some(parent) = self.events.get_mut(&k) {
+                        parent.children.push(key.to_string());
+                    }
                 }
+
+                self.events.insert(key.to_string(), e);
             },
             _ => panic!("Expected to build an event instance from hash"),
         }

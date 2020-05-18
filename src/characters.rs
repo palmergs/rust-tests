@@ -9,7 +9,6 @@ pub struct Character {}
 pub struct CharacterBuilder<'a> {
     store: &'a Caerlun,
     names: NameBuilder,
-    pc_race_keys: Vec<&'a str>,
 }
 
 impl<'a> CharacterBuilder<'a> {
@@ -17,7 +16,6 @@ impl<'a> CharacterBuilder<'a> {
         CharacterBuilder { 
             store: store,
             names: NameBuilder::new(),
-            pc_race_keys: vec!["human", "elf", "dwarf", "rulligg", "feletaur", "centaur", "urunai", "gobru", "urg"],
         }
     }
 
@@ -57,8 +55,8 @@ impl<'a> CharacterBuilder<'a> {
                 }
             },
             None => {
-                let n = self.pc_race_keys.len();
-                let key = self.pc_race_keys[rng.gen_range(0, n)];
+                let n = Race::pc().len();
+                let key = Race::pc()[rng.gen_range(0, n)];
                 self.store.race(key).unwrap()
             }
         }

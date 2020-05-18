@@ -9,8 +9,8 @@ pub struct Region {
     pub category: Option<String>,
     pub alias: Vec<Alias>,
     pub races: Vec<String>,
-    pub parent: Option<usize>,
-    pub children: Vec<usize>,
+    pub parent: Option<String>,
+    pub children: Vec<String>,
 }
 
 impl Region {

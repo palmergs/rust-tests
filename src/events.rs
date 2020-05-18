@@ -11,9 +11,9 @@ pub struct Event {
     pub name: String,
     pub range: Range<i64>,
     pub alias: Vec<Alias>,
-    pub races: Vec<usize>,
-    pub parent: Option<usize>,
-    pub children: Vec<usize>,
+    pub races: Vec<String>,
+    pub parent: Option<String>,
+    pub children: Vec<String>,
 }
 
 impl Event {
@@ -76,27 +76,3 @@ pub fn parse_years(time: &str) -> Range<i64> {
         }
     }
 }
-
-//         match RANGE.captures(time) {
-//             Some(capture) => {
-//                 let nums: Vec<&str> = NUMBER.find_iter(time).map(|mat| mat.as_str().trim()).collect();
-//                 let one: i32 = nums[0].parse().unwrap();
-//                 match capture.get(1).unwrap().as_str() {
-//                     "to" => {
-//                         let two: i32 = nums[1].parse().unwrap();
-//                         TimeRange{ start: Some(std::cmp::min(one, two)), end: Some(std::cmp::max(one, two)) }
-//                     },
-//                     "before" | "until" => TimeRange{ start: None, end: Some(one) },
-//                     "after" => TimeRange{ start: Some(one), end: None },
-//                     _ => panic!("Unable to parse time range with {}", time),
-//                 }
-//             },
-//             None => {
-//                 let year = time.to_string();
-//                 let year = year.trim();
-//                 let year: i32 = year.parse().unwrap();
-//                 TimeRange{ start: Some(year), end: Some(year) }
-//             }
-//         }
-//     }
-// }

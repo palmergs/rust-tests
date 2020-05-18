@@ -7,7 +7,7 @@ pub struct Race {
     pub name: String,
     pub plural: Option<String>,
     pub alias: Vec<Alias>,
-    pub regions: Vec<usize>,
+    pub regions: Vec<String>,
 }
 
 impl Race {
@@ -19,6 +19,10 @@ impl Race {
             alias: Vec::new(),
             regions: Vec::new(),
         }
+    }
+
+    pub fn pc() -> Vec<&'static str> {
+        vec!["human", "elf", "dwarf", "rulligg", "feletaur", "centaur", "urunai", "gobru", "urg"]
     }
 }
 
