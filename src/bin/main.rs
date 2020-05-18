@@ -105,5 +105,6 @@ fn build_store() -> Caerlun {
             }
         }
     }
+    caerlun.find_leaves();
     caerlun
 }

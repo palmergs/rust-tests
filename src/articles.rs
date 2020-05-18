@@ -35,6 +35,8 @@ pub struct Caerlun {
     pub regions: IndexMap<usize, Region>,
     pub events: IndexMap<usize, Event>, 
     pub features: IndexMap<usize, Geo>,
+
+    pub leaf_regions: Vec<usize>
 }
 
 impl Caerlun {
@@ -58,6 +60,8 @@ impl Caerlun {
             regions: IndexMap::new(),
             events: IndexMap::new(),
             features: IndexMap::new(),
+
+            leaf_regions: Vec::new(),
         };
 
         caerlun
@@ -197,7 +201,14 @@ impl Caerlun {
             },
             _ => (),
         }
+    }
 
+    pub fn find_leaves(&mut self) {
+        for (k, region) in &self.regions {
+            if region.children.len() == 0 {
+                self.leaf_regions.push(*k)
+            }
+        }
     }
 
     fn optional_id(&self, opt: Option<&Yaml>) -> Option<usize> {
