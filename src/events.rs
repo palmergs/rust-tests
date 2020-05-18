@@ -60,8 +60,12 @@ pub fn parse_years(time: &str) -> Range<i64> {
             let one: i64 = nums[0].parse().unwrap();
             match capture.get(1).unwrap().as_str() {
                 "to" => {
-                    let two: i64 = nums[1].parse().unwrap();
-                    one..two
+                    if nums.len() > 1 {
+                        let two: i64 = nums[1].parse().unwrap();
+                        one..two
+                    } else {
+                        one..i64::max_value()
+                    }
                 },
                 "before" | "until" => i64::min_value()..one,
                 "after" => one..i64::max_value(),

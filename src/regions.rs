@@ -38,7 +38,7 @@ impl Region {
         }
     }
 
-    pub fn in_race(&self, key: &str) -> bool {
+    pub fn has_race(&self, key: &str) -> bool {
         if self.races.len() == 0 { return true; }
         for r in &self.races {
             if r == key { return true; }

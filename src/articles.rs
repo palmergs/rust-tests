@@ -77,16 +77,40 @@ impl Caerlun {
         self.regions.get(key)
     }
 
-    pub fn leaf_region(&self, _dob: i64, _race: Option<&str>) -> &Region {
-        let len = self.regions.len();
+    pub fn leaf_region(&self, dob: i64, race: Option<&str>) -> &Region {
+        let len = self.leaf_regions.len();
         if len == 0 { 
             panic!("no regions to select leaf from");
         }
 
         let mut rng = rand::thread_rng();
         let idx = rng.gen_range(0, len);
-        let (_, region) = self.regions.get_index(idx).unwrap();
-        region
+        let mut cnt = idx;
+
+        // randomly select a region; if it fails to meet the criteria 
+        // then get the next one until one that matches the criteria
+        // is found; if none is ever found after a complete loop then
+        // return the last one
+        loop {
+            let key = self.leaf_regions.get(cnt).unwrap();
+            let region = self.regions.get(key).unwrap();
+            if region.in_range(dob) {
+                match race {
+                    Some(key) => {
+                        if region.has_race(key) { 
+                            return region; 
+                        }
+                    },
+                    None => {
+                        return region;
+                    }
+                }
+            }
+
+            cnt = cnt + 1;
+            if cnt == idx { return region; }
+            if cnt == len { cnt = 0; }
+        }
     }
 
 
@@ -290,7 +314,7 @@ impl Caerlun {
                 r.plural = self.optional_string(h.get(&self.plural_key));
                 r.alias = self.build_aliases(h.get(&self.alias_key));
                 r.races = self.strings(h.get(&self.race_key));
-                if let Some(year) = self.optional_string(h.get(&self.parent_key)) {
+                if let Some(year) = self.optional_string(h.get(&self.year_key)) {
                     r.range = Some(parse_years(&year))
                 }
 
@@ -317,8 +341,6 @@ impl Caerlun {
                 e.alias = self.build_aliases(h.get(&self.alias_key));
                 e.range = parse_years(&self.string(&h[&self.year_key]).unwrap());
                 e.races = self.strings(h.get(&self.race_key));
-                
-                
 
                 if let Some(k) = parent_key {
                     e.parent = Some(k.to_string());
