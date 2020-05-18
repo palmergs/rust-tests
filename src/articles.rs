@@ -11,6 +11,8 @@ use std::collections::HashMap;
 use std::cmp::{ min, max };
 use std::str::FromStr;
 
+use rand::Rng;
+
 use super::{ Race, Region, parse_years, Event, Geo, Tone, Alias };
 
 // const YEAR_OFFSET: usize = 10000;
@@ -78,6 +80,18 @@ impl Caerlun {
             return self.regions.get::<usize>(&id)
         }
         None
+    }
+
+    pub fn leaf_region(&self, _dob: i64, _race: Option<&str>) -> &Region {
+        let len = self.regions.len();
+        if len == 0 { 
+            panic!("no regions to select leaf from");
+        }
+
+        let mut rng = rand::thread_rng();
+        let idx = rng.gen_range(0, len);
+        let (_, region) = self.regions.get_index(idx).unwrap();
+        region
     }
 
     pub fn race_by_id(&self, id: usize) -> Option<&Race> {
@@ -345,6 +359,7 @@ impl Caerlun {
                 let mut r = Region::new(key, name);
                 r.plural = self.optional_string(h.get(&self.plural_key));
                 r.alias = self.build_aliases(h.get(&self.alias_key));
+                r.races = self.strings(h.get(&self.race_key));
                 r.parent = parent_id;
 
                 let id = self.register(key);

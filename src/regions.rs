@@ -8,6 +8,7 @@ pub struct Region {
     pub plural: Option<String>,
     pub category: Option<String>,
     pub alias: Vec<Alias>,
+    pub races: Vec<String>,
     pub parent: Option<usize>,
     pub children: Vec<usize>,
 }
@@ -20,6 +21,7 @@ impl Region {
             plural: None,
             category: None,
             alias: Vec::new(),
+            races: Vec::new(),
             parent: None,
             children: Vec::new()
         }

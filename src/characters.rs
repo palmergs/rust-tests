@@ -30,12 +30,14 @@ impl<'a> CharacterBuilder<'a> {
 
         let mut rng = rand::thread_rng();
         let race = self.race(race_key);
-        let region = self.region(region_key, &race.key);
-        let name = self.name(name_key, &race.key);
         let year = match dob {
             Some(s) => s.parse::<i64>().unwrap(),
             None => (CURRENT_YEAR - (20 + rng.gen_range(0, 20))),
         };
+
+        let region = self.region(region_key, Some(&race.key), year);
+
+        let name = self.name(name_key, &race.key);
         let events = self.events_from(&region.key, year, CURRENT_YEAR);
 
         println!("Name: {}", name);
@@ -62,21 +64,16 @@ impl<'a> CharacterBuilder<'a> {
         }
     }
 
-    fn region(&self, region_key: Option<&str>, race_key: &str) -> &Region {
-        let mut rng = rand::thread_rng();
+    fn region(&self, region_key: Option<&str>, race_key: Option<&str>, dob: i64) -> &Region {
         match region_key {
             Some(s) => {
                 if let Some(region) = self.store.region(s) {
                     region
                 } else {
-                    self.store.region("opal").unwrap()
+                    self.store.leaf_region(dob, race_key)
                 }
             },
-            None => {
-                let n = self.store.regions.len();
-                let (_, region) = self.store.regions.get_index(rng.gen_range(0, n)).unwrap();
-                region
-            }
+            None => self.store.leaf_region(dob, race_key),
         }
     }
 

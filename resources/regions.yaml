@@ -47,6 +47,10 @@ regions:
     name: Aelhus
     parent: brixtony-islands
     category: city
+    race:
+      - human
+      - elf
+      - kyr
   - id: levelin-forest
     parent: north-caerlun
     name: Levelin Forest
@@ -55,6 +59,8 @@ regions:
     parent: levelin-forest
     name: Levelin
     category: city
+    race:
+      - elf
   - id: winter-wall
     name: Winter Wall
     parent: north-caerlun
@@ -81,6 +87,16 @@ regions:
     parent: crown-river-valley
     category: city
     after: after -80
+    race:
+      - human
+      - elf
+      - dwarf
+      - centaur
+      - feletaur
+      - uranai
+      - rulligg
+      - urg
+      - gobru
   - id: opal-coast
     name: Opal Coast
     parent: opal-plains
@@ -92,11 +108,25 @@ regions:
     alias:
       - name: Ramantha
         year: -800 to 0
+    race:
+      - human
+      - elf
+      - dwarf
+      - uranai
+      - gobru
+      - urg
+      - rulligg
   - id: winesgate
     parent: opal-river-valley
     name: Winesgate
     category: city
-    year: after 580        
+    year: after 580      
+    race:
+      - human
+      - centaur
+      - feletaur
+      - uranai
+      - gobru  
   - id: kaltish-plains
     name: Kaltish Plains
     category: plains
@@ -112,6 +142,9 @@ regions:
     parent: kalt-river-valley
     category: city
     year: after -332
+    race:
+      - human
+      - elf
   - id: hamish
     parent: hamish-river-valley
     name: Hamish
@@ -120,16 +153,28 @@ regions:
     alias: 
       - name: Halan
         year: -600 to 3
+    race:
+      - human
+      - elf
+      - dwarf
   - id: portsmouth
     parent: kalt-river-valley
     name: Portsmouth
     category: city
     year: after 740
+    race:
+      - human
+      - elf
+      - dwarf
   - id: gayles
     parent: opal-coast
     category: city
     name: Gayles
     year: after 550
+    race:
+      - human
+      - elf
+      - dwarf
   - id: bessen-highlands
     parent: north-caerlun
     name: Bessen Highlands
@@ -143,6 +188,9 @@ regions:
     name: Kerel
     category: city
     year: after 722
+    race:
+      - human
+      - uranai
   - id: bessen-pass
     name: Bessen Pass
     parent: bessen-highlands
@@ -155,6 +203,15 @@ regions:
     parent: bessen-pass
     category: city
     year: after 660
+    race:
+      - human
+      - dwarf
+      - uranai
+      - gobru
+      - urg
+      - feletaur
+      - centaur
+      - rulligg
   - id: bessen-coast
     parent: north-caerlun
     name: Bessen Coast
@@ -165,17 +222,27 @@ regions:
     name: Bessen
     category: city
     year: after 780
+    race:
+      - human
+      - elf
+      - dwarf
+      - rulligg
+      - uranai
   - id: worthing
     name: Worthing
     parent: bessen-coast
     name: Worthing
     category: city
     year: after -2500
+    race:
+      - human
   - id: wells
     name: Wells
     parent: bessen-coast
     category: city
     year: after -2560
+    race:
+      - human
   - id: ostari-passage
     name: Ostari Passage
     parent: north-caerlun
@@ -184,10 +251,15 @@ regions:
     name: Ostari Archipelago
     parent: ostari-passage
     category: islands
+    race:
+      - human
   - id: catspaws-islands
     name: The Catspaws
     parent: bessen-coast
     category: islands
+    race:
+      - human
+      - dwarf
   - id: hiran-forest
     parent: ostari-passage
     category: forest
@@ -200,6 +272,13 @@ regions:
     parent: hiran-forest
     name: Hiran
     category: city
+    race:
+      - elf
+      - dwarf
+      - human
+      - uranai
+      - urg
+      - gobru
   - id: hiran-river-valley
     parent: ostari-passage
     category: plains
@@ -208,6 +287,10 @@ regions:
     parent: hiran-river-valley
     category: city
     name: Irendi
+    race:
+      - human
+      - elf
+      - dwarf
   - id: breemish-river-valley
     parent: ostari-passage
     caregory: valley
@@ -217,15 +300,27 @@ regions:
     parent: breemish-river-valley
     category: city
     year: -990 to 2
+    race:
+      - human
+      - elf
+      - dwarf
   - id: korenni 
     name: Korenni
     parent: hiran-river-valley
     category: city
     year: -1500 to 33
+    race:
+      - human
+      - elf
+      - dwarf
   - id: breem
     name: Breem
     parent: breemish-river-valley
     category: city
+    race:
+      - human
+      - elf
+      - dwarf
     year: after 580
   - id: south-reach
     parent: north-caerlun
@@ -234,10 +329,14 @@ regions:
     parent: south-reach
     name: Crownholme
     category: city
+    race:
+      - dwarf
   - id: watchholme
     parent: south-reach
     name: Watchholme
     category: city
+    race:
+      - dwarf
   - id: palisades
     parent: north-caerlun
     name: Palisades
@@ -264,6 +363,8 @@ regions:
     name: Kaz Dur
     category: city
     year: -4700 to -2190
+    race:
+      - dwarf
   - id: shattered-lands
     parent: north-caerlun
     name: Shattered Lands
@@ -276,20 +377,40 @@ regions:
     name: The Shards
     parent: kettlelands
     category: islands
+    race:
+      - dwarf
+      - human
+      - fyr
   - id: terminymm-city
     parent: kettlelands
     name: Terminymm
     year: -4500 to -3000
     category: city
+    race:
+      - human
   - id: seven-ceders
     name: Seven Ceders
     parent: levelin-forest
     year: after 780
     category: city
+    race:
+      - human
+      - elf
+      - centaur
+      - feletaur
+      - grollim
+      - uranai
   - id: legast
     name: Legast
     parent: opal-plains
     category: city
+    race:
+      - human
+      - centaur
+      - feletaur
+      - elf
+      - dwarf
+      - uranai
   
 
 
