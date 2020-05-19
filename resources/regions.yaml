@@ -124,7 +124,7 @@ regions:
     parent: opal-river-valley
     name: Winesgate
     category: city
-    year: after 580      
+    year: after 680      
     race:
       - human
       - centaur
@@ -174,7 +174,7 @@ regions:
     parent: opal-coast
     category: city
     name: Gayles
-    year: after 550
+    year: after 850
     race:
       - human
       - elf
@@ -206,7 +206,7 @@ regions:
     name: Ironsgate
     parent: bessen-pass
     category: city
-    year: after 660
+    year: after 960
     race:
       - human
       - dwarf
@@ -225,7 +225,7 @@ regions:
     parent: bessen-coast
     name: Bessen
     category: city
-    year: after 780
+    year: after 1180
     race:
       - human
       - elf

@@ -2,7 +2,7 @@ use super::{Caerlun, Event, NameBuilder, Race, Region};
 
 use rand::Rng;
 
-static CURRENT_YEAR: i64 = 840;
+static CURRENT_YEAR: i64 = 1260;
 
 pub struct Character {}
 

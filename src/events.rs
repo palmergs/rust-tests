@@ -12,6 +12,7 @@ pub struct Event {
     pub range: Range<i64>,
     pub alias: Vec<Alias>,
     pub races: Vec<String>,
+    pub events: Vec<String>,
     pub parent: Option<String>,
     pub children: Vec<String>,
 }
@@ -24,6 +25,7 @@ impl Event {
             range: 0..1,
             alias: Vec::new(),
             races: Vec::new(),
+            events: Vec::new(),
             parent: None,
             children: Vec::new(),
         }

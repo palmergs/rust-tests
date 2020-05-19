@@ -25,6 +25,7 @@ pub struct Caerlun {
     pub plural_key: Yaml,
     pub alias_key: Yaml,
     pub parent_key: Yaml,
+    pub region_key: Yaml,
     pub race_key: Yaml,
     pub tone_key: Yaml,
     pub year_key: Yaml,
@@ -47,6 +48,7 @@ impl Caerlun {
             alias_key: Yaml::from_str("alias"),
             parent_key: Yaml::from_str("parent"),
             race_key: Yaml::from_str("race"),
+            region_key: Yaml::from_str("region"),
             tone_key: Yaml::from_str("tone"),
             year_key: Yaml::from_str("year"),
 
@@ -119,13 +121,13 @@ impl Caerlun {
 
     pub fn timeline(&self) {
         let start: i64 = -5000;
-        let end: i64 = 840;
+        let end: i64 = 1260;
         let mut events: Vec<&Event> = self.events.values().collect();
         events.sort_by(|a, b| a.range.start.cmp(&b.range.start));
         for e in events {
             let start = max(start, e.range.start);
             let end = min(e.range.end, end);
-            let total = (5000 + 900) as i64;
+            let total = (5000 + 1300) as i64;
             let per = total / 100;
             let offset = ((start + 5000) / per) as usize;
             let width = (((end - start) / per) + 1) as usize;
@@ -352,6 +354,7 @@ impl Caerlun {
                 e.alias = self.build_aliases(h.get(&self.alias_key));
                 e.range = parse_years(&self.string(&h[&self.year_key]).unwrap());
                 e.races = self.strings(h.get(&self.race_key));
+                e.events = self.strings(h.get(&self.region_key));
 
                 if let Some(k) = parent_key {
                     e.parent = Some(k.to_string());

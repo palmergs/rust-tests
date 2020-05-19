@@ -20,14 +20,14 @@ events:
     name: Early Levelin Civilization
     year: -4700 to -2900
     type: civilzation
-    regions:
+    region:
       - levelin-forest
     races:
       - elf
   - id: early-iron-reach
     name: Early Iron Reach Civilization
     year: -4700 to -2190
-    regions:
+    region:
       - iron-reach
     races:
       - dwarf
@@ -35,7 +35,7 @@ events:
     name: Terminymm Civilization
     year: -4500 to -3000
     type: civilization
-    regions:
+    region:
       - kettlelands
     races: 
       - human
@@ -43,7 +43,7 @@ events:
     name: The Summoning
     year: -2997
     type: battle
-    regions:
+    region:
       - kettlelands
       - terminymm-city
     races:
@@ -52,7 +52,7 @@ events:
     name: War of the Reavers
     year: -3030 to -2700
     type: war
-    regions:
+    region:
       - kettlelands
       - levelin-forest
       - opal-plains
@@ -64,7 +64,7 @@ events:
     name: War of the Orphan Armies
     year: -2300 to -2100
     type: war
-    regions:
+    region:
       - iron-reach
       - shattered-lands
       - crown-reach
@@ -78,7 +78,7 @@ events:
     name: The Sack of Kaz Dur
     year: -2190
     type: battle
-    regions:
+    region:
       - iron-reach
     races:
       - dwarf
@@ -89,18 +89,18 @@ events:
   - id: dragon-lords
     name: Dragon Lords
     year: 0 to 501
-    regions:
+    region:
       - north-caerlun
   - id: ramanji-nation
     name: Ramanji
     year: -1200 to 3
-    regions:
+    region:
       - opal
   - id: ramanji-migration
     name: Ramanji Migration
     year: -1200 to -1050
     parent: ramanji-nation
-    regions:
+    region:
       - opal-delta
   - id: ramanji-states
     name: Ramanji States
@@ -126,14 +126,14 @@ events:
     name: Kiren
     year: -1500 to -1000
     type: civilization
-    regions:
+    region:
       - hiren-forest
       - hiren-river-valley
   - id: kiren-empire
     name: Kiren Empire
     year: -1500 to -1000
     type: government
-    regions:
+    region:
       - hiren-forest
       - hiren-river-valley
       - breemish-river-valley
@@ -145,7 +145,7 @@ events:
     name: Norn Kiren
     year: -990 to 2
     type: civilization
-    regions:
+    region:
       - hiren-forest
       - breemish-river-valley
   - id: defeat-ber-barenni
@@ -161,7 +161,7 @@ events:
     name: Sund Kiren Empire
     year: -990 to 33
     type: civilization
-    regions:
+    region:
       - hiren-forest
       - hiren-river-valley
   - id: sack-korenni
@@ -173,4 +173,97 @@ events:
       - rulligg
       - feletaur
       - centaur
-  
+  - id: massacre-of-the-servants
+    name: Massacre of the Servants
+    year: 503 to 533
+    type: war
+    races:
+      - human
+      - rulligg
+      - feletaur
+      - centaur
+  - id: unbelief-war
+    name: Unbelief War
+    year: 820 to 930
+    type: war
+    alias:
+      - name: The Darkening War
+        tone: negative
+      - name: The Blessed War
+        tone: positive
+    region:
+      - opal
+      - opal-river-delta
+      - kaltish-plains
+      - ostari-passage
+  - id: burning-opal-library
+    name: Burning of Opal Library
+    type: battle
+    year: 847
+    region:
+      - opal
+  - id: war-of-the-hand
+    name: The War of the Hand
+    year: 1137 to 1143
+    type: war
+  - id: freedom-war
+    name: The Freedom war
+    year: 1141 to 1180
+    type: war
+    alias:
+      - name: Unwashed War
+        tone: negative
+    races:
+      - human
+      - rulligg
+    region:
+      - opal-river-delta
+      - kaltish-plains
+  - id: dancers-seige
+    parent: freedom-war
+    name: Dancers Seige
+    year: 1180
+    type: battle
+    alias:
+      - name: Dancer's Gambit
+        tone: positive
+    region:
+      - opal
+  - id: bessen-independence
+    name: War of Bessen Independence
+    year: 1180 to 1190
+    type: war
+    races:
+      - human
+      - rulligg
+    region: 
+      - bessen-coast
+      - bessen-highlands
+      - kaltish-plains
+  - id: worthing-invasion
+    name: Worthing Invasion
+    year: after 1258
+    race: 
+      - human
+    region:
+      - worthing
+      - bessen-highlands
+      - bessen-coast
+      - wells
+      - kerel
+  - id: seige-of-worthing
+    parent: worthing-invasion
+    name: Seige of Worthing
+    year: 1259
+    race:
+      - human
+    region:
+      - worthing
+  - id: seige-of-wells
+    parent: worthing-invasion
+    name: Seige of Wells
+    year: 1260
+    race:
+      - human
+    region: 
+      - wells
