@@ -52,6 +52,13 @@ impl Region {
         }
         false
     }
+
+    pub fn is_water(&self) -> bool {
+        match &self.category {
+            Some(c) => c == "body-of-water",
+            None => false,
+        }
+    }
 }
 
 impl PartialEq for Region {

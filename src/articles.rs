@@ -102,15 +102,17 @@ impl Caerlun {
         loop {
             let key = self.leaf_regions.get(cnt).unwrap();
             let region = self.regions.get(key).unwrap();
-            if region.in_range(dob) {
-                match race {
-                    Some(key) => {
-                        if region.has_race(key) {
+            if !region.is_water() {
+                if region.in_range(dob) {
+                    match race {
+                        Some(key) => {
+                            if region.has_race(key) {
+                                return region;
+                            }
+                        }
+                        None => {
                             return region;
                         }
-                    }
-                    None => {
-                        return region;
                     }
                 }
             }
