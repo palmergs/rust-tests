@@ -12,24 +12,60 @@ pub struct Event {
     pub range: Range<i64>,
     pub alias: Vec<Alias>,
     pub races: Vec<String>,
-    pub events: Vec<String>,
+    pub regions: Vec<String>,
     pub parent: Option<String>,
     pub children: Vec<String>,
 }
 
 impl Event {
-    pub fn new(key: &str, name: &str) -> Event {
+    pub fn new(key: &str, name: &str, year: &str) -> Event {
         Event {
             key: key.to_string(),
             name: name.to_string(),
-            range: 0..1,
+            range: Event::parse_years(year),
             alias: Vec::new(),
             races: Vec::new(),
-            events: Vec::new(),
+            regions: Vec::new(),
             parent: None,
             children: Vec::new(),
         }
     }
+
+    pub fn parse_years(time: &str) -> Range<i64> {
+        lazy_static! {
+            static ref RANGE: Regex = Regex::new(r"\s*(to|before|until|after)\s*").unwrap();
+            static ref NUMBER: Regex = Regex::new(r"\s*([-]?[0-9]+)\s*").unwrap();
+        }
+    
+        match RANGE.captures(time) {
+            Some(capture) => {
+                let nums: Vec<&str> = NUMBER
+                    .find_iter(time)
+                    .map(|mat| mat.as_str().trim())
+                    .collect();
+                let one: i64 = nums[0].parse().unwrap();
+                match capture.get(1).unwrap().as_str() {
+                    "to" => {
+                        if nums.len() > 1 {
+                            let two: i64 = nums[1].parse().unwrap();
+                            one..two
+                        } else {
+                            one..i64::max_value()
+                        }
+                    }
+                    "before" | "until" => i64::min_value()..one,
+                    "after" => one..i64::max_value(),
+                    _ => 0..0,
+                }
+            }
+            None => {
+                let year = time.to_string();
+                let year = year.trim();
+                let year: i64 = year.parse().unwrap();
+                year..year
+            }
+        }
+    }    
 }
 
 impl Ord for Event {
@@ -51,39 +87,3 @@ impl PartialEq for Event {
 }
 
 impl Eq for Event {}
-
-pub fn parse_years(time: &str) -> Range<i64> {
-    lazy_static! {
-        static ref RANGE: Regex = Regex::new(r"\s*(to|before|until|after)\s*").unwrap();
-        static ref NUMBER: Regex = Regex::new(r"\s*([-]?[0-9]+)\s*").unwrap();
-    }
-
-    match RANGE.captures(time) {
-        Some(capture) => {
-            let nums: Vec<&str> = NUMBER
-                .find_iter(time)
-                .map(|mat| mat.as_str().trim())
-                .collect();
-            let one: i64 = nums[0].parse().unwrap();
-            match capture.get(1).unwrap().as_str() {
-                "to" => {
-                    if nums.len() > 1 {
-                        let two: i64 = nums[1].parse().unwrap();
-                        one..two
-                    } else {
-                        one..i64::max_value()
-                    }
-                }
-                "before" | "until" => i64::min_value()..one,
-                "after" => one..i64::max_value(),
-                _ => 0..0,
-            }
-        }
-        None => {
-            let year = time.to_string();
-            let year = year.trim();
-            let year: i64 = year.parse().unwrap();
-            year..year
-        }
-    }
-}

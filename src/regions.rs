@@ -1,7 +1,7 @@
 use std::cmp::Ordering;
 use std::ops::Range;
 
-use super::Alias;
+use super::{Alias, Event};
 
 #[derive(Debug)]
 pub struct Region {
@@ -17,7 +17,7 @@ pub struct Region {
 }
 
 impl Region {
-    pub fn new(key: &str, name: &str) -> Region {
+    pub fn new(key: &str, name: &str, year: Option<&str>) -> Region {
         Region {
             key: key.to_string(),
             name: name.to_string(),
@@ -25,7 +25,10 @@ impl Region {
             category: None,
             alias: Vec::new(),
             races: Vec::new(),
-            range: None,
+            range: match year {
+                Some(s) => Some(Event::parse_years(s)),
+                None => None,
+            },
             parent: None,
             children: Vec::new(),
         }

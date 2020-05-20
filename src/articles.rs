@@ -13,7 +13,7 @@ use std::str::FromStr;
 
 use rand::Rng;
 
-use super::{parse_years, Alias, Event, Geo, Race, Region, Tone};
+use super::{Alias, Event, Geo, Race, Region, Tone};
 
 // const YEAR_OFFSET: usize = 10000;
 
@@ -332,13 +332,11 @@ impl Caerlun {
                 let key = h[&self.id_key].as_str().unwrap();
                 let name = h[&self.name_key].as_str().unwrap();
                 let parent_key = self.optional_string(h.get(&self.parent_key));
-                let mut r = Region::new(key, name);
+                let year = self.optional_string(h.get(&self.year_key));
+                let mut r = Region::new(key, name, year.as_deref());
                 r.plural = self.optional_string(h.get(&self.plural_key));
                 r.alias = self.build_aliases(h.get(&self.alias_key));
                 r.races = self.strings(h.get(&self.race_key));
-                if let Some(year) = self.optional_string(h.get(&self.year_key)) {
-                    r.range = Some(parse_years(&year))
-                }
 
                 if let Some(k) = parent_key {
                     r.parent = Some(k.to_string());
@@ -359,11 +357,10 @@ impl Caerlun {
                 let key = h[&self.id_key].as_str().unwrap();
                 let name = h[&self.name_key].as_str().unwrap();
                 let parent_key = self.optional_string(h.get(&self.parent_key));
-                let mut e = Event::new(key, name);
+                let mut e = Event::new(key, name, &self.string(&h[&self.year_key]).unwrap());
                 e.alias = self.build_aliases(h.get(&self.alias_key));
-                e.range = parse_years(&self.string(&h[&self.year_key]).unwrap());
                 e.races = self.strings(h.get(&self.race_key));
-                e.events = self.strings(h.get(&self.region_key));
+                e.regions = self.strings(h.get(&self.region_key));
 
                 if let Some(k) = parent_key {
                     e.parent = Some(k.to_string());

@@ -67,18 +67,22 @@ regions:
   - id: opal-plains
     parent: north-caerlun
     name: Opal Plains
+    category: plains
   - id: opal-delta
     parent: opal-plains
     name: Opal River dzdelta
   - id: opal-river-valley
     parent: opal-plains
     name: Opal River Valley
+    category: valley
   - id: crown-river-valley
     parent: opal-plains
     name: Crown River Valley
+    category: valley
   - id: shattered-river-valley
     parent: opal-plains
     name: Shattered River Valley
+    category: valley
     race:
       - human
       - centaur
@@ -138,9 +142,11 @@ regions:
   - id: hamish-river-valley
     name: Hamish River Valley
     parent: kaltish-plains
+    category: valley
   - id: kalt-river-valley
     name: Kalt River Valley
     parent: kaltish-plains
+    category: valley
   - id: kalt
     name: Kalt
     parent: kalt-river-valley

@@ -25,7 +25,7 @@ mod regions;
 pub use regions::Region;
 
 mod events;
-pub use events::{parse_years, Event};
+pub use events::Event;
 
 mod features;
 pub use features::Geo;
