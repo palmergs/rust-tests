@@ -29,6 +29,9 @@ pub struct Caerlun {
     pub race_key: Yaml,
     pub tone_key: Yaml,
     pub year_key: Yaml,
+    pub height_key: Yaml,
+    pub weight_key: Yaml,
+    pub lifespan_key: Yaml,
 
     pub races: IndexMap<String, Race>,
     pub regions: IndexMap<String, Region>,
@@ -51,6 +54,9 @@ impl Caerlun {
             region_key: Yaml::from_str("region"),
             tone_key: Yaml::from_str("tone"),
             year_key: Yaml::from_str("year"),
+            height_key: Yaml::from_str("height"),
+            weight_key: Yaml::from_str("weight"),
+            lifespan_key: Yaml::from_str("lifespan"),
 
             races: IndexMap::new(),
             regions: IndexMap::new(),
@@ -292,9 +298,12 @@ impl Caerlun {
     pub fn append_race(&mut self, yaml: &Yaml) {
         match yaml {
             Yaml::Hash(h) => {
-                let key = h[&self.id_key].as_str().unwrap();
-                let name = h[&self.name_key].as_str().unwrap();
-                let mut r = Race::new(key, name);
+                let key = h[&self.id_key].as_str().expect("Expected id key");
+                let name = h[&self.name_key].as_str().expect("Expected name key");
+                let height = h[&self.height_key].as_str().expect("Expected height key");
+                let weight = h[&self.weight_key].as_str().expect("Expected weight key");
+                let lifespan = h[&self.lifespan_key].as_str().expect("Expected lifespan key");
+                let mut r = Race::new(key, name, height, weight, lifespan);
                 r.plural = self.optional_string(h.get(&self.plural_key));
                 r.alias = self.build_aliases(h.get(&self.alias_key));
 

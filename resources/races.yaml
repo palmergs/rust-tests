@@ -1,7 +1,7 @@
 races:
   - id: dragon
     name: Dragon
-    height: 80' - 120'
+    height: 80'0" - 120'0"
     weight: 33000 - 55000
     lifespan: 0-20, 20-2000, 2000-9000, 9000-10000
   - id: human
@@ -49,9 +49,11 @@ races:
     plural: Gobrunai
     alignment: native
     height: 3'0" - 3'6"
-    weight: 0-10, 10-40, 40-50, 50-60
+    weight: 35 - 50
+    lifespan: 0-10, 10-40, 40-50, 50-60
     alias:
       - name: Goblin
+        plural: Goblins
         tone: negative
   - id: urg
     name: Urg
@@ -62,6 +64,7 @@ races:
     lifespan: 0-8, 8-32, 32-40, 40-48
     alias:
       - name: Orc
+        plural: Orcs
         tone: negative
   - id: rulligg
     name: Rulligg
@@ -91,7 +94,7 @@ races:
     name: Balor
     plural: Balors
     alignment: opposition
-    height: 6'0 - 7'0
+    height: 6'0" - 7'0"
     weight: 160 - 220
     lifespan: 0-50, 50-100, 100-150, 150-250
   - id: kry
