@@ -63,8 +63,8 @@ races:
     height: 3'0" - 3'6"
     weight: 35 - 50
     lifespan: 0-10, 10-40, 40-50, 50-60
-    mname: gobrue
-    fname: gobrue    
+    mname: gobru
+    fname: gobru    
     alias:
       - name: Goblin
         plural: Goblins

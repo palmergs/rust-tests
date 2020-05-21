@@ -310,8 +310,7 @@ impl Caerlun {
                 let name = h[&self.name_key].as_str().expect("Expected name key");
                 let height = h[&self.height_key].as_str().expect("Expected height key");
                 let weight = h[&self.weight_key].as_str().expect("Expected weight key");
-                let lifespan = h[&self.lifespan_key].as_str().expect("Expected lifespan key");
-println!("What is the current hash {:?}", h);        
+                let lifespan = h[&self.lifespan_key].as_str().expect("Expected lifespan key"); 
                 let mut r = Race::new(
                     key,
                     name,

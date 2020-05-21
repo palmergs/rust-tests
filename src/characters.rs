@@ -35,7 +35,7 @@ impl<'a> CharacterBuilder<'a> {
 
         let region = self.region(region_key, Some(&race.key), year);
 
-        let name = self.name(name_key, &race.key);
+        let name = self.name(name_key, &race);
         let events = self.events_from(&region.key, year, CURRENT_YEAR);
 
         println!("Name: {}", name);
@@ -75,10 +75,23 @@ impl<'a> CharacterBuilder<'a> {
         }
     }
 
-    fn name(&self, name_key: Option<&str>, race_key: &str) -> String {
+    fn name(&self, name_key: Option<&str>, race: &Race) -> String {
         match name_key {
             Some(s) => self.names.name(s),
-            None => self.names.name(race_key),
+            None => {
+                let mut rng = rand::thread_rng();
+                let name = match rng.gen_range(0, 2) {
+                    0 => self.names.name(&race.mname),
+                    1 => self.names.name(&race.fname),
+                    _ => panic!("Expected only 2 options"),
+                };
+
+                if let Some(lname) = &race.lname {
+                    format!("{} {}", name, self.names.name(&lname))
+                } else {
+                    name
+                }
+            }
         }
     }
 
