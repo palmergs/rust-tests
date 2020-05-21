@@ -1,0 +1,8 @@
+[grollim]
+test
+
+[giant]
+test
+
+[balor]
+test

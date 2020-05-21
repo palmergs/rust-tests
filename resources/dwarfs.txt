@@ -18,6 +18,29 @@
 :_dcons+:_dvowel+:_dvowel:_dlast
 :_dvowel+:_dlast
 
+[dwarf-last]
+:metal+:_dmat-modifier
+:stone+:_dmat-modifier
+:nickname
+:_beard-description+beard
+
+[_dmat-modifier]
+breaker
+forge
+forger
+riven
+rivet
+beam
+smith
+delver
+seeker
+crafter
+master
+wright
+digger
+hand
+eye
+
 [_dlast]
 lin
 len
@@ -82,6 +105,7 @@ plain
 scarred
 short
 simple
+proud
 small
 sober
 red
@@ -109,6 +133,7 @@ short
 thin
 white
 yellow
+proud
 
 
 

@@ -11,6 +11,9 @@ races:
     height: 5'2" - 6'0"
     weight: 90 - 220
     lifespan: 0-15, 15-30, 30-60, 60-75
+    mname: male-fnames
+    fname: female-fnames
+    lname: last-name
     alias: 
       - name: Man 
         plural: Men
@@ -21,6 +24,8 @@ races:
     height: 5'2" - 5'6"
     weight: 70 - 100
     lifespan: 0-40, 40-80, 80-160, 160-240
+    mname: elf-name
+    fname: elf-name
     regions:
       - levelin-forest
       - hiran-forest
@@ -31,6 +36,9 @@ races:
     height: 4'10" - 5'3"
     weight: 140 - 220
     lifespan: 0-30, 30-60, 60-120, 120-150
+    mname: dwarf-male
+    fname: dwarf-female
+    lname: dwarf-last
     regions:
       - south-reach
       - palisades
@@ -41,6 +49,8 @@ races:
     height: 6'0" - 7'0"
     weight: 140 - 200
     lifespan: 0-12, 12-32, 42-50, 50-58
+    mname: uranai
+    fname: uranai    
     alias:
       - name: Lupin
         tone: negative
@@ -51,6 +61,8 @@ races:
     height: 3'0" - 3'6"
     weight: 35 - 50
     lifespan: 0-10, 10-40, 40-50, 50-60
+    mname: gobrue
+    fname: gobrue    
     alias:
       - name: Goblin
         plural: Goblins
@@ -62,6 +74,8 @@ races:
     height: 5'5" - 5'10"
     weight: 180 - 240
     lifespan: 0-8, 8-32, 32-40, 40-48
+    mname: urg
+    fname: urg
     alias:
       - name: Orc
         plural: Orcs
@@ -72,6 +86,8 @@ races:
     height: 5'6" - 5'10"
     weight: 300 - 400
     lifespan: 0-8, 8-24, 25-54, 54-200
+    mname: rulligg
+    fname: rulligg
     alias:
       - name: Rock Troll
         plural: Rock Trolls
@@ -82,12 +98,20 @@ races:
     height: 5'0" - 5'6"
     weight: 150 - 200
     lifespan: 0-5, 5-15, 15-45, 45-60
+    mnane: feletaur
+    fname: feletaur
+    regions:
+      - opal-plains
+      - levelin-forest
+      - bessen-highlands
   - id: centaur
     name: Centaur
     alignment: dragon-brought
     height: 6'6" - 8'0"
     weight: 600 - 900
     lifespan: 0-8, 8-16, 16-48, 48-64
+    mname: centaur
+    fname: centaur
     regions:
       - opal-plains
   - id: balor
@@ -97,6 +121,8 @@ races:
     height: 6'0" - 7'0"
     weight: 160 - 220
     lifespan: 0-50, 50-100, 100-150, 150-250
+    mname: balor
+    fname: balor
   - id: kry
     name: Kyr
     plural: Kyr
@@ -109,6 +135,8 @@ races:
     height: 15'0" - 18'0"
     weight: 650 - 950
     lifespan: 0-30, 30-60, 60-90, 90-120
+    mname: giant
+    fname: giant
     regions:
       - iron-reach
       - crown-reach
@@ -122,6 +150,8 @@ races:
     height: 13'0" - 16'0"
     weight: 650 - 950
     lifespan: 0-30, 30-60, 60-90, 90-120
+    mname: giant
+    fname: giant
     regions:
       - kettlelands
       - quarterlands
@@ -132,5 +162,7 @@ races:
     height: 5'5" - 5'10"
     weight: 130 - 200
     lifespan: 0-20, 20-40, 40-60, 60-80
+    mname: grollim
+    fname: grollim
     regions: 
       - kettlelands

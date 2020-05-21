@@ -15,6 +15,7 @@
 :_felf+:_melf+:_lelf
 :_felf+'+:_lelf
 :_melf+:_lelf
+:elf-name+ +:elf-name
 
 [_felf]
 ab
