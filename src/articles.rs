@@ -21,6 +21,9 @@ use super::{Alias, Event, Geo, Race, Region, Tone};
 pub struct Caerlun {
     pub id_key: Yaml,
     pub name_key: Yaml,
+    pub mname_key: Yaml,
+    pub fname_key: Yaml,
+    pub lname_key: Yaml,
     pub abbr_key: Yaml,
     pub plural_key: Yaml,
     pub alias_key: Yaml,
@@ -46,6 +49,9 @@ impl Caerlun {
         let caerlun = Caerlun {
             id_key: Yaml::from_str("id"),
             name_key: Yaml::from_str("name"),
+            mname_key: Yaml::from_str("mname"),
+            fname_key: Yaml::from_str("fname"),
+            lname_key: Yaml::from_str("lname"),
             abbr_key: Yaml::from_str("abbr"),
             plural_key: Yaml::from_str("plural"),
             alias_key: Yaml::from_str("alias"),
@@ -305,7 +311,16 @@ impl Caerlun {
                 let height = h[&self.height_key].as_str().expect("Expected height key");
                 let weight = h[&self.weight_key].as_str().expect("Expected weight key");
                 let lifespan = h[&self.lifespan_key].as_str().expect("Expected lifespan key");
-                let mut r = Race::new(key, name, height, weight, lifespan);
+println!("What is the current hash {:?}", h);        
+                let mut r = Race::new(
+                    key,
+                    name,
+                    height,
+                    weight,
+                    lifespan,
+                    h[&self.mname_key].as_str().expect("Expected mname key"),
+                    h[&self.fname_key].as_str().expect("Expected fname key"),
+                    self.optional_string(h.get(&self.lname_key)).as_deref());
                 r.plural = self.optional_string(h.get(&self.plural_key));
                 r.alias = self.build_aliases(h.get(&self.alias_key));
 

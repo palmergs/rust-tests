@@ -15,10 +15,22 @@ pub struct Race {
     pub height: Range<i64>,
     pub weight: Range<i64>,
     pub lifespan: Vec<Range<i64>>,
+    pub mname: String,
+    pub fname: String,
+    pub lname: Option<String>,
 }
 
 impl Race {
-    pub fn new(key: &str, name: &str, height: &str, weight: &str, lifespan: &str) -> Race {
+    pub fn new(
+        key: &str, 
+        name: &str, 
+        height: &str, 
+        weight: &str, 
+        lifespan: &str, 
+        mname: &str, 
+        fname: &str, 
+        lname: Option<&str>) -> Race {
+
         Race {
             key: key.to_string(),
             name: name.to_string(),
@@ -28,6 +40,12 @@ impl Race {
             height: Race::parse_height(height),
             weight: Race::parse_weight(weight),
             lifespan: Race::parse_lifespan(lifespan),
+            mname: mname.to_string(),
+            fname: fname.to_string(),
+            lname: match lname {
+                Some(s) => Some(s.to_string()),
+                None => None,
+            }
         }
     }
 
