@@ -62,11 +62,13 @@ fn main() -> io::Result<()> {
         let caerlun = build_store();
         let builder = CharacterBuilder::new(&caerlun);
         for _ in 0..count {
-            builder.build(
+            let character = builder.build(
                 matches.value_of("key"),
+                None,
                 matches.value_of("race"),
                 matches.value_of("region"),
-                matches.value_of("dob"))
+                matches.value_of("dob"));
+            print!("{}", character);
         }
     } else if matches.is_present("timeline") {
         let caerlun = build_store();

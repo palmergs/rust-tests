@@ -1,10 +1,33 @@
 use super::{Caerlun, Event, NameBuilder, Race, Region};
 
+use std::fmt;
 use rand::Rng;
 
 static CURRENT_YEAR: i64 = 1260;
 
-pub struct Character {}
+pub struct Character {
+    pub fname: String,
+    pub lname: Option<String>,
+    pub nickname: Option<String>,
+    pub race: (String, String),
+    pub region: (String, String),
+    pub dob: i64,
+}
+
+impl fmt::Display for Character {
+        // fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        //     for (idx, r) in self.rolls.iter().enumerate() {
+        //         if idx > 0 { write!(f, " + ")?; }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        if let Some(last) = &self.lname { write!(f, "Name: {} {}\n", self.fname, last)?; }
+        else { write!(f, "Name: {}\n", self.fname)?; }
+        
+        write!(f, "Race: {} from {}\n", self.race.1, self.region.1)?;
+        write!(f, "Age: {}\n", CURRENT_YEAR - self.dob)?;
+
+        write!(f, "\n")
+    }
+}
 
 pub struct CharacterBuilder<'a> {
     store: &'a Caerlun,
@@ -21,27 +44,43 @@ impl<'a> CharacterBuilder<'a> {
 
     pub fn build(
         &self,
-        name_key: Option<&str>,
+        fname_key: Option<&str>,
+        lname_key: Option<&str>,
         race_key: Option<&str>,
         region_key: Option<&str>,
         dob: Option<&str>,
-    ) {
+    ) -> Character {
         let mut rng = rand::thread_rng();
         let race = self.race(race_key);
-        let year = match dob {
-            Some(s) => s.parse::<i64>().unwrap(),
-            None => (CURRENT_YEAR - (20 + rng.gen_range(0, 20))),
-        };
+        let year = self.dob(dob, &race);
 
         let region = self.region(region_key, Some(&race.key), year);
 
-        let name = self.name(name_key, &race);
+        let fname = self.fname(fname_key, &race);
+        let lname = self.lname(lname_key, &race);
         let events = self.events_from(&region.key, year, CURRENT_YEAR);
 
-        println!("Name: {}", name);
-        println!("Race: {}", race.name);
-        println!("Region: {}", region.name);
-        println!("DOB: {}", year);
+
+        Character{
+            fname: fname,
+            lname: lname,
+            nickname: None,
+            race: (race.key.to_string(), race.name.to_string()),
+            region: (region.key.to_string(), region.name.to_string()),
+            dob: year,
+        }
+    }
+
+    fn dob(&self, dob: Option<&str>, race: &Race) -> i64 {
+        match dob {
+            Some(s) => s.parse::<i64>().expect("Parsable string for integer"),
+            None => {
+                let mut rng = rand::thread_rng();
+                let range = &race.lifespan[1];
+                let age = rng.gen_range(range.start, range.end) as i64;
+                CURRENT_YEAR - age
+            }
+        }
     }
 
     fn race(&self, race_key: Option<&str>) -> &Race {
@@ -75,23 +114,26 @@ impl<'a> CharacterBuilder<'a> {
         }
     }
 
-    fn name(&self, name_key: Option<&str>, race: &Race) -> String {
-        match name_key {
-            Some(s) => self.names.name(s),
-            None => {
-                let mut rng = rand::thread_rng();
-                let name = match rng.gen_range(0, 2) {
-                    0 => self.names.name(&race.mname),
-                    1 => self.names.name(&race.fname),
-                    _ => panic!("Expected only 2 options"),
-                };
+    fn fname(&self, name_key: Option<&str>, race: &Race) -> String {
+        let mut rng = rand::thread_rng();
+        match rng.gen_range(0, 2) {
+            0 => self.name(name_key, Some(&race.mname)).expect("Expected fname 1"),
+            1 => self.name(name_key, Some(&race.fname)).expect("Expected fname 2"),
+            _ => panic!("Expected only 2 options"),
+        }
+    }
 
-                if let Some(lname) = &race.lname {
-                    format!("{} {}", name, self.names.name(&lname))
-                } else {
-                    name
-                }
-            }
+    fn lname(&self, name_key: Option<&str>, race: &Race) -> Option<String> {
+        self.name(name_key, race.lname.as_deref())
+    }
+
+    fn name(&self, name_key: Option<&str>, backup_key: Option<&str>) -> Option<String> {
+        match name_key {
+            Some(s) => Some(self.names.name(s)),
+            None => match backup_key {
+                Some(s) => Some(self.names.name(s)),
+                None => None,
+            } 
         }
     }
 

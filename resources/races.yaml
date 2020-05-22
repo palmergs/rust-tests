@@ -51,8 +51,8 @@ races:
     height: 6'0" - 7'0"
     weight: 140 - 200
     lifespan: 0-12, 12-32, 42-50, 50-58
-    mname: uranai
-    fname: uranai    
+    mname: urunai
+    fname: urunai    
     alias:
       - name: Lupin
         tone: negative
