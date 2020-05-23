@@ -31,7 +31,7 @@ mod features;
 pub use features::Geo;
 
 pub mod characters;
-pub use characters::CharacterBuilder;
+pub use characters::{Character, Atts, Stats, CharacterBuilder};
 
 #[derive(RustEmbed)]
 #[folder = "resources/"]

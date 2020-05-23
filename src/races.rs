@@ -1,7 +1,7 @@
 extern crate regex;
 use regex::Regex;
 
-use super::Alias;
+use super::{Alias, Atts, Stats};
 use std::cmp::Ordering;
 use std::ops::Range;
 
@@ -18,6 +18,8 @@ pub struct Race {
     pub mname: String,
     pub fname: String,
     pub lname: Option<String>,
+    pub stats: Stats,
+    pub atts: Atts,
 }
 
 impl Race {
@@ -45,7 +47,9 @@ impl Race {
             lname: match lname {
                 Some(s) => Some(s.to_string()),
                 None => None,
-            }
+            },
+            stats: Race::parse_stats(),
+            atts: Race::parse_atts(),
         }
     }
 
@@ -53,6 +57,26 @@ impl Race {
         vec![
             "human", "elf", "dwarf", "rulligg", "feletaur", "centaur", "urunai", "gobru", "urg",
         ]
+    }
+
+    fn parse_stats() -> Stats {
+        Stats {
+            bdy: 10,
+            foc: 10,
+        }
+    }
+
+    fn parse_atts() -> Atts {
+        Atts {
+            st: 0,
+            en: 0,
+            dx: 0,
+            hc: 0,
+            aw: 0,
+            it: 0,
+            wi: 0,
+            ch: 0,
+        }
     }
 
     fn parse_height(height: &str) -> Range<i64> {

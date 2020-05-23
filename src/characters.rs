@@ -5,6 +5,24 @@ use rand::Rng;
 
 static CURRENT_YEAR: i64 = 1260;
 
+#[derive(Debug, Clone, Copy)]
+pub struct Stats {
+    pub bdy: i16,
+    pub foc: i16,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct Atts {
+    pub st: i8,
+    pub en: i8,
+    pub dx: i8,
+    pub aw: i8,
+    pub hc: i8,
+    pub it: i8,
+    pub wi: i8,
+    pub ch: i8,
+}
+
 pub struct Character {
     pub fname: String,
     pub lname: Option<String>,
@@ -12,6 +30,10 @@ pub struct Character {
     pub race: (String, String),
     pub region: (String, String),
     pub dob: i64,
+    pub max_stat: Stats,
+    pub cur_stat: Stats,
+    pub max_atts: Atts,
+    pub cur_atts: Atts,
 }
 
 impl fmt::Display for Character {
@@ -24,6 +46,24 @@ impl fmt::Display for Character {
         
         write!(f, "Race: {} from {}\n", self.race.1, self.region.1)?;
         write!(f, "Age: {}\n", CURRENT_YEAR - self.dob)?;
+        write!(f, 
+            "BDY: {:>3}/{:<3} FOC: {:>3}/{:<3}\n", 
+            self.cur_stat.bdy, 
+            self.max_stat.bdy, 
+            self.cur_stat.foc,
+            self.max_stat.foc)?;
+        write!(f, 
+            "STR: {:<4} END: {:<4} DEX: {:<4} HEC: {:<4}\n",
+            self.cur_atts.st,
+            self.cur_atts.en,
+            self.cur_atts.dx,
+            self.cur_atts.hc)?;
+        write!(f, 
+            "AWA: {:<4} INT: {:<4} WIL: {:<4} CHR: {:<4}\n",    
+            self.cur_atts.aw,
+            self.cur_atts.it,
+            self.cur_atts.wi,
+            self.cur_atts.ch)?;
 
         write!(f, "\n")
     }
@@ -60,7 +100,6 @@ impl<'a> CharacterBuilder<'a> {
         let lname = self.lname(lname_key, &race);
         let events = self.events_from(&region.key, year, CURRENT_YEAR);
 
-
         Character{
             fname: fname,
             lname: lname,
@@ -68,6 +107,10 @@ impl<'a> CharacterBuilder<'a> {
             race: (race.key.to_string(), race.name.to_string()),
             region: (region.key.to_string(), region.name.to_string()),
             dob: year,
+            max_stat: race.stats,
+            cur_stat: race.stats,
+            max_atts: race.atts,
+            cur_atts: race.atts,
         }
     }
 
