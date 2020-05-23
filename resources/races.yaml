@@ -4,6 +4,23 @@ races:
     height: 80'0" - 120'0"
     weight: 33000 - 55000
     lifespan: 0-20, 20-2000, 2000-9000, 9000-10000
+    stats:
+      bdy: 400
+      foc: 10
+    attributes:
+      str: 10
+      end: 10
+      dex: 0
+      awa: 5
+      hec: -1
+      int: 5
+      wil: 10
+      chr: 5
+    special:
+      - magic
+      - starsight
+      - heatsight
+      - diamond sight
     mname: dragon
     fname: dragon
   - id: human
@@ -16,6 +33,18 @@ races:
     mname: male-fnames
     fname: female-fnames
     lname: last-name
+    stats:
+      bdy: 10
+      foc: 10  
+    attributes:
+      str: 0
+      end: 0
+      dex: 0
+      awa: 0
+      hec: 0
+      int: 0
+      wil: 0
+      chr: 0
     alias: 
       - name: Man 
         plural: Men
@@ -28,6 +57,20 @@ races:
     lifespan: 0-40, 40-80, 80-160, 160-240
     mname: elf-name
     fname: elf-name
+    stats:
+      bdy: 8
+      foc: 12     
+    attributes:
+      str: -1
+      end: -1
+      dex: 2
+      awa: 0
+      hec: 1
+      int: 0
+      wil: 0
+      chr: 0
+    special:
+      - starsight
     region:
       - levelin-forest
       - hiran-forest
@@ -41,6 +84,21 @@ races:
     mname: dwarf-male
     fname: dwarf-female
     lname: dwarf-last
+    stats:
+      bdy: 12
+      foc: 8     
+    attributes:
+      str: 0
+      end: 2
+      dex: -1
+      awa: -1
+      hec: 0
+      int: 0
+      wil: 1
+      chr: 0
+    special:
+      - heatsight
+      - direction sense
     region:
       - south-reach
       - palisades
@@ -52,7 +110,21 @@ races:
     weight: 140 - 200
     lifespan: 0-12, 12-32, 42-50, 50-58
     mname: urunai
-    fname: urunai    
+    fname: urunai   
+    stats:
+      bdy: 14
+      foc: 8       
+    attributes:
+      str: 1
+      end: 1
+      dex: 1
+      awa: 1
+      hec: 0
+      int: -1
+      wil: -1
+      chr: -1
+    special:
+      - diamond sight      
     alias:
       - name: Lupin
         tone: negative
@@ -64,7 +136,21 @@ races:
     weight: 35 - 50
     lifespan: 0-10, 10-40, 40-50, 50-60
     mname: gobru
-    fname: gobru    
+    fname: gobru   
+    stats:
+      bdy: 7
+      foc: 8       
+    attributes:
+      str: -2
+      end: 0
+      dex: 2
+      awa: 1
+      hec: 1
+      int: -1
+      wil: -1
+      chr: -1
+    special:
+      - diamond sight       
     alias:
       - name: Goblin
         plural: Goblins
@@ -78,6 +164,20 @@ races:
     lifespan: 0-8, 8-32, 32-40, 40-48
     mname: urg
     fname: urg
+    stats:
+      bdy: 14
+      foc: 8       
+    attributes:
+      str: 1
+      end: 1
+      dex: 0
+      awa: 1
+      hec: 0
+      int: -1
+      wil: -1
+      chr: -1
+    special:
+      - diamond sight       
     alias:
       - name: Orc
         plural: Orcs
@@ -90,6 +190,20 @@ races:
     lifespan: 0-8, 8-24, 25-54, 54-200
     mname: rulligg
     fname: rulligg
+    stats:
+      bdy: 18
+      foc: 8      
+    attributes: 
+      str: 3
+      end: 1
+      dex: -2
+      awa: 0
+      hec: -1
+      int: 0
+      wil: 0
+      chr: 0
+    special:
+      - immovable    
     alias:
       - name: Rock Troll
         plural: Rock Trolls
@@ -97,11 +211,23 @@ races:
   - id: feletaur
     name: Felataur
     alignment: dragon-brought
-    height: 5'0" - 5'6"
-    weight: 150 - 200
+    height: 4'0" - 4'6"
+    weight: 70 - 100
     lifespan: 0-5, 5-15, 15-45, 45-60
     mname: feletaur
     fname: feletaur
+    stats:
+      bdy: 7
+      foc: 10    
+    attributes:
+      str: -2
+      end: -1
+      dex: 3
+      awa: 2
+      hec: 1
+      int: -1
+      wil: -1
+      chr: 0
     region:
       - opal-plains
       - levelin-forest
@@ -114,6 +240,18 @@ races:
     lifespan: 0-8, 8-16, 16-48, 48-64
     mname: centaur
     fname: centaur
+    stats:
+      bdy: 24
+      foc: 10     
+    attributes:
+      str: 2
+      end: 2
+      dex: -1
+      awa: 0
+      hec: -1
+      int: -1
+      wil: 2
+      chr: -1
     region:
       - opal-plains
   - id: balor
@@ -125,6 +263,20 @@ races:
     lifespan: 0-50, 50-100, 100-150, 150-250
     mname: balor
     fname: balor
+    stats:
+      bdy: 13
+      foc: 20     
+    attributes:
+      str: 1
+      end: 0
+      dex: 0
+      awa: 0
+      hec: 0
+      int: 1
+      wil: 1
+      chr: 2
+    special:
+      - heatsight     
   - id: kry
     name: Kyr
     plural: Kyr
@@ -139,6 +291,18 @@ races:
     lifespan: 0-30, 30-60, 60-90, 90-120
     mname: giant
     fname: giant
+    stats:
+      bdy: 48
+      foc: 10       
+    attributes:
+      str: 4
+      end: 4
+      dex: -2
+      awa: -2
+      hec: -2
+      int: -1
+      wil: 2
+      chr: -1
     region:
       - iron-reach
       - crown-reach
@@ -154,6 +318,18 @@ races:
     lifespan: 0-30, 30-60, 60-90, 90-120
     mname: giant
     fname: giant
+    stats:
+      bdy: 48
+      foc: 10       
+    attributes:
+      str: 4
+      end: 4
+      dex: -2
+      awa: -2
+      hec: -1
+      int: -1
+      wil: 2
+      chr: 0    
     region:
       - kettlelands
       - quarterlands
@@ -166,5 +342,19 @@ races:
     lifespan: 0-20, 20-40, 40-60, 60-80
     mname: grollim
     fname: grollim
+    stats:
+      bdy: 12
+      foc: 12     
+    attributes:
+      str: 0
+      end: 1
+      dex: 0
+      awa: 0
+      hec: 0
+      int: 0
+      wil: 2
+      chr: 0
+    special:
+      - heatsight      
     region: 
       - kettlelands
