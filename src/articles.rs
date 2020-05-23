@@ -6,36 +6,17 @@ use yaml_rust::{Yaml, YamlLoader};
 use indexmap::IndexMap;
 // use nested_intervals::IntervalSet;
 
-//use std::i32::{ MIN, MAX };
 use std::cmp::{max, min};
-use std::collections::HashMap;
-use std::str::FromStr;
+// use std::str::FromStr;
 
 use rand::Rng;
 
-use super::{Alias, Event, Geo, Race, Region, Tone};
+use super::{Event, Geo, Race, Region};
 
 // const YEAR_OFFSET: usize = 10000;
 
 #[derive(Debug)]
 pub struct Caerlun {
-    pub id_key: Yaml,
-    pub name_key: Yaml,
-    pub mname_key: Yaml,
-    pub fname_key: Yaml,
-    pub lname_key: Yaml,
-    pub abbr_key: Yaml,
-    pub plural_key: Yaml,
-    pub alias_key: Yaml,
-    pub parent_key: Yaml,
-    pub region_key: Yaml,
-    pub race_key: Yaml,
-    pub tone_key: Yaml,
-    pub year_key: Yaml,
-    pub height_key: Yaml,
-    pub weight_key: Yaml,
-    pub lifespan_key: Yaml,
-
     pub races: IndexMap<String, Race>,
     pub regions: IndexMap<String, Region>,
     pub events: IndexMap<String, Event>,
@@ -45,25 +26,36 @@ pub struct Caerlun {
 }
 
 impl Caerlun {
+    pub fn id_key() -> &'static Yaml {
+        lazy_static! {
+            static ref ID_KEY: Yaml = Yaml::from_str("id");
+        }
+        &ID_KEY
+    }
+
+    pub fn name_key() -> &'static Yaml {
+        lazy_static! {
+            static ref NAME_KEY: Yaml = Yaml::from_str("name");
+        }
+        &NAME_KEY
+    }
+
+    pub fn plural_key() -> &'static Yaml {
+        lazy_static! {
+            static ref PLURAL_KEY: Yaml = Yaml::from_str("plural");
+        }
+        &PLURAL_KEY
+    }
+
+    pub fn parent_key() -> &'static Yaml {
+        lazy_static! {
+            static ref PARENT_KEY: Yaml = Yaml::from_str("parent");
+        }
+        &PARENT_KEY
+    }
+
     pub fn new() -> Caerlun {
         let caerlun = Caerlun {
-            id_key: Yaml::from_str("id"),
-            name_key: Yaml::from_str("name"),
-            mname_key: Yaml::from_str("mname"),
-            fname_key: Yaml::from_str("fname"),
-            lname_key: Yaml::from_str("lname"),
-            abbr_key: Yaml::from_str("abbr"),
-            plural_key: Yaml::from_str("plural"),
-            alias_key: Yaml::from_str("alias"),
-            parent_key: Yaml::from_str("parent"),
-            race_key: Yaml::from_str("race"),
-            region_key: Yaml::from_str("region"),
-            tone_key: Yaml::from_str("tone"),
-            year_key: Yaml::from_str("year"),
-            height_key: Yaml::from_str("height"),
-            weight_key: Yaml::from_str("weight"),
-            lifespan_key: Yaml::from_str("lifespan"),
-
             races: IndexMap::new(),
             regions: IndexMap::new(),
             events: IndexMap::new(),
@@ -236,7 +228,38 @@ impl Caerlun {
         }
     }
 
-    fn string(&self, yaml: &Yaml) -> Option<String> {
+    pub fn append_race(&mut self, yaml: &Yaml) {
+        let r = Race::build(yaml);
+        self.races.insert(r.key.to_string(), r);
+    }
+
+    pub fn append_geo(&mut self, yaml: &Yaml) {
+        let g = Geo::build(yaml);
+        self.features.insert(g.key.to_string(), g);
+    }
+
+    pub fn append_region(&mut self, yaml: &Yaml) {
+        let r = Region::build(yaml);
+        if let Some(k) = &r.parent {
+            if let Some(parent) = self.regions.get_mut(k) {
+                parent.children.push(r.key.to_string());
+            }
+        }
+        self.regions.insert(r.key.to_string(), r);
+    }
+
+    pub fn append_event(&mut self, yaml: &Yaml) {
+        let e = Event::build(yaml);
+        if let Some(k) = &e.parent {
+            if let Some(parent) = self.events.get_mut(k) {
+                parent.children.push(e.key.to_string());
+            }
+        }
+        self.events.insert(e.key.to_string(), e);
+    }
+
+    // Build a string from a YAML struct that must exist
+    pub fn string(yaml: &Yaml) -> Option<String> {
         match yaml {
             Yaml::String(s) => Some(s.to_string()),
             Yaml::Integer(n) => Some(n.to_string()),
@@ -244,14 +267,17 @@ impl Caerlun {
         }
     }
 
-    fn optional_string(&self, opt: Option<&Yaml>) -> Option<String> {
+    // Build a string from a YAML struct that might exist
+    pub fn opt_string(opt: Option<&Yaml>) -> Option<String> {
         match opt {
-            Some(yaml) => self.string(yaml),
+            Some(yaml) => Caerlun::string(yaml),
             _ => None,
         }
-    }
+    }    
 
-    fn strings(&self, opt: Option<&Yaml>) -> Vec<String> {
+    // Turn a YAML list into an array of strings; safely 
+    // return an empty vector if no list is found.
+    pub fn strings(opt: Option<&Yaml>) -> Vec<String> {
         match opt {
             Some(yaml) => match yaml {
                 Yaml::Array(arr) => arr
@@ -261,133 +287,6 @@ impl Caerlun {
                 _ => Vec::new(),
             },
             None => Vec::new(),
-        }
-    }
-
-    fn build_aliases(&self, opt: Option<&Yaml>) -> Vec<Alias> {
-        match opt {
-            Some(yaml) => match yaml {
-                Yaml::Array(arr) => {
-                    let mut vec = Vec::new();
-                    for a in arr {
-                        match self.build_alias(a) {
-                            Some(alias) => vec.push(alias),
-                            None => (),
-                        }
-                    }
-                    vec
-                }
-                _ => Vec::new(),
-            },
-            None => Vec::new(),
-        }
-    }
-
-    fn build_alias(&self, yaml: &Yaml) -> Option<Alias> {
-        match yaml {
-            Yaml::Hash(h) => {
-                let tone = match h.get(&self.tone_key) {
-                    Some(s) => Tone::from_str(s.as_str().unwrap()).unwrap(),
-                    None => Tone::Neutral,
-                };
-
-                let alias = Alias {
-                    name: h[&self.name_key].as_str().unwrap().to_string(),
-                    tone: tone,
-                    races: self.strings(h.get(&self.race_key)),
-                };
-
-                Some(alias)
-            }
-            _ => None,
-        }
-    }
-
-    pub fn append_race(&mut self, yaml: &Yaml) {
-        match yaml {
-            Yaml::Hash(h) => {
-                let key = h[&self.id_key].as_str().expect("Expected id key");
-                let name = h[&self.name_key].as_str().expect("Expected name key");
-                let height = h[&self.height_key].as_str().expect("Expected height key");
-                let weight = h[&self.weight_key].as_str().expect("Expected weight key");
-                let lifespan = h[&self.lifespan_key].as_str().expect("Expected lifespan key"); 
-                let mut r = Race::new(
-                    key,
-                    name,
-                    height,
-                    weight,
-                    lifespan,
-                    h[&self.mname_key].as_str().expect("Expected mname key"),
-                    h[&self.fname_key].as_str().expect("Expected fname key"),
-                    self.optional_string(h.get(&self.lname_key)).as_deref());
-                r.plural = self.optional_string(h.get(&self.plural_key));
-                r.alias = self.build_aliases(h.get(&self.alias_key));
-
-                self.races.insert(key.to_string(), r);
-            }
-            _ => panic!("Expected to build race instance from hash"),
-        }
-    }
-
-    pub fn append_geo(&mut self, yaml: &Yaml) {
-        match yaml {
-            Yaml::Hash(h) => {
-                let key = h[&self.id_key].as_str().unwrap();
-                let name = h[&self.name_key].as_str().unwrap();
-                let g = Geo::new(key, name);
-
-                self.features.insert(key.to_string(), g);
-            }
-            _ => panic!("Expected to build a geo instance from hash"),
-        }
-    }
-
-    pub fn append_region(&mut self, yaml: &Yaml) {
-        match yaml {
-            Yaml::Hash(h) => {
-                let key = h[&self.id_key].as_str().unwrap();
-                let name = h[&self.name_key].as_str().unwrap();
-                let parent_key = self.optional_string(h.get(&self.parent_key));
-                let year = self.optional_string(h.get(&self.year_key));
-                let mut r = Region::new(key, name, year.as_deref());
-                r.plural = self.optional_string(h.get(&self.plural_key));
-                r.alias = self.build_aliases(h.get(&self.alias_key));
-                r.races = self.strings(h.get(&self.race_key));
-
-                if let Some(k) = parent_key {
-                    r.parent = Some(k.to_string());
-                    if let Some(parent) = self.regions.get_mut(&k) {
-                        parent.children.push(key.to_string());
-                    }
-                }
-
-                self.regions.insert(key.to_string(), r);
-            }
-            _ => panic!("Expected to build a region instance from hash"),
-        }
-    }
-
-    pub fn append_event(&mut self, yaml: &Yaml) {
-        match yaml {
-            Yaml::Hash(h) => {
-                let key = h[&self.id_key].as_str().unwrap();
-                let name = h[&self.name_key].as_str().unwrap();
-                let parent_key = self.optional_string(h.get(&self.parent_key));
-                let mut e = Event::new(key, name, &self.string(&h[&self.year_key]).unwrap());
-                e.alias = self.build_aliases(h.get(&self.alias_key));
-                e.races = self.strings(h.get(&self.race_key));
-                e.regions = self.strings(h.get(&self.region_key));
-
-                if let Some(k) = parent_key {
-                    e.parent = Some(k.to_string());
-                    if let Some(parent) = self.events.get_mut(&k) {
-                        parent.children.push(key.to_string());
-                    }
-                }
-
-                self.events.insert(key.to_string(), e);
-            }
-            _ => panic!("Expected to build an event instance from hash"),
         }
     }
 }

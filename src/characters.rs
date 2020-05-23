@@ -90,7 +90,6 @@ impl<'a> CharacterBuilder<'a> {
         region_key: Option<&str>,
         dob: Option<&str>,
     ) -> Character {
-        let mut rng = rand::thread_rng();
         let race = self.race(race_key);
         let year = self.dob(dob, &race);
 
@@ -127,7 +126,6 @@ impl<'a> CharacterBuilder<'a> {
     }
 
     fn race(&self, race_key: Option<&str>) -> &Race {
-        let mut rng = rand::thread_rng();
         match race_key {
             Some(s) => {
                 if let Some(race) = self.store.race(s) {
@@ -137,8 +135,7 @@ impl<'a> CharacterBuilder<'a> {
                 }
             }
             None => {
-                let n = Race::pc().len();
-                let key = Race::pc()[rng.gen_range(0, n)];
+                let key = Race::random_player_race();
                 self.store.race(key).unwrap()
             }
         }

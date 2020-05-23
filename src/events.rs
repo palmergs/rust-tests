@@ -1,7 +1,9 @@
 extern crate regex;
 use regex::Regex;
 
-use super::Alias;
+use yaml_rust::Yaml;
+
+use super::{ Caerlun, Region, Race, Alias};
 use std::cmp::Ordering;
 use std::ops::Range;
 
@@ -18,16 +20,38 @@ pub struct Event {
 }
 
 impl Event {
-    pub fn new(key: &str, name: &str, year: &str) -> Event {
-        Event {
-            key: key.to_string(),
-            name: name.to_string(),
-            range: Event::parse_years(year),
-            alias: Vec::new(),
-            races: Vec::new(),
-            regions: Vec::new(),
-            parent: None,
-            children: Vec::new(),
+    pub fn key() -> &'static Yaml {
+        lazy_static! {
+            static ref EVENT_KEY: Yaml = Yaml::from_str("race");
+        }
+        &EVENT_KEY
+    }
+
+    pub fn year_key() -> &'static Yaml {
+        lazy_static! {
+            static ref YEAR_KEY: Yaml = Yaml::from_str("year");
+        }
+        &YEAR_KEY
+    }
+
+    pub fn build(yaml: &Yaml) -> Event {
+        match yaml {
+            Yaml::Hash(h) => {
+                let key = Caerlun::opt_string(h.get(Caerlun::id_key())).expect("missing id key");
+                let name = Caerlun::opt_string(h.get(Caerlun::name_key())).expect("missing name key");
+                let year = Caerlun::opt_string(h.get(Event::year_key())).expect("missing year key");
+                Event{
+                    key: key,
+                    parent: Caerlun::opt_string(h.get(Caerlun::parent_key())),
+                    name: name,
+                    range: Event::parse_years(&year),
+                    alias: Alias::build(h.get(Alias::key())),
+                    races: Caerlun::strings(h.get(Race::key())),
+                    regions: Caerlun::strings(h.get(Region::key())),
+                    children: Vec::new(),
+                }
+            },
+            _ => panic!("Expected a hash when building an event"),
         }
     }
 
