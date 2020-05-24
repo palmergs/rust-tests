@@ -42,6 +42,11 @@ fn main() -> io::Result<()> {
             .long("timeline")
             .help("Generate a graph showing events by time")
             .takes_value(false))     
+        .arg(Arg::with_name("year")
+            .short("y")
+            .long("year")
+            .help("Set a year for various options (e.g. start year for timeline)")
+            .takes_value(true))
         .arg(Arg::with_name("regions")
             .short("m")
             .long("regions")
@@ -72,7 +77,7 @@ fn main() -> io::Result<()> {
         }
     } else if matches.is_present("timeline") {
         let caerlun = build_store();
-        caerlun.timeline();
+        caerlun.timeline(matches.value_of("year"), None);
     } else if let Some(key) = matches.value_of("key") {
         let builder = NameBuilder::new();
         for _ in 0..count {

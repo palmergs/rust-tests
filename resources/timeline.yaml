@@ -86,6 +86,36 @@ events:
       - fire-giant
       - urg
       - gobru
+  - id: war-of-the-crown
+    name: War of the Crown
+    year: -1880 to -1530
+    type: war
+    region:
+      - south-reach
+      - shattered-land
+      - crown-reach
+    races:
+      - dwarf
+      - ice-giant
+      - fire-giant
+      - urg
+      - gobru
+      - urunai
+  - id: war-of-returning
+    name: War of Returning
+    year: -880 to -720
+    type: war
+    region:
+      - south-reach
+      - shattered-land
+      - iron-reach
+    races:
+      - dwarf
+      - ice-giant
+      - fire-giant
+      - urg
+      - gobru
+      - urunai
   - id: dragon-lords
     name: Dragon Lords
     year: 0 to 501
@@ -182,6 +212,68 @@ events:
       - rulligg
       - feletaur
       - centaur
+  - id: opal-kingdom
+    name: Kingdom of Opal
+    year: 520 to 930
+    region:
+     - opal
+  - id: palisades-expedition
+    name: Expedition to Palisades
+    year: 888 to 892
+    region:
+      - south-reach
+      - palisades
+    races: 
+      - dwarf
+      - urg
+      - gobru
+      - urunai
+  - id: opal-empire
+    name: Empire of Opal
+    year: after 930
+    region:
+      - opal
+      - opal-river-valley
+  - id: irendi-kingdom
+    name: Irendi Kingdom
+    year: 512 to 870
+  - id: irendi-empire
+    name: Irendi Empire
+    year: after 870
+  - id: irendi-civil-war
+    name: Irendi Civil War
+    year: 1182 to 1222
+    type: war
+  - id: seige-of-breem
+    name: Siege of Breem
+    year: 1184 to 1188
+    parent: irendi-civil-war
+    type: battle
+  - id: redblade-war
+    name: Redblade War
+    year: 990 to 1170
+    type: war
+    region:
+      - ostari-passage
+      - hiran-forest
+  - id: battle-of-seven-hills
+    name: Battle of Seven Hills
+    year: 1170
+    type: battle
+    region: 
+      - hiran
+    race:
+      - dwarf
+      - elf
+      - human
+      - urg
+      - gobru
+      - urunai
+  - id: seige-of-kerren
+    name: Seige of Kerren
+    year: 1212 to 1218
+    parent: irendi-civil-war
+    type: battle
   - id: unbelief-war
     name: Unbelief War
     year: 820 to 930
@@ -200,12 +292,59 @@ events:
     name: Burning of Opal Library
     type: battle
     year: 847
+    parent: unbelief-war
     region:
       - opal
+  - id: green-plague
+    name: Green Plague
+    type: plague
+    year: 847 to 882
+    region:
+      - northern-caerlun
+    races:
+      - elf
+      - human
+  - id: dry-famine
+    name: Dry Famine
+    type: famine
+    year: 1120 to 1125
+    region: opal-river-valley
+    races:
+      - human
+  - id: peasants-war
+    name: the Peasants War
+    year: 1124 to 1138
+    region:
+      - opal-river-valley
+    races: 
+      - human
+      - rulligg
+      - urunai
+  - id: gortons-retreat
+    name: Gorton's Retread
+    year: 1131
+    type: battle
+    parent: peasants-war
+    region:
+      - gorton-plains
+    races: 
+      - human
+      - rulligg
+      - urunai
   - id: war-of-the-hand
     name: The War of the Hand
     year: 1135 to 1143
     type: war
+  - id: firesight-plague
+    name: The Firesight Plague
+    year: 1140 to 1145
+    type: plague
+    region:
+      - south-reach
+      - palisades
+      - hiren-forest
+    races:
+      - dwarf
   - id: freedom-war
     name: The Freedom war
     year: 1139 to 1180
@@ -240,9 +379,43 @@ events:
       - bessen-coast
       - bessen-highlands
       - kaltish-plains
+  - id: hamish-invasion
+    name: Hamish Invasion
+    year: 1227 to 1233
+    type: war
+    race: 
+      - human
+    region:
+      - hamish
+      - kalt
+      - opal     
+  - id: second-firesight-plague
+    name: Second Firesight Plague
+    year: 1222 to 1235
+    type: plague
+    races:
+      - dwarf
+    region:
+      - south-reach
+      - palisades
+      - shards-islands
+  - id: summer-famine
+    name: Summer Famine
+    year: 1232 to 1234
+    type: famine
+    race: 
+      - human
+    region:
+      - bessen
+      - opal
+      - kalt
+      - hamish
+      - wells
+      - worthing
   - id: worthing-invasion
     name: Worthing Invasion
     year: after 1258
+    type: war
     race: 
       - human
     region:

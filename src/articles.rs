@@ -5,6 +5,8 @@ use rand::Rng;
 
 use super::{Event, Geo, Race, Region};
 
+pub static CURRENT_YEAR: i64 = 1260;
+
 #[derive(Debug)]
 pub struct Caerlun {
     pub races: IndexMap<String, Race>,
@@ -115,29 +117,41 @@ impl Caerlun {
         }
     }
 
-    pub fn timeline(&self) {
-        let start: i64 = -5000;
-        let end: i64 = 1260;
-        let total_years: i64 = -1 * start + end;
+    pub fn timeline(&self, start: Option<&str>, end: Option<&str>) {
+        let start = match start {
+            Some(n) => n.parse::<i64>().expect("could not parse value into year"), 
+            None => -5000,
+        };
+        let end = match end {
+            Some(n) => n.parse::<i64>().expect("could not parse value into year"),
+            None => CURRENT_YEAR,
+        };
+        let total_years: i64 = if start < 0 {
+            -1 * start + end
+        } else {
+            end - start
+        };
         let years_per_char: i64 = total_years / 130;
         let mut events: Vec<&Event> = self.events.values().collect();
         events.sort_by(|a, b| a.range.start.cmp(&b.range.start));
         for e in events {
-            let event_start = max(start, e.range.start);
-            let event_end = min(e.range.end, end);
-            let event_years = (event_end - event_start) as i64;
-            let event_width = (event_years / years_per_char) as usize;
-            let event_offset = ((event_start + (-1 * start)) / years_per_char) as usize;
-            println!(
-                "{:>30} {:>5} to {:<5} {:o$}{:*<w$}",
-                e.name,
-                event_start,
-                event_end,
-                " ",
-                "*",
-                o = event_offset,
-                w = event_width
-            );
+            if e.range.start > start {
+                let event_start = max(start, e.range.start);
+                let event_end = min(e.range.end, end);
+                let event_years = (event_end - event_start) as i64;
+                let event_width = (event_years / years_per_char) as usize;
+                let event_offset = ((event_start + (-1 * start)) / years_per_char) as usize;
+                println!(
+                    "{:>30} {:>5} to {:<5} {:o$}{:*<w$}",
+                    e.name,
+                    event_start,
+                    event_end,
+                    " ",
+                    "*",
+                    o = event_offset,
+                    w = event_width
+                );
+            }
         }
     }
 

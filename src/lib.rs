@@ -13,7 +13,7 @@ mod names;
 pub use names::{Fragment, FragmentList, NameBuilder};
 
 mod articles;
-pub use articles::Caerlun;
+pub use articles::{ Caerlun, CURRENT_YEAR };
 
 mod aliases;
 pub use aliases::{Alias, Tone};

@@ -1,5 +1,6 @@
 use super::{
     Caerlun, 
+    CURRENT_YEAR,
     Event, 
     NameBuilder, 
     Race, 
@@ -13,8 +14,6 @@ use super::{
 
 use rand::Rng;
 use std::fmt;
-
-static CURRENT_YEAR: i64 = 1260;
 
 pub struct Character {
     pub fname: String,
