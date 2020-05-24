@@ -5,7 +5,7 @@ use rand::Rng;
 
 use yaml_rust::Yaml;
 
-use super::{Caerlun, Region, Alias, Stats, Attribs};
+use super::{Alias, Attribs, Caerlun, Region, Stats};
 use std::cmp::Ordering;
 use std::ops::Range;
 
@@ -61,25 +61,25 @@ impl Race {
         }
         &RACE_KEY
     }
-    
+
     pub fn weight_key() -> &'static Yaml {
         lazy_static! {
             static ref RACE_KEY: Yaml = Yaml::from_str("weight");
         }
         &RACE_KEY
     }
-    
+
     pub fn lifespan_key() -> &'static Yaml {
         lazy_static! {
             static ref RACE_KEY: Yaml = Yaml::from_str("lifespan");
         }
         &RACE_KEY
-    }    
+    }
 
     pub fn player_races() -> Vec<&'static str> {
         vec![
-                "human", "elf", "dwarf", "rulligg", "feletaur", "centaur", "urunai", "gobru", "urg",
-            ]
+            "human", "elf", "dwarf", "rulligg", "feletaur", "centaur", "urunai", "gobru", "urg",
+        ]
     }
 
     pub fn random_player_race() -> &'static str {
@@ -91,14 +91,20 @@ impl Race {
         match yaml {
             Yaml::Hash(h) => {
                 let key = Caerlun::opt_string(h.get(Caerlun::id_key())).expect("missing id key");
-                let name = Caerlun::opt_string(h.get(Caerlun::name_key())).expect("missing name key");
-                let mname = Caerlun::opt_string(h.get(Race::male_name_key())).expect("missing male name key");
-                let fname = Caerlun::opt_string(h.get(Race::female_name_key())).expect("missing female name key");
+                let name =
+                    Caerlun::opt_string(h.get(Caerlun::name_key())).expect("missing name key");
+                let mname = Caerlun::opt_string(h.get(Race::male_name_key()))
+                    .expect("missing male name key");
+                let fname = Caerlun::opt_string(h.get(Race::female_name_key()))
+                    .expect("missing female name key");
                 let lname = Caerlun::opt_string(h.get(Race::family_name_key()));
-                let height = Caerlun::opt_string(h.get(Race::height_key())).expect("Expected height key");
-                let weight = Caerlun::opt_string(h.get(Race::weight_key())).expect("Expected weight key");
-                let lifespan = Caerlun::opt_string(h.get(Race::lifespan_key())).expect("Expected lifespan key"); 
-                Race{
+                let height =
+                    Caerlun::opt_string(h.get(Race::height_key())).expect("Expected height key");
+                let weight =
+                    Caerlun::opt_string(h.get(Race::weight_key())).expect("Expected weight key");
+                let lifespan = Caerlun::opt_string(h.get(Race::lifespan_key()))
+                    .expect("Expected lifespan key");
+                Race {
                     key: key,
                     name: name,
                     plural: Caerlun::opt_string(h.get(Caerlun::plural_key())),
@@ -119,24 +125,28 @@ impl Race {
             }
             _ => panic!("expected a hash to build a race intance"),
         }
-    }    
+    }
 
     fn parse_height(height: &str) -> Range<i64> {
         lazy_static! {
-            static ref HEIGHT: Regex = Regex::new("\\s*(\\d+)'(\\d+)\"\\s*-\\s*(\\d+)'(\\d+)\"\\s*").unwrap();
+            static ref HEIGHT: Regex =
+                Regex::new("\\s*(\\d+)'(\\d+)\"\\s*-\\s*(\\d+)'(\\d+)\"\\s*").unwrap();
         }
 
         match HEIGHT.captures(height) {
             Some(captures) => {
                 if captures.len() < 5 {
-                    panic!("Expected four numbers from height: value={} captures={:?}", height, captures);
+                    panic!(
+                        "Expected four numbers from height: value={} captures={:?}",
+                        height, captures
+                    );
                 }
                 let min_ft: i64 = captures.get(1).unwrap().as_str().parse().unwrap();
                 let min_in: i64 = captures.get(2).unwrap().as_str().parse().unwrap();
                 let max_ft: i64 = captures.get(3).unwrap().as_str().parse().unwrap();
                 let max_in: i64 = captures.get(4).unwrap().as_str().parse().unwrap();
                 (min_ft * 12 + min_in)..(max_ft * 12 + max_in)
-            },
+            }
             None => panic!("Could not parse height: value={}", height),
         }
     }
@@ -144,37 +154,43 @@ impl Race {
     fn parse_weight(weight: &str) -> Range<i64> {
         lazy_static! {
             static ref WEIGHT: Regex = Regex::new("\\s*(\\d+)\\s*\\-\\s*(\\d+)\\s*").unwrap();
-        }   
+        }
 
-         match WEIGHT.captures(weight) {
+        match WEIGHT.captures(weight) {
             Some(captures) => {
                 if captures.len() < 3 {
-                    panic!("Expected two numbers from weight: value={} captures={:?}", weight, captures);
+                    panic!(
+                        "Expected two numbers from weight: value={} captures={:?}",
+                        weight, captures
+                    );
                 }
                 let min: i64 = captures.get(1).unwrap().as_str().parse().unwrap();
                 let max: i64 = captures.get(2).unwrap().as_str().parse().unwrap();
                 min..max
-            },
+            }
             None => panic!("Could not parse weight: value={}", weight),
-        }     
+        }
     }
 
     fn parse_lifespan(lifespan: &str) -> Vec<Range<i64>> {
         lazy_static! {
             static ref NUM_RANGE: Regex = Regex::new("\\s*(\\d+)\\s*\\-\\s*(\\d+)\\s*").unwrap();
-        } 
+        }
 
         let mut ranges: Vec<Range<i64>> = Vec::new();
         for s in lifespan.split(",") {
             match NUM_RANGE.captures(s) {
                 Some(captures) => {
                     if captures.len() < 3 {
-                        panic!("Expected two numbers from lifespan entry: value={} captures={:?}", s, captures);
+                        panic!(
+                            "Expected two numbers from lifespan entry: value={} captures={:?}",
+                            s, captures
+                        );
                     }
                     let min: i64 = captures.get(1).unwrap().as_str().parse().unwrap();
                     let max: i64 = captures.get(2).unwrap().as_str().parse().unwrap();
                     ranges.push(min..max);
-                },
+                }
                 None => panic!("Could not parse a number pair: value={}", s),
             }
         }

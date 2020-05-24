@@ -1,5 +1,5 @@
-use yaml_rust::Yaml;
 use rand::Rng;
+use yaml_rust::Yaml;
 
 use super::Caerlun;
 
@@ -10,36 +10,34 @@ pub struct Stats {
 }
 
 impl Stats {
-  pub fn key() -> &'static Yaml {
-    lazy_static! {
-        static ref STATS_KEY: Yaml = Yaml::from_str("stats");
+    pub fn key() -> &'static Yaml {
+        lazy_static! {
+            static ref STATS_KEY: Yaml = Yaml::from_str("stats");
+        }
+        &STATS_KEY
     }
-    &STATS_KEY
-  }
 
-  pub fn bdy_key() -> &'static Yaml {
-    lazy_static! {
-        static ref BDY_KEY: Yaml = Yaml::from_str("bdy");
+    pub fn bdy_key() -> &'static Yaml {
+        lazy_static! {
+            static ref BDY_KEY: Yaml = Yaml::from_str("bdy");
+        }
+        &BDY_KEY
     }
-    &BDY_KEY
-  }
-  
-  pub fn foc_key() -> &'static Yaml {
-    lazy_static! {
-        static ref FOC_KEY: Yaml = Yaml::from_str("foc");
+
+    pub fn foc_key() -> &'static Yaml {
+        lazy_static! {
+            static ref FOC_KEY: Yaml = Yaml::from_str("foc");
+        }
+        &FOC_KEY
     }
-    &FOC_KEY
-  }  
 
     pub fn build(yaml: &Yaml, random: i16) -> Stats {
         match yaml {
-            Yaml::Hash(h) => {
-                
-                Stats {
-                    bdy: Caerlun::opt_integer(h.get(Stats::bdy_key()), random as i32).expect("missing bdy attribute") as i16,
-                    foc: Caerlun::opt_integer(h.get(Stats::foc_key()), random as i32).expect("missing foc attribute") as i16,
-                }   
-                
+            Yaml::Hash(h) => Stats {
+                bdy: Caerlun::opt_integer(h.get(Stats::bdy_key()), random as i32)
+                    .expect("missing bdy attribute") as i16,
+                foc: Caerlun::opt_integer(h.get(Stats::foc_key()), random as i32)
+                    .expect("missing foc attribute") as i16,
             },
             _ => panic!("Expected has for stats"),
         }
@@ -59,85 +57,90 @@ pub struct Attribs {
 }
 
 impl Attribs {
-  pub fn key() -> &'static Yaml {
-    lazy_static! {
-        static ref ATTRIBS_KEY: Yaml = Yaml::from_str("attributes");
+    pub fn key() -> &'static Yaml {
+        lazy_static! {
+            static ref ATTRIBS_KEY: Yaml = Yaml::from_str("attributes");
+        }
+        &ATTRIBS_KEY
     }
-    &ATTRIBS_KEY
-  }
 
-  pub fn st_key() -> &'static Yaml {
-    lazy_static! {
-        static ref ST_KEY: Yaml = Yaml::from_str("str");
+    pub fn st_key() -> &'static Yaml {
+        lazy_static! {
+            static ref ST_KEY: Yaml = Yaml::from_str("str");
+        }
+        &ST_KEY
     }
-    &ST_KEY
-  }
 
-  pub fn en_key() -> &'static Yaml {
-    lazy_static! {
-        static ref EN_KEY: Yaml = Yaml::from_str("end");
+    pub fn en_key() -> &'static Yaml {
+        lazy_static! {
+            static ref EN_KEY: Yaml = Yaml::from_str("end");
+        }
+        &EN_KEY
     }
-    &EN_KEY
-  }
-  
-  pub fn dx_key() -> &'static Yaml {
-    lazy_static! {
-        static ref DX_KEY: Yaml = Yaml::from_str("dex");
-    }
-    &DX_KEY
-  }  
 
-  pub fn aw_key() -> &'static Yaml {
-    lazy_static! {
-        static ref AW_KEY: Yaml = Yaml::from_str("awa");
+    pub fn dx_key() -> &'static Yaml {
+        lazy_static! {
+            static ref DX_KEY: Yaml = Yaml::from_str("dex");
+        }
+        &DX_KEY
     }
-    &AW_KEY
-  }
 
-  pub fn hc_key() -> &'static Yaml {
-    lazy_static! {
-        static ref HC_KEY: Yaml = Yaml::from_str("hec");
+    pub fn aw_key() -> &'static Yaml {
+        lazy_static! {
+            static ref AW_KEY: Yaml = Yaml::from_str("awa");
+        }
+        &AW_KEY
     }
-    &HC_KEY
-  }
 
-  pub fn it_key() -> &'static Yaml {
-    lazy_static! {
-        static ref IT_KEY: Yaml = Yaml::from_str("int");
+    pub fn hc_key() -> &'static Yaml {
+        lazy_static! {
+            static ref HC_KEY: Yaml = Yaml::from_str("hec");
+        }
+        &HC_KEY
     }
-    &IT_KEY
-  }   
 
-  pub fn wi_key() -> &'static Yaml {
-    lazy_static! {
-        static ref WI_KEY: Yaml = Yaml::from_str("wil");
+    pub fn it_key() -> &'static Yaml {
+        lazy_static! {
+            static ref IT_KEY: Yaml = Yaml::from_str("int");
+        }
+        &IT_KEY
     }
-    &WI_KEY
-  }
 
-  pub fn ch_key() -> &'static Yaml {
+    pub fn wi_key() -> &'static Yaml {
+        lazy_static! {
+            static ref WI_KEY: Yaml = Yaml::from_str("wil");
+        }
+        &WI_KEY
+    }
+
+    pub fn ch_key() -> &'static Yaml {
         lazy_static! {
             static ref CH_KEY: Yaml = Yaml::from_str("chr");
         }
         &CH_KEY
-  }   
+    }
 
-  pub fn build(yaml: &Yaml, random: i8) -> Attribs {
-      match yaml {
-          Yaml::Hash(h) => {
-                Attribs {
-                    st: Caerlun::opt_integer(h.get(Attribs::st_key()), random as i32).expect("missing str attribute") as i8,
-                    en: Caerlun::opt_integer(h.get(Attribs::en_key()), random as i32).expect("missing end attribute") as i8,
-                    dx: Caerlun::opt_integer(h.get(Attribs::dx_key()), random as i32).expect("missing dex attribute") as i8,
-                    hc: Caerlun::opt_integer(h.get(Attribs::hc_key()), random as i32).expect("missing hec attribute") as i8,
-                    aw: Caerlun::opt_integer(h.get(Attribs::aw_key()), random as i32).expect("missing awa attribute") as i8,
-                    it: Caerlun::opt_integer(h.get(Attribs::it_key()), random as i32).expect("missing int attribute") as i8,
-                    wi: Caerlun::opt_integer(h.get(Attribs::wi_key()), random as i32).expect("missing wil attribute") as i8,
-                    ch: Caerlun::opt_integer(h.get(Attribs::ch_key()), random as i32).expect("missing chr attribute") as i8,
-                }      
+    pub fn build(yaml: &Yaml, random: i8) -> Attribs {
+        match yaml {
+            Yaml::Hash(h) => Attribs {
+                st: Caerlun::opt_integer(h.get(Attribs::st_key()), random as i32)
+                    .expect("missing str attribute") as i8,
+                en: Caerlun::opt_integer(h.get(Attribs::en_key()), random as i32)
+                    .expect("missing end attribute") as i8,
+                dx: Caerlun::opt_integer(h.get(Attribs::dx_key()), random as i32)
+                    .expect("missing dex attribute") as i8,
+                hc: Caerlun::opt_integer(h.get(Attribs::hc_key()), random as i32)
+                    .expect("missing hec attribute") as i8,
+                aw: Caerlun::opt_integer(h.get(Attribs::aw_key()), random as i32)
+                    .expect("missing awa attribute") as i8,
+                it: Caerlun::opt_integer(h.get(Attribs::it_key()), random as i32)
+                    .expect("missing int attribute") as i8,
+                wi: Caerlun::opt_integer(h.get(Attribs::wi_key()), random as i32)
+                    .expect("missing wil attribute") as i8,
+                ch: Caerlun::opt_integer(h.get(Attribs::ch_key()), random as i32)
+                    .expect("missing chr attribute") as i8,
             },
-          _ => panic!("Expected attribute hash"),
-      }
+            _ => panic!("Expected attribute hash"),
+        }
+    }
 }
-}
-

@@ -275,14 +275,14 @@ impl Caerlun {
                     Yaml::Integer(n) => *n as i32,
                     _ => panic!("could not parse number from field"),
                 };
-                
+
                 if range > 0 {
                     let mut rng = rand::thread_rng();
                     let modifier = rng.gen_range(0, range * 2 + 1) - range;
                     n = n + modifier as i32;
                 }
-                Some(n) 
-            },
+                Some(n)
+            }
             _ => None,
         }
     }
@@ -293,9 +293,9 @@ impl Caerlun {
             Some(yaml) => Caerlun::string(yaml),
             _ => None,
         }
-    }    
+    }
 
-    // Turn a YAML list into an array of strings; safely 
+    // Turn a YAML list into an array of strings; safely
     // return an empty vector if no list is found.
     pub fn strings(opt: Option<&Yaml>) -> Vec<String> {
         match opt {

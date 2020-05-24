@@ -3,7 +3,7 @@ use std::ops::Range;
 
 use yaml_rust::Yaml;
 
-use super::{Caerlun, Race, Alias, Event};
+use super::{Alias, Caerlun, Event, Race};
 
 #[derive(Debug)]
 pub struct Region {
@@ -37,10 +37,11 @@ impl Region {
         match yaml {
             Yaml::Hash(h) => {
                 let key = Caerlun::opt_string(h.get(Caerlun::id_key())).expect("missing id key");
-                let name = Caerlun::opt_string(h.get(Caerlun::name_key())).expect("missing name key");
+                let name =
+                    Caerlun::opt_string(h.get(Caerlun::name_key())).expect("missing name key");
                 let cat = Caerlun::opt_string(h.get(Region::category_key()));
                 let year = Caerlun::opt_string(h.get(Event::year_key()));
-                Region{
+                Region {
                     key: key,
                     parent: Caerlun::opt_string(h.get(Caerlun::parent_key())),
                     name: name,
@@ -54,8 +55,8 @@ impl Region {
                     },
                     children: Vec::new(),
                 }
-            },
-            _ => panic!("Expected a hash element when building a region")
+            }
+            _ => panic!("Expected a hash element when building a region"),
         }
     }
 

@@ -1,4 +1,4 @@
-use super::{ Caerlun, Race };
+use super::{Caerlun, Race};
 use std::str::FromStr;
 
 use yaml_rust::Yaml;

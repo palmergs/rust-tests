@@ -1,7 +1,7 @@
-use super::{Caerlun, Event, NameBuilder, Race, Attribs, Stats, Region};
+use super::{Attribs, Caerlun, Event, NameBuilder, Race, Region, Stats};
 
-use std::fmt;
 use rand::Rng;
+use std::fmt;
 
 static CURRENT_YEAR: i64 = 1260;
 
@@ -20,29 +20,29 @@ pub struct Character {
 
 impl fmt::Display for Character {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        if let Some(last) = &self.lname { write!(f, "Name: {} {}\n", self.fname, last)?; }
-        else { write!(f, "Name: {}\n", self.fname)?; }
-        
+        if let Some(last) = &self.lname {
+            write!(f, "Name: {} {}\n", self.fname, last)?;
+        } else {
+            write!(f, "Name: {}\n", self.fname)?;
+        }
+
         write!(f, "Race: {} from {}\n", self.race.1, self.region.1)?;
         write!(f, "Age: {}\n", CURRENT_YEAR - self.dob)?;
-        write!(f, 
-            "BDY: {:>3}/{:<3} FOC: {:>3}/{:<3}\n", 
-            self.cur_stat.bdy, 
-            self.max_stat.bdy, 
-            self.cur_stat.foc,
-            self.max_stat.foc)?;
-        write!(f, 
+        write!(
+            f,
+            "BDY: {:>3}/{:<3} FOC: {:>3}/{:<3}\n",
+            self.cur_stat.bdy, self.max_stat.bdy, self.cur_stat.foc, self.max_stat.foc
+        )?;
+        write!(
+            f,
             "STR: {:<4} END: {:<4} DEX: {:<4} HEC: {:<4}\n",
-            self.cur_atts.st,
-            self.cur_atts.en,
-            self.cur_atts.dx,
-            self.cur_atts.hc)?;
-        write!(f, 
-            "AWA: {:<4} INT: {:<4} WIL: {:<4} CHR: {:<4}\n",    
-            self.cur_atts.aw,
-            self.cur_atts.it,
-            self.cur_atts.wi,
-            self.cur_atts.ch)?;
+            self.cur_atts.st, self.cur_atts.en, self.cur_atts.dx, self.cur_atts.hc
+        )?;
+        write!(
+            f,
+            "AWA: {:<4} INT: {:<4} WIL: {:<4} CHR: {:<4}\n",
+            self.cur_atts.aw, self.cur_atts.it, self.cur_atts.wi, self.cur_atts.ch
+        )?;
 
         write!(f, "\n")
     }
@@ -78,7 +78,7 @@ impl<'a> CharacterBuilder<'a> {
         let lname = self.lname(lname_key, &race);
         let events = self.events_from(&region.key, year, CURRENT_YEAR);
 
-        Character{
+        Character {
             fname: fname,
             lname: lname,
             nickname: None,
@@ -136,8 +136,12 @@ impl<'a> CharacterBuilder<'a> {
     fn fname(&self, name_key: Option<&str>, race: &Race) -> String {
         let mut rng = rand::thread_rng();
         match rng.gen_range(0, 2) {
-            0 => self.name(name_key, Some(&race.mname)).expect("Expected fname 1"),
-            1 => self.name(name_key, Some(&race.fname)).expect("Expected fname 2"),
+            0 => self
+                .name(name_key, Some(&race.mname))
+                .expect("Expected fname 1"),
+            1 => self
+                .name(name_key, Some(&race.fname))
+                .expect("Expected fname 2"),
             _ => panic!("Expected only 2 options"),
         }
     }
@@ -152,7 +156,7 @@ impl<'a> CharacterBuilder<'a> {
             None => match backup_key {
                 Some(s) => Some(self.names.name(s)),
                 None => None,
-            } 
+            },
         }
     }
 

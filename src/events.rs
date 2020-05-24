@@ -3,7 +3,7 @@ use regex::Regex;
 
 use yaml_rust::Yaml;
 
-use super::{ Caerlun, Region, Race, Alias};
+use super::{Alias, Caerlun, Race, Region};
 use std::cmp::Ordering;
 use std::ops::Range;
 
@@ -38,9 +38,10 @@ impl Event {
         match yaml {
             Yaml::Hash(h) => {
                 let key = Caerlun::opt_string(h.get(Caerlun::id_key())).expect("missing id key");
-                let name = Caerlun::opt_string(h.get(Caerlun::name_key())).expect("missing name key");
+                let name =
+                    Caerlun::opt_string(h.get(Caerlun::name_key())).expect("missing name key");
                 let year = Caerlun::opt_string(h.get(Event::year_key())).expect("missing year key");
-                Event{
+                Event {
                     key: key,
                     parent: Caerlun::opt_string(h.get(Caerlun::parent_key())),
                     name: name,
@@ -50,7 +51,7 @@ impl Event {
                     regions: Caerlun::strings(h.get(Region::key())),
                     children: Vec::new(),
                 }
-            },
+            }
             _ => panic!("Expected a hash when building an event"),
         }
     }
@@ -60,7 +61,7 @@ impl Event {
             static ref RANGE: Regex = Regex::new(r"\s*(to|before|until|after)\s*").unwrap();
             static ref NUMBER: Regex = Regex::new(r"\s*([-]?[0-9]+)\s*").unwrap();
         }
-    
+
         match RANGE.captures(time) {
             Some(capture) => {
                 let nums: Vec<&str> = NUMBER
@@ -89,7 +90,7 @@ impl Event {
                 year..year
             }
         }
-    }    
+    }
 }
 
 impl Ord for Event {
