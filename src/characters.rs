@@ -96,6 +96,7 @@ impl<'a> CharacterBuilder<'a> {
         }
     }
 
+    // Randomly modify the stats 
     fn modify(stats: &mut Stats, atts: &mut Attribs) {
         let mut rng = rand::thread_rng();
         match rng.gen_range(0, 4) {
@@ -104,24 +105,40 @@ impl<'a> CharacterBuilder<'a> {
                 stats.bdy = stats.bdy + rng.gen_range(0, 3);
                 atts.st = atts.st + 1;
                 atts.en = atts.en + 1;
+                if rng.gen_range(0, 2) == 1 {
+                    atts.it = atts.it - 1;
+                    atts.wi = atts.wi - 1;
+                }
             },
             1 => {
                 // Smart
                 stats.foc = stats.foc + rng.gen_range(0, 3);
                 atts.it = atts.it + 1;
                 atts.aw = atts.aw + 1;
+                if rng.gen_range(0, 2) == 1 {
+                    atts.st = atts.st - 1;
+                    atts.en = atts.en - 1;
+                }
             },
             2 => {
                 // Fast
                 stats.foc = stats.foc + rng.gen_range(0, 2);
                 atts.dx = atts.dx + 1;
                 atts.hc = atts.hc + 1;
+                if rng.gen_range(0, 2) == 1 {
+                    atts.st = atts.st - 1;
+                    atts.en = atts.en - 1;
+                }
             },
             3 => {
                 // Wise
                 stats.foc = stats.foc + rng.gen_range(0, 2);
                 atts.wi = atts.wi + 1;
                 atts.ch = atts.ch + 1;
+                if rng.gen_range(0, 2) == 1 {
+                    atts.st = atts.st - 1;
+                    atts.it = atts.it - 1;
+                }
             },
             _ => ()
         }
