@@ -5,7 +5,7 @@ use rand::Rng;
 
 use yaml_rust::Yaml;
 
-use super::{Alias, Value, Caerlun, Region};
+use super::{Alias, Value, Caerlun, Region, POINTS, ATTRIBUTES};
 use std::cmp::Ordering;
 use std::ops::Range;
 
@@ -22,8 +22,8 @@ pub struct Race {
     pub mname: String,
     pub fname: String,
     pub lname: Option<String>,
-    pub points: Vec<Value>,
-    pub attributes: Vec<Value>,
+    pub points:[Value; POINTS],
+    pub attributes:[Value; ATTRIBUTES],
 }
 
 impl Race {

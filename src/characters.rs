@@ -5,7 +5,9 @@ use super::{
     Race, 
     Region, 
     Value,
+    ATTRIBUTES,
     STR, END, DEX, HEC, AWA, INT, WIL, CHR, 
+    POINTS,
     BODY, FOCUS, SPELL,
 };
 
@@ -21,8 +23,8 @@ pub struct Character {
     pub race: (String, String),
     pub region: (String, String),
     pub dob: i64,
-    pub points: Vec<Value>,
-    pub attributes: Vec<Value>,
+    pub points: [Value; POINTS],
+    pub attributes: [Value; ATTRIBUTES],
 }
 
 impl fmt::Display for Character {

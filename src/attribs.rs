@@ -118,9 +118,9 @@ impl Value {
         &CHR_KEY
     }
 
-    pub fn build_points(yaml: &Yaml) -> Vec<Value> {
+    pub fn build_points(yaml: &Yaml) -> [Value; POINTS] {
         match yaml {
-            Yaml::Hash(h) => vec![
+            Yaml::Hash(h) => [
                 Value::build_value(h.get(Value::bdy_key())),
                 Value::build_value(h.get(Value::foc_key())),
                 Value::build_value(h.get(Value::spp_key())),
@@ -129,9 +129,9 @@ impl Value {
         }
     }
 
-    pub fn build_attributes(yaml: &Yaml) -> Vec<Value> {
+    pub fn build_attributes(yaml: &Yaml) -> [Value; ATTRIBUTES] {
         match yaml {
-            Yaml::Hash(h) => vec![
+            Yaml::Hash(h) => [
                 Value::build_value(h.get(Value::str_key())),
                 Value::build_value(h.get(Value::end_key())),
                 Value::build_value(h.get(Value::dex_key())),

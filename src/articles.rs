@@ -118,24 +118,25 @@ impl Caerlun {
     pub fn timeline(&self) {
         let start: i64 = -5000;
         let end: i64 = 1260;
+        let total_years: i64 = -1 * start + end;
+        let years_per_char: i64 = total_years / 130;
         let mut events: Vec<&Event> = self.events.values().collect();
         events.sort_by(|a, b| a.range.start.cmp(&b.range.start));
         for e in events {
-            let start = max(start, e.range.start);
-            let end = min(e.range.end, end);
-            let total = (5000 + 1300) as i64;
-            let per = total / 100;
-            let offset = ((start + 5000) / per) as usize;
-            let width = (((end - start) / per) + 1) as usize;
+            let event_start = max(start, e.range.start);
+            let event_end = min(e.range.end, end);
+            let event_years = (event_end - event_start) as i64;
+            let event_width = (event_years / years_per_char) as usize;
+            let event_offset = ((event_start + (-1 * start)) / years_per_char) as usize;
             println!(
                 "{:>30} {:>5} to {:<5} {:o$}{:*<w$}",
                 e.name,
-                start,
-                end,
+                event_start,
+                event_end,
                 " ",
                 "*",
-                o = offset,
-                w = width
+                o = event_offset,
+                w = event_width
             );
         }
     }
