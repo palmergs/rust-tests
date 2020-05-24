@@ -1,4 +1,3 @@
-use rand::Rng;
 use yaml_rust::Yaml;
 
 use super::Caerlun;
@@ -31,12 +30,12 @@ impl Stats {
         &FOC_KEY
     }
 
-    pub fn build(yaml: &Yaml, random: i16) -> Stats {
+    pub fn build(yaml: &Yaml) -> Stats {
         match yaml {
             Yaml::Hash(h) => Stats {
-                bdy: Caerlun::opt_integer(h.get(Stats::bdy_key()), random as i32)
+                bdy: Caerlun::opt_integer(h.get(Stats::bdy_key()))
                     .expect("missing bdy attribute") as i16,
-                foc: Caerlun::opt_integer(h.get(Stats::foc_key()), random as i32)
+                foc: Caerlun::opt_integer(h.get(Stats::foc_key()))
                     .expect("missing foc attribute") as i16,
             },
             _ => panic!("Expected has for stats"),
@@ -120,24 +119,24 @@ impl Attribs {
         &CH_KEY
     }
 
-    pub fn build(yaml: &Yaml, random: i8) -> Attribs {
+    pub fn build(yaml: &Yaml) -> Attribs {
         match yaml {
             Yaml::Hash(h) => Attribs {
-                st: Caerlun::opt_integer(h.get(Attribs::st_key()), random as i32)
+                st: Caerlun::opt_integer(h.get(Attribs::st_key()))
                     .expect("missing str attribute") as i8,
-                en: Caerlun::opt_integer(h.get(Attribs::en_key()), random as i32)
+                en: Caerlun::opt_integer(h.get(Attribs::en_key()))
                     .expect("missing end attribute") as i8,
-                dx: Caerlun::opt_integer(h.get(Attribs::dx_key()), random as i32)
+                dx: Caerlun::opt_integer(h.get(Attribs::dx_key()))
                     .expect("missing dex attribute") as i8,
-                hc: Caerlun::opt_integer(h.get(Attribs::hc_key()), random as i32)
+                hc: Caerlun::opt_integer(h.get(Attribs::hc_key()))
                     .expect("missing hec attribute") as i8,
-                aw: Caerlun::opt_integer(h.get(Attribs::aw_key()), random as i32)
+                aw: Caerlun::opt_integer(h.get(Attribs::aw_key()))
                     .expect("missing awa attribute") as i8,
-                it: Caerlun::opt_integer(h.get(Attribs::it_key()), random as i32)
+                it: Caerlun::opt_integer(h.get(Attribs::it_key()))
                     .expect("missing int attribute") as i8,
-                wi: Caerlun::opt_integer(h.get(Attribs::wi_key()), random as i32)
+                wi: Caerlun::opt_integer(h.get(Attribs::wi_key()))
                     .expect("missing wil attribute") as i8,
-                ch: Caerlun::opt_integer(h.get(Attribs::ch_key()), random as i32)
+                ch: Caerlun::opt_integer(h.get(Attribs::ch_key()))
                     .expect("missing chr attribute") as i8,
             },
             _ => panic!("Expected attribute hash"),

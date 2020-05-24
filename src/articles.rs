@@ -10,6 +10,7 @@ use std::cmp::{max, min};
 // use std::str::FromStr;
 
 use rand::Rng;
+// use rand::rngs::{ThreadRng, SmallRng};
 
 use super::{Event, Geo, Race, Region};
 
@@ -26,6 +27,13 @@ pub struct Caerlun {
 }
 
 impl Caerlun {
+    // pub fn random(min: usize, max: usize) -> usize {
+    //     lazy_static! {
+    //         static ref RANDOM: SmallRng = SmallRng::from_rng(rand::thread_rng()).expect("couldn't build random generator");
+    //     }
+    //     RANDOM.gen_range(min, max + 1)
+    // }
+
     pub fn id_key() -> &'static Yaml {
         lazy_static! {
             static ref ID_KEY: Yaml = Yaml::from_str("id");
@@ -56,6 +64,7 @@ impl Caerlun {
 
     pub fn new() -> Caerlun {
         let caerlun = Caerlun {
+
             races: IndexMap::new(),
             regions: IndexMap::new(),
             events: IndexMap::new(),
@@ -267,21 +276,14 @@ impl Caerlun {
         }
     }
 
-    pub fn opt_integer(opt: Option<&Yaml>, range: i32) -> Option<i32> {
+    pub fn opt_integer(opt: Option<&Yaml>) -> Option<i32> {
         match opt {
             Some(yaml) => {
-                let mut n = match yaml {
-                    Yaml::String(s) => s.parse::<i32>().expect("Could not parse to integer"),
-                    Yaml::Integer(n) => *n as i32,
+                match yaml {
+                    Yaml::String(s) => Some(s.parse::<i32>().expect("Could not parse to integer")),
+                    Yaml::Integer(n) => Some(*n as i32),
                     _ => panic!("could not parse number from field"),
-                };
-
-                if range > 0 {
-                    let mut rng = rand::thread_rng();
-                    let modifier = rng.gen_range(0, range * 2 + 1) - range;
-                    n = n + modifier as i32;
                 }
-                Some(n)
             }
             _ => None,
         }
