@@ -1,4 +1,13 @@
-use super::{Attribs, Caerlun, Event, NameBuilder, Race, Region, Stats};
+use super::{
+    Caerlun, 
+    Event, 
+    NameBuilder, 
+    Race, 
+    Region, 
+    Value,
+    STR, END, DEX, HEC, AWA, INT, WIL, CHR, 
+    BODY, FOCUS, SPELL,
+};
 
 use rand::Rng;
 use std::fmt;
@@ -12,10 +21,8 @@ pub struct Character {
     pub race: (String, String),
     pub region: (String, String),
     pub dob: i64,
-    pub max_stat: Stats,
-    pub cur_stat: Stats,
-    pub max_atts: Attribs,
-    pub cur_atts: Attribs,
+    pub points: Vec<Value>,
+    pub attributes: Vec<Value>,
 }
 
 impl fmt::Display for Character {
@@ -26,22 +33,34 @@ impl fmt::Display for Character {
             write!(f, "Name: {}\n", self.fname)?;
         }
 
-        write!(f, "Race: {} from {}\n", self.race.1, self.region.1)?;
+        write!(f, "Race: {}\n", self.race.1)?;
+        write!(f, "From: {}\n", self.region.1)?;
         write!(f, "Age: {}\n", CURRENT_YEAR - self.dob)?;
         write!(
             f,
-            "BDY: {:>3}/{:<3} FOC: {:>3}/{:<3}\n",
-            self.cur_stat.bdy, self.max_stat.bdy, self.cur_stat.foc, self.max_stat.foc
+            "BDY: {:>3}/{:<3} FOC: {:>3}/{:<3} SPP: {:>3}/{:<3}\n",
+            self.points[BODY].curr, 
+            self.points[BODY].base,
+            self.points[FOCUS].curr,
+            self.points[FOCUS].base,
+            self.points[SPELL].curr,
+            self.points[SPELL].base,
         )?;
         write!(
             f,
             "STR: {:<4} END: {:<4} DEX: {:<4} HEC: {:<4}\n",
-            self.cur_atts.st, self.cur_atts.en, self.cur_atts.dx, self.cur_atts.hc
+            self.attributes[STR].curr, 
+            self.attributes[END].curr, 
+            self.attributes[DEX].curr,  
+            self.attributes[HEC].curr,  
         )?;
         write!(
             f,
             "AWA: {:<4} INT: {:<4} WIL: {:<4} CHR: {:<4}\n",
-            self.cur_atts.aw, self.cur_atts.it, self.cur_atts.wi, self.cur_atts.ch
+            self.attributes[AWA].curr, 
+            self.attributes[INT].curr, 
+            self.attributes[WIL].curr,  
+            self.attributes[CHR].curr,  
         )?;
 
         write!(f, "\n")
@@ -78,10 +97,6 @@ impl<'a> CharacterBuilder<'a> {
         let lname = self.lname(lname_key, &race);
         let events = self.events_from(&region.key, year, CURRENT_YEAR);
 
-        let mut stats = race.stats.clone();
-        let mut atts = race.atts.clone();
-        CharacterBuilder::modify(&mut stats, &mut atts);
-
         Character {
             fname: fname,
             lname: lname,
@@ -89,58 +104,8 @@ impl<'a> CharacterBuilder<'a> {
             race: (race.key.to_string(), race.name.to_string()),
             region: (region.key.to_string(), region.name.to_string()),
             dob: year,
-            max_stat: stats,
-            cur_stat: stats,
-            max_atts: atts,
-            cur_atts: atts,
-        }
-    }
-
-    // Randomly modify the stats 
-    fn modify(stats: &mut Stats, atts: &mut Attribs) {
-        let mut rng = rand::thread_rng();
-        match rng.gen_range(0, 4) {
-            0 => {
-                // Strong
-                stats.bdy = stats.bdy + rng.gen_range(0, 3);
-                atts.st = atts.st + 1;
-                atts.en = atts.en + 1;
-                if rng.gen_range(0, 2) == 1 {
-                    atts.it = atts.it - 1;
-                    atts.wi = atts.wi - 1;
-                }
-            },
-            1 => {
-                // Smart
-                stats.foc = stats.foc + rng.gen_range(0, 3);
-                atts.it = atts.it + 1;
-                atts.aw = atts.aw + 1;
-                if rng.gen_range(0, 2) == 1 {
-                    atts.st = atts.st - 1;
-                    atts.en = atts.en - 1;
-                }
-            },
-            2 => {
-                // Fast
-                stats.foc = stats.foc + rng.gen_range(0, 2);
-                atts.dx = atts.dx + 1;
-                atts.hc = atts.hc + 1;
-                if rng.gen_range(0, 2) == 1 {
-                    atts.st = atts.st - 1;
-                    atts.en = atts.en - 1;
-                }
-            },
-            3 => {
-                // Wise
-                stats.foc = stats.foc + rng.gen_range(0, 2);
-                atts.wi = atts.wi + 1;
-                atts.ch = atts.ch + 1;
-                if rng.gen_range(0, 2) == 1 {
-                    atts.st = atts.st - 1;
-                    atts.it = atts.it - 1;
-                }
-            },
-            _ => ()
+            points: race.points.clone(),
+            attributes: race.attributes.clone()
         }
     }
 

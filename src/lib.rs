@@ -22,7 +22,8 @@ mod races;
 pub use races::Race;
 
 mod attribs;
-pub use attribs::{Attribs, Stats};
+pub use attribs::{Value, STR, END, DEX, HEC, AWA, INT, WIL, CHR, 
+  BODY, FOCUS, SPELL, };
 
 mod regions;
 pub use regions::Region;

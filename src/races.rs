@@ -5,7 +5,7 @@ use rand::Rng;
 
 use yaml_rust::Yaml;
 
-use super::{Alias, Attribs, Caerlun, Region, Stats};
+use super::{Alias, Value, Caerlun, Region};
 use std::cmp::Ordering;
 use std::ops::Range;
 
@@ -22,8 +22,8 @@ pub struct Race {
     pub mname: String,
     pub fname: String,
     pub lname: Option<String>,
-    pub stats: Stats,
-    pub atts: Attribs,
+    pub points: Vec<Value>,
+    pub attributes: Vec<Value>,
 }
 
 impl Race {
@@ -119,8 +119,8 @@ impl Race {
                         None => None,
                     },
                     regions: Caerlun::strings(h.get(Region::key())),
-                    stats: Stats::build(&h.get(Stats::key()).expect("missing stats key")),
-                    atts: Attribs::build(&h.get(Attribs::key()).expect("missing attribs key")),
+                    points: Value::build_points(&h.get(Value::points_key()).expect("missing points key")),
+                    attributes: Value::build_attributes(&h.get(Value::attributes_key()).expect("missing attributes key")),
                 }
             }
             _ => panic!("expected a hash to build a race intance"),
