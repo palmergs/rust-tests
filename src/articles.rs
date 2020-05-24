@@ -1,20 +1,9 @@
-// extern crate regex;
-// use regex::Regex;
-
 use yaml_rust::{Yaml, YamlLoader};
-// use sorted_vec::SortedVec;
 use indexmap::IndexMap;
-// use nested_intervals::IntervalSet;
-
 use std::cmp::{max, min};
-// use std::str::FromStr;
-
 use rand::Rng;
-// use rand::rngs::{ThreadRng, SmallRng};
 
 use super::{Event, Geo, Race, Region};
-
-// const YEAR_OFFSET: usize = 10000;
 
 #[derive(Debug)]
 pub struct Caerlun {
@@ -27,13 +16,6 @@ pub struct Caerlun {
 }
 
 impl Caerlun {
-    // pub fn random(min: usize, max: usize) -> usize {
-    //     lazy_static! {
-    //         static ref RANDOM: SmallRng = SmallRng::from_rng(rand::thread_rng()).expect("couldn't build random generator");
-    //     }
-    //     RANDOM.gen_range(min, max + 1)
-    // }
-
     pub fn id_key() -> &'static Yaml {
         lazy_static! {
             static ref ID_KEY: Yaml = Yaml::from_str("id");

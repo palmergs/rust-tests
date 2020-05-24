@@ -80,6 +80,7 @@ impl<'a> CharacterBuilder<'a> {
 
         let mut stats = race.stats.clone();
         let mut atts = race.atts.clone();
+        CharacterBuilder::modify(&mut stats, &mut atts);
 
         Character {
             fname: fname,
@@ -92,6 +93,37 @@ impl<'a> CharacterBuilder<'a> {
             cur_stat: stats,
             max_atts: atts,
             cur_atts: atts,
+        }
+    }
+
+    fn modify(stats: &mut Stats, atts: &mut Attribs) {
+        let mut rng = rand::thread_rng();
+        match rng.gen_range(0, 4) {
+            0 => {
+                // Strong
+                stats.bdy = stats.bdy + rng.gen_range(0, 3);
+                atts.st = atts.st + 1;
+                atts.en = atts.en + 1;
+            },
+            1 => {
+                // Smart
+                stats.foc = stats.foc + rng.gen_range(0, 3);
+                atts.it = atts.it + 1;
+                atts.aw = atts.aw + 1;
+            },
+            2 => {
+                // Fast
+                stats.foc = stats.foc + rng.gen_range(0, 2);
+                atts.dx = atts.dx + 1;
+                atts.hc = atts.hc + 1;
+            },
+            3 => {
+                // Wise
+                stats.foc = stats.foc + rng.gen_range(0, 2);
+                atts.wi = atts.wi + 1;
+                atts.ch = atts.ch + 1;
+            },
+            _ => ()
         }
     }
 
