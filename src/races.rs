@@ -5,7 +5,7 @@ use rand::Rng;
 
 use yaml_rust::Yaml;
 
-use super::{Caerlun, Region, Alias, Atts, Stats};
+use super::{Caerlun, Region, Alias, Stats, Attribs};
 use std::cmp::Ordering;
 use std::ops::Range;
 
@@ -23,7 +23,7 @@ pub struct Race {
     pub fname: String,
     pub lname: Option<String>,
     pub stats: Stats,
-    pub atts: Atts,
+    pub atts: Attribs,
 }
 
 impl Race {
@@ -113,65 +113,13 @@ impl Race {
                         None => None,
                     },
                     regions: Caerlun::strings(h.get(Region::key())),
-                    stats: Race::parse_stats(),
-                    atts: Race::parse_atts(),
+                    stats: Stats::build(&h.get(Stats::key()).expect("missing stats key"), 1),
+                    atts: Attribs::build(&h.get(Attribs::key()).expect("missing attribs key"), 1),
                 }
             }
             _ => panic!("expected a hash to build a race intance"),
         }
     }    
-
-    pub fn new(
-        key: &str, 
-        name: &str, 
-        height: &str, 
-        weight: &str, 
-        lifespan: &str, 
-        mname: &str, 
-        fname: &str, 
-        lname: Option<&str>) -> Race {
-
-        Race {
-            key: key.to_string(),
-            name: name.to_string(),
-            plural: None,
-            alias: Vec::new(),
-            regions: Vec::new(),
-            height: Race::parse_height(height),
-            weight: Race::parse_weight(weight),
-            lifespan: Race::parse_lifespan(lifespan),
-            mname: mname.to_string(),
-            fname: fname.to_string(),
-            lname: match lname {
-                Some(s) => Some(s.to_string()),
-                None => None,
-            },
-            stats: Race::parse_stats(),
-            atts: Race::parse_atts(),
-        }
-    }
-
-
-
-    fn parse_stats() -> Stats {
-        Stats {
-            bdy: 10,
-            foc: 10,
-        }
-    }
-
-    fn parse_atts() -> Atts {
-        Atts {
-            st: 0,
-            en: 0,
-            dx: 0,
-            hc: 0,
-            aw: 0,
-            it: 0,
-            wi: 0,
-            ch: 0,
-        }
-    }
 
     fn parse_height(height: &str) -> Range<i64> {
         lazy_static! {

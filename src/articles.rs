@@ -1,4 +1,4 @@
-extern crate regex;
+// extern crate regex;
 // use regex::Regex;
 
 use yaml_rust::{Yaml, YamlLoader};
@@ -263,6 +263,26 @@ impl Caerlun {
         match yaml {
             Yaml::String(s) => Some(s.to_string()),
             Yaml::Integer(n) => Some(n.to_string()),
+            _ => None,
+        }
+    }
+
+    pub fn opt_integer(opt: Option<&Yaml>, range: i32) -> Option<i32> {
+        match opt {
+            Some(yaml) => {
+                let mut n = match yaml {
+                    Yaml::String(s) => s.parse::<i32>().expect("Could not parse to integer"),
+                    Yaml::Integer(n) => *n as i32,
+                    _ => panic!("could not parse number from field"),
+                };
+                
+                if range > 0 {
+                    let mut rng = rand::thread_rng();
+                    let modifier = rng.gen_range(0, range * 2 + 1) - range;
+                    n = n + modifier as i32;
+                }
+                Some(n) 
+            },
             _ => None,
         }
     }

@@ -21,6 +21,9 @@ pub use aliases::{Alias, Tone};
 mod races;
 pub use races::Race;
 
+mod attribs;
+pub use attribs::{Attribs, Stats};
+
 mod regions;
 pub use regions::Region;
 
@@ -31,7 +34,7 @@ mod features;
 pub use features::Geo;
 
 pub mod characters;
-pub use characters::{Character, Atts, Stats, CharacterBuilder};
+pub use characters::{Character, CharacterBuilder};
 
 #[derive(RustEmbed)]
 #[folder = "resources/"]

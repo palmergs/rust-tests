@@ -1,27 +1,9 @@
-use super::{Caerlun, Event, NameBuilder, Race, Region};
+use super::{Caerlun, Event, NameBuilder, Race, Attribs, Stats, Region};
 
 use std::fmt;
 use rand::Rng;
 
 static CURRENT_YEAR: i64 = 1260;
-
-#[derive(Debug, Clone, Copy)]
-pub struct Stats {
-    pub bdy: i16,
-    pub foc: i16,
-}
-
-#[derive(Debug, Clone, Copy)]
-pub struct Atts {
-    pub st: i8,
-    pub en: i8,
-    pub dx: i8,
-    pub aw: i8,
-    pub hc: i8,
-    pub it: i8,
-    pub wi: i8,
-    pub ch: i8,
-}
 
 pub struct Character {
     pub fname: String,
@@ -32,14 +14,11 @@ pub struct Character {
     pub dob: i64,
     pub max_stat: Stats,
     pub cur_stat: Stats,
-    pub max_atts: Atts,
-    pub cur_atts: Atts,
+    pub max_atts: Attribs,
+    pub cur_atts: Attribs,
 }
 
 impl fmt::Display for Character {
-        // fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        //     for (idx, r) in self.rolls.iter().enumerate() {
-        //         if idx > 0 { write!(f, " + ")?; }
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         if let Some(last) = &self.lname { write!(f, "Name: {} {}\n", self.fname, last)?; }
         else { write!(f, "Name: {}\n", self.fname)?; }
