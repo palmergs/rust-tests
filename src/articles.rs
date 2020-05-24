@@ -64,7 +64,6 @@ impl Caerlun {
 
     pub fn new() -> Caerlun {
         let caerlun = Caerlun {
-
             races: IndexMap::new(),
             regions: IndexMap::new(),
             events: IndexMap::new(),
@@ -278,13 +277,11 @@ impl Caerlun {
 
     pub fn opt_integer(opt: Option<&Yaml>) -> Option<i32> {
         match opt {
-            Some(yaml) => {
-                match yaml {
-                    Yaml::String(s) => Some(s.parse::<i32>().expect("Could not parse to integer")),
-                    Yaml::Integer(n) => Some(*n as i32),
-                    _ => panic!("could not parse number from field"),
-                }
-            }
+            Some(yaml) => match yaml {
+                Yaml::String(s) => Some(s.parse::<i32>().expect("Could not parse to integer")),
+                Yaml::Integer(n) => Some(*n as i32),
+                _ => panic!("could not parse number from field"),
+            },
             _ => None,
         }
     }

@@ -90,19 +90,18 @@ impl Race {
     pub fn build(yaml: &Yaml) -> Race {
         match yaml {
             Yaml::Hash(h) => {
-                let key = Caerlun::opt_string(h.get(Caerlun::id_key()))
-                    .expect("missing id key");
-                let name = Caerlun::opt_string(h.get(Caerlun::name_key()))
-                    .expect("missing name key");
+                let key = Caerlun::opt_string(h.get(Caerlun::id_key())).expect("missing id key");
+                let name =
+                    Caerlun::opt_string(h.get(Caerlun::name_key())).expect("missing name key");
                 let mname = Caerlun::opt_string(h.get(Race::male_name_key()))
                     .expect("missing male name key");
                 let fname = Caerlun::opt_string(h.get(Race::female_name_key()))
                     .expect("missing female name key");
                 let lname = Caerlun::opt_string(h.get(Race::family_name_key()));
-                let height = Caerlun::opt_string(h.get(Race::height_key()))
-                    .expect("Expected height key");
-                let weight = Caerlun::opt_string(h.get(Race::weight_key()))
-                    .expect("Expected weight key");
+                let height =
+                    Caerlun::opt_string(h.get(Race::height_key())).expect("Expected height key");
+                let weight =
+                    Caerlun::opt_string(h.get(Race::weight_key())).expect("Expected weight key");
                 let lifespan = Caerlun::opt_string(h.get(Race::lifespan_key()))
                     .expect("Expected lifespan key");
                 Race {

@@ -78,6 +78,9 @@ impl<'a> CharacterBuilder<'a> {
         let lname = self.lname(lname_key, &race);
         let events = self.events_from(&region.key, year, CURRENT_YEAR);
 
+        let mut stats = race.stats.clone();
+        let mut atts = race.atts.clone();
+
         Character {
             fname: fname,
             lname: lname,
@@ -85,10 +88,10 @@ impl<'a> CharacterBuilder<'a> {
             race: (race.key.to_string(), race.name.to_string()),
             region: (region.key.to_string(), region.name.to_string()),
             dob: year,
-            max_stat: race.stats,
-            cur_stat: race.stats,
-            max_atts: race.atts,
-            cur_atts: race.atts,
+            max_stat: stats,
+            cur_stat: stats,
+            max_atts: atts,
+            cur_atts: atts,
         }
     }
 
