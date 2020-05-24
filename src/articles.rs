@@ -5,7 +5,10 @@ use rand::Rng;
 
 use super::{Event, Geo, Race, Region};
 
-pub static CURRENT_YEAR: i64 = 1260;
+pub const EARLIEST_YEAR: i64 = -5000;
+pub const CURRENT_YEAR: i64 = 1260;
+
+const TIMELINE_WIDTH: i64 = 100;
 
 #[derive(Debug)]
 pub struct Caerlun {
@@ -117,21 +120,25 @@ impl Caerlun {
         }
     }
 
+    // Display a timeline between two years
     pub fn timeline(&self, start: Option<&str>, end: Option<&str>) {
         let start = match start {
             Some(n) => n.parse::<i64>().expect("could not parse value into year"), 
-            None => -5000,
+            None => EARLIEST_YEAR,
         };
+
         let end = match end {
             Some(n) => n.parse::<i64>().expect("could not parse value into year"),
             None => CURRENT_YEAR,
         };
+        
         let total_years: i64 = if start < 0 {
             -1 * start + end
         } else {
             end - start
         };
-        let years_per_char: i64 = total_years / 130;
+        
+        let years_per_char: i64 = total_years / TIMELINE_WIDTH;
         let mut events: Vec<&Event> = self.events.values().collect();
         events.sort_by(|a, b| a.range.start.cmp(&b.range.start));
         for e in events {
