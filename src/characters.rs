@@ -1,14 +1,6 @@
 use super::{
-    Caerlun, 
-    CURRENT_YEAR,
-    NameBuilder, 
-    Race, 
-    Region, 
-    Value,
-    ATTRIBUTES,
-    STR, END, DEX, HEC, AWA, INT, WIL, CHR, 
-    POINTS,
-    BODY, FOCUS, SPELL,
+    Caerlun, NameBuilder, Race, Region, Value, ATTRIBUTES, AWA, BODY, CHR, CURRENT_YEAR, DEX, END,
+    FOCUS, HEC, INT, POINTS, SPELL, STR, WIL,
 };
 
 use rand::Rng;
@@ -41,7 +33,7 @@ impl fmt::Display for Character {
         write!(
             f,
             "BDY: {:>3}/{:<3} FOC: {:>3}/{:<3} SPP: {:>3}/{:<3}\n",
-            self.points[BODY].curr, 
+            self.points[BODY].curr,
             self.points[BODY].base,
             self.points[FOCUS].curr,
             self.points[FOCUS].base,
@@ -51,18 +43,18 @@ impl fmt::Display for Character {
         write!(
             f,
             "STR: {:<4} END: {:<4} DEX: {:<4} HEC: {:<4}\n",
-            self.attributes[STR].curr, 
-            self.attributes[END].curr, 
-            self.attributes[DEX].curr,  
-            self.attributes[HEC].curr,  
+            self.attributes[STR].curr,
+            self.attributes[END].curr,
+            self.attributes[DEX].curr,
+            self.attributes[HEC].curr,
         )?;
         write!(
             f,
             "AWA: {:<4} INT: {:<4} WIL: {:<4} CHR: {:<4}\n",
-            self.attributes[AWA].curr, 
-            self.attributes[INT].curr, 
-            self.attributes[WIL].curr,  
-            self.attributes[CHR].curr,  
+            self.attributes[AWA].curr,
+            self.attributes[INT].curr,
+            self.attributes[WIL].curr,
+            self.attributes[CHR].curr,
         )?;
 
         write!(f, "\n")
@@ -106,7 +98,7 @@ impl<'a> CharacterBuilder<'a> {
             region: (region.key.to_string(), region.name.to_string()),
             dob: year,
             points: race.points.clone(),
-            attributes: race.attributes.clone()
+            attributes: race.attributes.clone(),
         }
     }
 

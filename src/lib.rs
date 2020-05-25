@@ -13,7 +13,7 @@ mod names;
 pub use names::{Fragment, FragmentList, NameBuilder};
 
 mod articles;
-pub use articles::{ Caerlun, CURRENT_YEAR };
+pub use articles::{Caerlun, CURRENT_YEAR};
 
 mod aliases;
 pub use aliases::{Alias, Tone};
@@ -23,11 +23,8 @@ pub use races::Race;
 
 mod attribs;
 pub use attribs::{
-  Value, 
-  POINTS,
-  BODY, FOCUS, SPELL,
-  ATTRIBUTES,
-  STR, END, DEX, HEC, AWA, INT, WIL, CHR};
+    Value, ATTRIBUTES, AWA, BODY, CHR, DEX, END, FOCUS, HEC, INT, POINTS, SPELL, STR, WIL,
+};
 
 mod regions;
 pub use regions::Region;

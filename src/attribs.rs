@@ -145,10 +145,22 @@ impl Value {
         }
     }
 
-    fn build_value(opt: Option<&Yaml>) -> Value {      
+    fn build_value(opt: Option<&Yaml>) -> Value {
         match Caerlun::opt_integer(opt) {
-            Some(val) => Value { base: val as i16, mods: 0, lost: 0, temp: 0, curr: val as i16 },
-            None => Value { base: 0, mods: 0, lost: 0, temp: 0, curr: 0 }
+            Some(val) => Value {
+                base: val as i16,
+                mods: 0,
+                lost: 0,
+                temp: 0,
+                curr: val as i16,
+            },
+            None => Value {
+                base: 0,
+                mods: 0,
+                lost: 0,
+                temp: 0,
+                curr: 0,
+            },
         }
     }
 }
