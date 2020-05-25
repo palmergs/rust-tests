@@ -182,6 +182,7 @@ events:
     name: Surrender of Ber Barenni
     year: 2
     type: battle
+    parent: dragon-lords
     races:
       - human
       - rulligg
@@ -198,6 +199,7 @@ events:
     name: Sack of Korenni
     year: 33
     type: battle
+    parent: dragon-lords
     races:
       - human
       - rulligg

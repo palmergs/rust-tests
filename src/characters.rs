@@ -1,7 +1,6 @@
 use super::{
     Caerlun, 
     CURRENT_YEAR,
-    Event, 
     NameBuilder, 
     Race, 
     Region, 
@@ -15,9 +14,11 @@ use super::{
 use rand::Rng;
 use std::fmt;
 
+// use indexmap::IndexSet;
+
 pub struct Character {
-    pub fname: String,
-    pub lname: Option<String>,
+    pub name: String,
+    pub family: Option<String>,
     pub nickname: Option<String>,
     pub race: (String, String),
     pub region: (String, String),
@@ -28,10 +29,10 @@ pub struct Character {
 
 impl fmt::Display for Character {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        if let Some(last) = &self.lname {
-            write!(f, "Name: {} {}\n", self.fname, last)?;
+        if let Some(family) = &self.family {
+            write!(f, "Name: {} {}\n", self.name, family)?;
         } else {
-            write!(f, "Name: {}\n", self.fname)?;
+            write!(f, "Name: {}\n", self.name)?;
         }
 
         write!(f, "Race: {}\n", self.race.1)?;
@@ -94,13 +95,12 @@ impl<'a> CharacterBuilder<'a> {
 
         let region = self.region(region_key, Some(&race.key), year);
 
-        let fname = self.fname(fname_key, &race);
-        let lname = self.lname(lname_key, &race);
-        let events = self.events_from(&region.key, year, CURRENT_YEAR);
+        let name = self.name(fname_key, &race);
+        let family = self.family(lname_key, &race);
 
         Character {
-            fname: fname,
-            lname: lname,
+            name: name,
+            family: family,
             nickname: None,
             race: (race.key.to_string(), race.name.to_string()),
             region: (region.key.to_string(), region.name.to_string()),
@@ -151,24 +151,24 @@ impl<'a> CharacterBuilder<'a> {
         }
     }
 
-    fn fname(&self, name_key: Option<&str>, race: &Race) -> String {
+    fn name(&self, name_key: Option<&str>, race: &Race) -> String {
         let mut rng = rand::thread_rng();
         match rng.gen_range(0, 2) {
             0 => self
-                .name(name_key, Some(&race.mname))
+                .select_name(name_key, Some(&race.mname))
                 .expect("Expected fname 1"),
             1 => self
-                .name(name_key, Some(&race.fname))
+                .select_name(name_key, Some(&race.fname))
                 .expect("Expected fname 2"),
             _ => panic!("Expected only 2 options"),
         }
     }
 
-    fn lname(&self, name_key: Option<&str>, race: &Race) -> Option<String> {
-        self.name(name_key, race.lname.as_deref())
+    fn family(&self, name_key: Option<&str>, race: &Race) -> Option<String> {
+        self.select_name(name_key, race.lname.as_deref())
     }
 
-    fn name(&self, name_key: Option<&str>, backup_key: Option<&str>) -> Option<String> {
+    fn select_name(&self, name_key: Option<&str>, backup_key: Option<&str>) -> Option<String> {
         match name_key {
             Some(s) => Some(self.names.name(s)),
             None => match backup_key {
@@ -176,13 +176,5 @@ impl<'a> CharacterBuilder<'a> {
                 None => None,
             },
         }
-    }
-
-    fn events_from(&self, region_key: &str, from: i64, to: i64) -> Vec<Event> {
-        let mut rng = rand::thread_rng();
-
-        let idx = rng.gen_range(from, to);
-
-        Vec::new()
     }
 }
