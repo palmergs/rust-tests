@@ -2,7 +2,9 @@
 :lost-tribe
 
 [gobru]
-:lost-tribe
+:_yipin+:_yipin
+:_short-yipin+:_yipin
+:_yipin+:_short-yipin
 
 [urg]
 :lost-tribe
@@ -11,6 +13,33 @@
 :_flost-tribe+:_mlost-tribe+:_llast-tribe
 :_flost-tribe+:_mlost-tribe+:_lost-tribe-occupation
 :_lost-tribe-occupation+:_mlost-tribe+:_llast-tribe
+
+[_yipin]
+yip
+nip
+ger
+rurr
+wer
+wip
+gurr
+bar
+ark
+
+[_short-yipin]
+ip
+iw
+in
+ig
+ij
+if
+id
+op
+ow
+on
+og
+oj
+of
+
 
 [_lost-tribe-occupation]
 hunt

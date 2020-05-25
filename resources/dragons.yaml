@@ -1,0 +1,171 @@
+races:
+  - id: stone-dragon
+    name: Stone Dragon
+    height: 80'0" - 120'0"
+    weight: 33000 - 55000
+    lifespan: 0-20, 20-2000, 2000-9000, 9000-10000
+    points:
+      bdy: 400
+      foc: 10
+      spp: 40
+    attributes:
+      str: 10
+      end: 10
+      dex: 0
+      awa: 5
+      hec: -1
+      int: 5
+      wil: 10
+      chr: 5
+    special:
+      - magic sight
+      - heatsight
+      - bash resistance
+    mname: dragon
+    fname: dragon
+  - id: water-dragon
+    name: Water Dragon
+    height: 80'0" - 120'0"
+    weight: 33000 - 55000
+    lifespan: 0-20, 20-2000, 2000-9000, 9000-10000
+    points:
+      bdy: 400
+      foc: 10
+      spp: 40
+    attributes:
+      str: 10
+      end: 10
+      dex: 0
+      awa: 5
+      hec: -1
+      int: 5
+      wil: 10
+      chr: 5
+    special:
+      - magic
+      - diamond sight
+      - stab resistance
+      - swim
+    mname: dragon
+    fname: dragon    
+  - id: sky-dragon
+    name: Sky Dragon
+    height: 80'0" - 120'0"
+    weight: 33000 - 55000
+    lifespan: 0-20, 20-2000, 2000-9000, 9000-10000
+    points:
+      bdy: 400
+      foc: 10
+      spp: 40
+    attributes:
+      str: 10
+      end: 10
+      dex: 0
+      awa: 5
+      hec: -1
+      int: 5
+      wil: 10
+      chr: 5
+    special:
+      - magic
+      - starsight
+      - electric immunity
+      - flight
+    mname: dragon
+    fname: dragon       
+  - id: fire-dragon
+    name: Fire Dragon
+    height: 80'0" - 120'0"
+    weight: 33000 - 55000
+    lifespan: 0-20, 20-2000, 2000-9000, 9000-10000
+    points:
+      bdy: 400
+      foc: 10
+      spp: 40
+    attributes:
+      str: 10
+      end: 10
+      dex: 0
+      awa: 5
+      hec: -1
+      int: 5
+      wil: 10
+      chr: 5
+    special:
+      - magic
+      - diamond sight
+      - fire immunity
+      - flight
+    mname: dragon
+    fname: dragon
+  - id: wyvern
+    name: Wyvern
+    parent: fire-dragon
+    height: 12'0" - 14'0"
+    weight: 400 - 500
+    lifespan: 0-10, 10-80, 80-160, 160-240
+    points:
+      bdy: 50
+      foc: 15
+    attributes:
+      str: 2
+      end: 2
+      dex: 0
+      awa: 2
+      hec: -2
+      int: -3
+      wil: -1
+      chr: -3
+    special:
+      - diamond sight
+      - fire immunity
+      - flight
+    mname: dragon
+    fname: dragon
+  - id: rock-lizard
+    name: Rock Lizard
+    parent: stone-dragon
+    height: 20'0" - 24'0"
+    weight: 2000 - 2500
+    lifespan: 0-10, 10-80, 80-160, 160-240
+    points:
+      bdy: 120
+      foc: 35
+    attributes:
+      str: 4
+      end: 4
+      dex: -2
+      awa: 0
+      hec: -2
+      int: -1
+      wil: 4
+      chr: -3
+    special:
+      - heatsight
+      - bash resistance
+    mname: dragon
+    fname: dragon    
+  - id: flying-snake
+    name: Flying Snake
+    parent: sky-dragon
+    height: 3'0" - 3'6"
+    weight: 20 - 30
+    lifespan: 0-10, 10-80, 80-160, 160-240
+    points:
+      bdy: 5
+      foc: 15
+    attributes:
+      str: -3
+      end: 0
+      dex: 3
+      awa: 2
+      hec: -2
+      int: -4
+      wil: -2
+      chr: -1
+    special:
+      - starsight
+      - electric resistance
+      - flight
+    mname: dragon
+    fname: dragon

@@ -100,6 +100,7 @@ fn build_store() -> Caerlun {
     let mut caerlun = Caerlun::new();
     for p in Asset::iter() {
         if p.ends_with(".yaml") {
+            // println!("About to load: {:?}", p);
             let o = Asset::get(&p);
             match o {
                 Some(cow) => {

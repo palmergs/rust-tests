@@ -1,0 +1,161 @@
+races:
+  - id: urunai
+    name: Uruk'u
+    plural: Urunai
+    alignment: orphan
+    height: 6'0" - 7'0"
+    weight: 140 - 200
+    lifespan: 0-12, 12-32, 42-50, 50-58
+    mname: urunai
+    fname: urunai   
+    points:
+      bdy: 14
+      foc: 8       
+    attributes:
+      str: 1
+      end: 1
+      dex: 1
+      awa: 1
+      hec: 0
+      int: -1
+      wil: -1
+      chr: -1
+    special:
+      - diamond sight      
+    alias:
+      - name: Lupin
+        tone: negative
+  - id: gobru
+    name: Gobr'u
+    plural: Gobrunai
+    alignment: orphan
+    height: 3'0" - 3'6"
+    weight: 35 - 50
+    lifespan: 0-10, 10-40, 40-50, 50-60
+    mname: gobru
+    fname: gobru   
+    points:
+      bdy: 7
+      foc: 8       
+    attributes:
+      str: -2
+      end: 0
+      dex: 2
+      awa: 1
+      hec: 1
+      int: -1
+      wil: -1
+      chr: -1
+    special:
+      - diamond sight       
+    alias:
+      - name: Goblin
+        plural: Goblins
+        tone: negative
+      - name: Yipin
+        tone: positive
+  - id: ratmin
+    name: Ratmin
+    alignment: orphan      
+    height: 2'0" - 2'4"
+    weight: 20 - 30
+    lifespan: 0-16, 16-48, 48-56, 56-64
+    mname: ratmin
+    fname: ratmin
+    points:
+      bdy: 5
+      foc: 10
+    attributes:
+      str: -2
+      end: -1
+      dex: 2
+      awa: 2
+      hec: 2
+      int: 1
+      wil: 1
+      chr: 0   
+    special:
+      - diamond sight 
+  - id: urg
+    name: Urg
+    plural: Urgunai
+    alignment: orphan
+    height: 5'5" - 5'10"
+    weight: 180 - 240
+    lifespan: 0-8, 8-32, 32-40, 40-48
+    mname: urg
+    fname: urg
+    points:
+      bdy: 14
+      foc: 8       
+    attributes:
+      str: 1
+      end: 1
+      dex: 0
+      awa: 1
+      hec: 0
+      int: -1
+      wil: -1
+      chr: -1
+    special:
+      - diamond sight       
+    alias:
+      - name: Orc
+        plural: Orcs
+        tone: negative
+      - name: Hav
+        tone: positive
+  - id: swamp-troll
+    name: Swamp Troll
+    plural: Swamp Trolls
+    alignment: orphan
+    height: 8'0" - 9'0"
+    weight: 300 - 350
+    lifespan: 0-10, 10-20, 20-30, 30-40
+    mname: lost-tribe
+    fname: lost-tribe
+    points:
+      bdy: 25
+      foc: 10
+    attributes:
+      str: 2
+      end: 3
+      dex: 2
+      awa: 2
+      hec: -2
+      int: 0
+      wil: 2
+      chr: -2
+    special:
+      - diamond sight
+      - fire resistant
+      - acid resostant
+  - id: ogre
+    name: Ogre
+    plural: Ogres
+    alignment: orphan
+    height: 10'0" - 12'11"
+    weight: 400 - 600
+    lifespan: 0-10, 10-20, 20-30, 30-40
+    mname: lost-tribe
+    fname: lost-tribe
+    points:
+      bdy: 35
+      foc: 10
+    attributes:
+      str: 3
+      end: 4
+      dex: -2
+      awa: -3
+      hec: -2
+      int: -2
+      wil: 2
+      chr: -2
+    special:
+      - diamond sight
+    region:
+      - bessen-highlands
+      - iron-reach
+      - crown-reach
+      - quarterlands
+      - opal-plains
