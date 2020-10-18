@@ -323,7 +323,7 @@ events:
       - rulligg
       - urunai
   - id: gortons-retreat
-    name: Gorton's Retread
+    name: Gorton's Retreat
     year: 1131
     type: battle
     parent: peasants-war

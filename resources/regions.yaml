@@ -73,7 +73,7 @@ regions:
     category: plains
   - id: opal-delta
     parent: opal-plains
-    name: Opal River dzdelta
+    name: Opal River Delta
   - id: opal-river-valley
     parent: opal-plains
     name: Opal River Valley
