@@ -123,8 +123,11 @@ mary
 ali
 bertha
 brenda
+brenea
 cali
+cara
 cari
+cris
 dolores
 ephram
 fanny
@@ -138,6 +141,9 @@ jess
 jenny
 jennifer
 kera
+kara
+kartha
+kris
 laura
 lara
 merry
@@ -153,4 +159,7 @@ vera
 wanda
 wendy
 yolanda
+yennifer
 zera
+zen
+zara
