@@ -88,7 +88,9 @@ fn main() -> io::Result<()> {
         caerlun.print_regions();
     } else {
         let builder = NameBuilder::new();
-        for s in builder.keys().iter() {
+        let mut keys = builder.keys();
+        keys.sort();
+        for s in keys.iter() {
             println!("{}", s);
         }
     }

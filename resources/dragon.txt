@@ -12,9 +12,13 @@ kalatri
 valaran
 xenthia
 
-[dragon-lords]
+[dragon-lord]
 goth
 jokin
 feth
 correlith
 krill
+velli
+fra farala
+obol
+pallace
