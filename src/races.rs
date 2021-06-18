@@ -84,7 +84,7 @@ impl Race {
 
     pub fn random_player_race() -> &'static str {
         let mut rng = rand::thread_rng();
-        Race::player_races()[rng.gen_range(0, Race::player_races().len())]
+        Race::player_races()[rng.gen_range(0..Race::player_races().len())]
     }
 
     pub fn build(yaml: &Yaml) -> Race {
