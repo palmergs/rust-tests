@@ -106,7 +106,7 @@ fn build_store() -> Caerlun {
             let o = Asset::get(&p);
             match o {
                 Some(cow) => {
-                    match std::str::from_utf8(&cow) {
+                    match std::str::from_utf8(&cow.data) {
                         Ok(s) => caerlun.build_type(s),
                         _ => (),
                     }

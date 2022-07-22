@@ -110,7 +110,7 @@ impl NameBuilder {
             if p.ends_with(".txt") {
                 let o = Asset::get(&p);
                 match o {
-                    Some(cow) => match std::str::from_utf8(&cow) {
+                    Some(cow) => match std::str::from_utf8(&cow.data) {
                         Ok(s) => builder.parse(s),
                         _ => (),
                     },
