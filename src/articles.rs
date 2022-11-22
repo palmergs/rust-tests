@@ -85,7 +85,7 @@ impl Caerlun {
         }
 
         let mut rng = rand::thread_rng();
-        let idx = rng.gen_range(0, len);
+        let idx = rng.gen_range(0..len);
         let mut cnt = idx;
 
         // randomly select a region; if it fails to meet the criteria

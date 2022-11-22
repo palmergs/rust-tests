@@ -108,7 +108,7 @@ impl<'a> CharacterBuilder<'a> {
             None => {
                 let mut rng = rand::thread_rng();
                 let range = &race.lifespan[1];
-                let age = rng.gen_range(range.start, range.end) as i64;
+                let age = rng.gen_range(range.start..range.end) as i64;
                 CURRENT_YEAR - age
             }
         }
@@ -145,7 +145,7 @@ impl<'a> CharacterBuilder<'a> {
 
     fn name(&self, name_key: Option<&str>, race: &Race) -> String {
         let mut rng = rand::thread_rng();
-        match rng.gen_range(0, 2) {
+        match rng.gen_range(0..2) {
             0 => self
                 .select_name(name_key, Some(&race.mname))
                 .expect("Expected fname 1"),
